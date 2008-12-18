@@ -8,20 +8,20 @@
             [model.make :as make]))
 
 
-(defn drop-makes []
+(defn drop-make []
   (try
-    (sql/drop-table :makes)
+    (sql/drop-table :make)
     (catch Exception e)))
 
-(defn create-makes []
-  (sql/create-table :makes
-    [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT makes_pk PRIMARY KEY"]
+(defn create-make []
+  (sql/create-table :make
+    [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT make_pk PRIMARY KEY"]
     [:name "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
     [:grade :real]))
 
 (defn insert-makes []
-  (sql/insert-values :makes
+  (sql/insert-values :make
     [:name :founded :grade]
     ["Ford"      "1904" 60]
     ["Chevrolet" "1912" 88.6]
@@ -30,19 +30,20 @@
 
 (sql/with-connection db
   (sql/transaction
-    (drop-makes)
-    (println "dropped makes")
-    (create-makes)
-    (println "created makes")
+    (drop-make)
+    (println "dropped make")
+    (create-make)
+    (println "created make")
     (insert-makes)
     (println "inserted 4 makes")))
 
 (sql/with-connection db
   (sql/with-results res
-   "select * from makes"
+   "select * from make"
     (doseq [rec res]
       (println rec))))
 
 (println "Setup complete. Woo hoo!")
 
-(println (str "make/create returned " (make/create {:name "GM" :grade 45})))
+(println (str "(make/find-record 1) returned " (make/find-record 1)))
+(println (str "(make/create ...) returned " (make/create {:name "GM" :grade 45})))
