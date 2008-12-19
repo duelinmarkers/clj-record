@@ -21,11 +21,9 @@
       (find-record model-name id))))
 
 (defmacro setup-model [model-name]
-  (let [find-record-fn-name 'find-record
-        create-fn-name 'create]
-    `[(defn ~find-record-fn-name [id#]
-        (find-record ~model-name id#))
-      (defn ~create-fn-name [attributes#]
-        (create ~model-name attributes#))]))
+  `[(defn ~'find-record [id#]
+      (find-record ~model-name id#))
+    (defn ~'create [attributes#]
+      (create ~model-name attributes#))])
 
 
