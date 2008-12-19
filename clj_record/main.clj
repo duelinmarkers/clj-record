@@ -5,20 +5,27 @@
 
 (ns clj_record.main
   (:require [clojure.contrib.sql :as sql]
-            [model.manufacturer :as manufacturer]))
+            [model.manufacturer :as manufacturer]
+            [model.product :as product]))
 
 
-(defn drop-manufacturer []
+(defn drop-tables []
   (try
     (sql/drop-table :manufacturer)
+    (sql/drop-table :product)
     (catch Exception e)))
 
-(defn create-manufacturer []
+(defn create-tables []
   (sql/create-table :manufacturer
     [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
     [:name "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
-    [:grade :real]))
+    [:grade :real])
+  (sql/create-table :product
+    [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
+    [:name "VARCHAR(32)" "NOT NULL"]
+    [:price "INT"]
+    [:manufacturer_id "INT" "NOT NULL"]))
 
 (defn insert-manufacturers []
   (sql/insert-values :manufacturer
@@ -30,8 +37,8 @@
 
 (sql/with-connection db
   (sql/transaction
-    (drop-manufacturer)
-    (create-manufacturer)
+    (drop-tables)
+    (create-tables)
     (insert-manufacturers)))
 
 (sql/with-connection db
@@ -44,4 +51,10 @@
 
 (println (str "(manufacturer/table-name) is " (manufacturer/table-name)))
 (println (str "(manufacturer/find-record 1) returned " (manufacturer/find-record 1)))
-(println (str "(manufacturer/create ...) returned " (manufacturer/create {:name "GM" :grade 45})))
+(let [gm (manufacturer/create {:name "GM" :grade 45})]
+  (println (str "(manufacturer/create ...) returned " gm))
+  (println (product/create {:name "K Car" :price 4000 :manufacturer_id (gm :id)})))
+
+(println "Finished happy!")
+
+
