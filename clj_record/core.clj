@@ -20,8 +20,9 @@
             (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
       (find-record model-name id))))
 
-(defmacro setup-model [model-name]
+(defmacro initialize-model [model-name]
   `(do
+    (defn ~'table-name [] (table-name ~model-name))
     (defn ~'find-record [id#]
       (find-record ~model-name id#))
     (defn ~'create [attributes#]

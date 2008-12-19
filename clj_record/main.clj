@@ -31,11 +31,8 @@
 (sql/with-connection db
   (sql/transaction
     (drop-manufacturer)
-    (println "dropped manufacturer")
     (create-manufacturer)
-    (println "created manufacturer")
-    (insert-manufacturers)
-    (println "inserted 4 manufacturers")))
+    (insert-manufacturers)))
 
 (sql/with-connection db
   (sql/with-results res
@@ -43,7 +40,8 @@
     (doseq [rec res]
       (println rec))))
 
-(println "Setup complete. Woo hoo!")
+(println "Setup complete!")
 
+(println (str "(manufacturer/table-name) is " (manufacturer/table-name)))
 (println (str "(manufacturer/find-record 1) returned " (manufacturer/find-record 1)))
 (println (str "(manufacturer/create ...) returned " (manufacturer/create {:name "GM" :grade 45})))
