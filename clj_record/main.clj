@@ -54,7 +54,7 @@
 (let [gm (manufacturer/create {:name "GM" :grade 45})]
   (println (str "(manufacturer/create ...) returned " gm))
   (println (product/create {:name "K Car" :price 4000 :manufacturer_id (gm :id)})))
-
+(println manufacturer/foo)
 (println "Finished happy!")
 
 

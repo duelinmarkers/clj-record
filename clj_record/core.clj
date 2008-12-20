@@ -20,12 +20,16 @@
             (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
       (find-record model-name id))))
 
+(defn defs-from-options [options] '((def foo "foo from options")))
+
 (defmacro init-model [model-name & options]
-  `(do
-    (defn ~'table-name [] (table-name ~model-name))
-    (defn ~'find-record [id#]
-      (find-record ~model-name id#))
-    (defn ~'create [attributes#]
-      (create ~model-name attributes#))))
+  (let [optional-forms (defs-from-options options)]
+    `(do
+      (defn ~'table-name [] (table-name ~model-name))
+      (defn ~'find-record [id#]
+        (find-record ~model-name id#))
+      (defn ~'create [attributes#]
+        (create ~model-name attributes#))
+      ~@optional-forms)))
 
 
