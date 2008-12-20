@@ -3,7 +3,7 @@
 
 
 (defn table-name [model-name]
-  (if (keyword? model-name) (.getName model-name) model-name))
+  (if (string? model-name) model-name (.getName model-name)))
 
 (defn find-record [model-name id]
   (sql/with-connection db
@@ -20,7 +20,7 @@
             (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
       (find-record model-name id))))
 
-(defmacro init-model [model-name]
+(defmacro init-model [model-name & options]
   `(do
     (defn ~'table-name [] (table-name ~model-name))
     (defn ~'find-record [id#]
