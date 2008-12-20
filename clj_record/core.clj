@@ -20,7 +20,7 @@
             (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
       (find-record model-name id))))
 
-(defn defs-from-options [options] '((def foo "foo from options")))
+(defn defs-from-options [options] nil)
 
 (defmacro init-model [model-name & options]
   (let [optional-forms (defs-from-options options)]
