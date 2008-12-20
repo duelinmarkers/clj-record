@@ -1,5 +1,6 @@
 (ns clj_record.core
-  (:require [clojure.contrib.sql :as sql]))
+  (:require [clojure.contrib.sql :as sql])
+  (:use clojure.contrib.str-utils))
 
 
 (defn table-name [model-name]
@@ -9,6 +10,14 @@
   (sql/with-connection db
     (sql/with-results rows (format "select * from %s where id = %s" (table-name model-name) id)
       (merge {} (first rows)))))
+
+(defn find-records [model-name attributes]
+  (let [to-conditions (fn [attrs]
+          (str-join " AND " (map #(str (.getName (first %)) " = " (frest %)) attrs)))]
+    (sql/with-connection db
+      (sql/with-results rows 
+        (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))
+        (merge {} (first rows))))))
 
 (defn create [model-name attributes]
   (sql/with-connection db
