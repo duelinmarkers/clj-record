@@ -5,6 +5,7 @@
 
 (ns clj_record.main
   (:require [clojure.contrib.sql :as sql]
+            [clojure.contrib.test-is :as test-is]
             [model.manufacturer :as manufacturer]
             [model.product :as product]))
 
@@ -58,7 +59,4 @@
     (clj_record.core/find-records :product {:manufacturer_id (gm :id)})))
   (println (manufacturer/find-products gm)))
 
-
-(println "Finished happy!")
-
-
+(test-is/run-all-tests)

@@ -1,11 +1,3 @@
-Figure out an API for associations.
-  Maybe ...
-    (has-many :products)
-    (belongs-to :holding-company)
-  creates
-    (manufacturer/find-products {:id 3})
-    (manufacturer/find-holding-company {:holding_company_id 3})
-
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 

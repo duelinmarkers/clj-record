@@ -1,5 +1,15 @@
 (ns model.manufacturer
-  (:require [clj_record.core :as cljrec]))
+  (:require [clj_record.core :as cljrec])
+  (:use clojure.contrib.test-is))
 
-(cljrec/init-model 'manufacturer
+(cljrec/init-model manufacturer
   (has-many products))
+
+(defn good? 
+  ([manufacturer] 
+    (and (:grade manufacturer) (>= (:grade manufacturer) 90)))
+  {:test (fn []
+    (are (good? {:grade _1})
+      90 90.0 91)
+    (are (not (good? {:grade _1}))
+      89 80 nil))})
