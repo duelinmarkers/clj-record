@@ -3,6 +3,7 @@
   (:use clojure.contrib.str-utils)
   (:use clojure.contrib.test-is))
 
+
 (defn singularize 
   ([plural] (re-sub #"s$" "" plural))
   {:test (fn []
@@ -11,12 +12,12 @@
 
 (defn table-name
   ([model-name]
-    (if (string? model-name) model-name (.getName model-name)))
+    (if (string? model-name) model-name (name model-name)))
   {:test (fn []
-    (are (= (table-name _1) _2)
+    (are (= _1 (table-name _2))
       "foo" "foo"
-      'foo "foo"
-      :foo "foo"))})
+      "foo" 'foo
+      "foo" :foo))})
 
 (defn find-record [model-name id]
   (sql/with-connection db
@@ -61,7 +62,7 @@
 
 (defmacro init-model [model-name & options]
   (let [optional-forms (defs-from-options model-name options)
-        model-name (.getName model-name)]
+        model-name (name model-name)]
     `(do
       (defn ~'table-name [] (table-name ~model-name))
       (defn ~'find-record [id#]
