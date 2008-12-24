@@ -3,7 +3,7 @@
          :subname "/tmp/clj_record.test.db"
          :create true})
 
-(ns clj_record.main
+(ns clj_record.test.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]
             [clj_record.test.model.manufacturer :as manufacturer]
@@ -59,5 +59,5 @@
     (clj_record.core/find-records :product {:manufacturer_id (gm :id)})))
   (println (manufacturer/find-products gm)))
 
-(load "test/associations-test")
+(load "associations-test")
 (test-is/run-all-tests)
