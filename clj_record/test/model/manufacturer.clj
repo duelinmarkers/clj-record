@@ -1,4 +1,4 @@
-(ns model.manufacturer
+(ns clj_record.test.model.manufacturer
   (:require [clj_record.core :as cljrec])
   (:use clojure.contrib.test-is))
 

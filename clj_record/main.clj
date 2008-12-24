@@ -6,8 +6,8 @@
 (ns clj_record.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]
-            [model.manufacturer :as manufacturer]
-            [model.product :as product]))
+            [clj_record.test.model.manufacturer :as manufacturer]
+            [clj_record.test.model.product :as product]))
 
 
 (defn drop-tables []

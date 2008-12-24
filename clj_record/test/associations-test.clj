@@ -1,7 +1,7 @@
 (ns clj_record.test.assocations-test
   (:require
-    [model.manufacturer :as manufacturer]
-    [model.product :as product])
+    [clj_record.test.model.manufacturer :as manufacturer]
+    [clj_record.test.model.product :as product])
   (:use clojure.contrib.test-is))
 
 (deftest belongs-to-creates-find-function
