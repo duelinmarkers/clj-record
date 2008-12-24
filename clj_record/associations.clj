@@ -11,5 +11,10 @@
       (defn ~clear-fn-name [record#]
         (println "Can't delete things yet!")))))
 
-(defn belongs-to [& args] nil)
+(defn belongs-to [model-name association-name]
+  (let [associated-model-name (str association-name)
+        find-fn-name (symbol (str "find-" associated-model-name))
+        foreign-key-attribute (keyword (str associated-model-name "_id"))]
+    `(defn ~find-fn-name [record#]
+      (find-record ~associated-model-name (~foreign-key-attribute record#)))))
 

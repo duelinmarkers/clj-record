@@ -59,4 +59,5 @@
     (clj_record.core/find-records :product {:manufacturer_id (gm :id)})))
   (println (manufacturer/find-products gm)))
 
+(load "test/associations-test")
 (test-is/run-all-tests)
