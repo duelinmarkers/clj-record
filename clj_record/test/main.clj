@@ -42,22 +42,8 @@
     (create-tables)
     (insert-manufacturers)))
 
-(sql/with-connection db
-  (sql/with-results res
-   "select * from manufacturer"
-    (doseq [rec res]
-      (println rec))))
-
 (println "Setup complete!")
 
-(println (str "(manufacturer/table-name) is " (manufacturer/table-name)))
-(println (str "(manufacturer/find-record 1) returned " (manufacturer/find-record 1)))
-(let [gm (manufacturer/create {:name "GM" :grade 45})]
-  (println (str "(manufacturer/create ...) returned " gm))
-  (println (product/create {:name "K Car" :price 4000 :manufacturer_id (gm :id)}))
-  (println (str "(clj_record.core/find-records ...) : " 
-    (clj_record.core/find-records :product {:manufacturer_id (gm :id)})))
-  (println (manufacturer/find-products gm)))
-
 (load "associations-test")
+(load "core-test")
 (test-is/run-all-tests)

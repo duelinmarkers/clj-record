@@ -22,11 +22,11 @@
 
 (defn find-records [model-name attributes]
   (let [to-conditions (fn [attrs]
-          (str-join " AND " (map #(str (.getName (first %)) " = " (frest %)) attrs)))]
+          (str-join " AND " (map #(str (.getName (first %)) " = " (if (string? (frest %)) (format "'%s'" (frest %)) (frest %))) attrs)))
+        select-query (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))]
     (sql/with-connection db
-      (sql/with-results rows 
-        (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))
-        (merge {} (first rows))))))
+      (sql/with-results rows select-query
+        (doall (map #(merge {} %) rows))))))
 
 (defn create [model-name attributes]
   (sql/with-connection db
@@ -37,6 +37,12 @@
             (sql/insert-values (table-name model-name) key-vector val-vector)
             (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
       (find-record model-name id))))
+
+(defn destroy [model-name attributes]
+  (sql/with-connection db
+    (sql/do-prepared
+      (format "delete from %s where id = ?" (table-name model-name))
+      [(:id attributes)])))
 
 (defn- defs-from-options [model-name options]
   (for [option-form options]
@@ -49,8 +55,12 @@
       (defn ~'table-name [] (table-name ~model-name))
       (defn ~'find-record [id#]
         (find-record ~model-name id#))
+      (defn ~'find-records [attributes#]
+        (find-records ~model-name attributes#))
       (defn ~'create [attributes#]
         (create ~model-name attributes#))
+      (defn ~'destroy [attributes#]
+        (destroy ~model-name attributes#))
       ~@optional-forms)))
 
 
