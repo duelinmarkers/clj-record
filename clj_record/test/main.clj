@@ -28,21 +28,12 @@
     [:price "INT"]
     [:manufacturer_id "INT" "NOT NULL"]))
 
-(defn insert-manufacturers []
-  (sql/insert-values :manufacturer
-    [:name :founded :grade]
-    ["Ford"      "1904" 60]
-    ["Chevrolet" "1912" 88.6]
-    ["Honda"     "1972" 92.2]
-    ["Acura"     "1988" 90.0]))
-
 (sql/with-connection db
   (sql/transaction
     (drop-tables)
-    (create-tables)
-    (insert-manufacturers)))
+    (create-tables)))
 
-(println "Setup complete!")
+(println "Setup complete.")
 
 (load "associations-test")
 (load "core-test")

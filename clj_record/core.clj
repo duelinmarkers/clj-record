@@ -20,10 +20,18 @@
     (sql/with-results rows (format "select * from %s where id = %s" (table-name model-name) id)
       (merge {} (first rows)))))
 
+(defn- to-condition [[attribute value]]
+  (str
+    (name attribute)
+    (if (nil? value)
+      " IS NULL"
+      (str " = " (if (string? value) (format "'%s'" value) value)))))
+
+(defn to-conditions [attributes]
+  (str-join " AND " (map to-condition attributes)))
+
 (defn find-records [model-name attributes]
-  (let [to-conditions (fn [attrs]
-          (str-join " AND " (map #(str (.getName (first %)) " = " (if (string? (frest %)) (format "'%s'" (frest %)) (frest %))) attrs)))
-        select-query (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))]
+  (let [select-query (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))]
     (sql/with-connection db
       (sql/with-results rows select-query
         (doall (map #(merge {} %) rows))))))
