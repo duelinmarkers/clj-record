@@ -2,7 +2,7 @@
   (:require [clj_record.core :as cljrec])
   (:use clojure.contrib.test-is))
 
-(cljrec/init-model manufacturer
+(cljrec/init-model
   (has-many products))
 
 (defn good? 

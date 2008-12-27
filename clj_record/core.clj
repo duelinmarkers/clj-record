@@ -61,9 +61,9 @@
   (for [option-form options]
     (apply (ns-resolve 'clj_record.core (first option-form)) model-name (rest option-form))))
 
-(defmacro init-model [model-name & options]
-  (let [optional-forms (defs-from-options model-name options)
-        model-name (name model-name)]
+(defmacro init-model [& options]
+  (let [model-name (first (reverse (re-split #"\." (name (ns-name *ns*)))))
+        optional-forms (defs-from-options model-name options)]
     `(do
       (defn ~'table-name [] (table-name ~model-name))
       (defn ~'find-record [id#]
