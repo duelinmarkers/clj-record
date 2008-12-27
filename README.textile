@@ -1,0 +1,42 @@
+h1. clj-record
+
+clj-record is an API inspired by Rails' ActiveRecord but implemented in the "Clojure programming language":http://www.clojure.org/.
+
+This is a learning exercise and (at least for now) not intended for real-world use, though contributions to harden it are welcome, as are recommendations for how to make it more idiomatically lisp-ey.
+
+h2. The API
+
+To define a model, you do something like this.
+
+<pre><code>
+  (ns com.example.user)
+
+  (clj-record.core/init-model)
+</code></pre>
+
+To define associations, you add something like this.
+
+<pre><code>
+  (ns com.example.user)
+
+  (clj-record.core/init-model
+    (belongs-to account)
+    (has-many subscriptions))
+</code></pre>
+
+Then you can do things like this.
+
+<pre><code>
+  (let [mikey (user/find-record 2)
+        subs (user/find-subscriptions mikey)]
+    (doseq [subscription subs]
+      (println (format "%s subscribed to %s" (:name mikey) (:name sub))))
+    (user/destroy-subscriptions mikey)
+    (println "But not any more."))
+</code></pre>
+
+See "core-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test/core-test.clj and "associations-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test/associations-test.clj for everything that works.
+
+h2. The Name...
+
+...is awful. Recommendations are welcome.
