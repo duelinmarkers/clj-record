@@ -1,8 +1,8 @@
 h1. clj-record
 
-clj-record is an API inspired by Rails' ActiveRecord but implemented in the "Clojure programming language":http://www.clojure.org/.
+clj-record is an API inspired by Rails' ActiveRecord but implemented in the "Clojure programming language":http://www.clojure.org/ and intended to use its idioms.
 
-This is a learning exercise and (at least for now) not intended for real-world use, though contributions to harden it are welcome, as are recommendations for how to make it more idiomatically lisp-ey.
+This is a learning exercise and (at least for now) not intended for real-world use. Contributions to harden it are welcome, but I'm even more interested in recommendations for how to make it more idiomatically lisp-ey.
 
 h2. The API
 
@@ -29,8 +29,7 @@ Then you can do things like this.
 <pre><code>
   (let [mikey (user/find-record 2)
         subs (user/find-subscriptions mikey)]
-    (doseq [subscription subs]
-      (println (format "%s subscribed to %s" (:name mikey) (:name sub))))
+    (doseq [subscription subs] (println (format "%s subscribed to %s" (:name mikey) (:name sub))))
     (user/destroy-subscriptions mikey)
     (println "But not any more."))
 </code></pre>
@@ -40,3 +39,7 @@ See "core-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_r
 h2. The Name...
 
 ...is awful. Recommendations are welcome.
+
+---
+
+Copyright 2008 John D. Hume and released under an MIT license.
