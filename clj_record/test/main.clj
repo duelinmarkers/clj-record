@@ -35,6 +35,6 @@
 
 (println "Setup complete.")
 
-(load "associations-test")
 (load "core-test")
+(load "associations-test")
 (test-is/run-all-tests)
