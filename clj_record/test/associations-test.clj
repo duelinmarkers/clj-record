@@ -1,7 +1,7 @@
-(ns clj_record.test.assocations-test
+(ns clj-record.test.assocations-test
   (:require
-    [clj_record.test.model.manufacturer :as manufacturer]
-    [clj_record.test.model.product :as product])
+    [clj-record.test.model.manufacturer :as manufacturer]
+    [clj-record.test.model.product :as product])
   (:use clojure.contrib.test-is))
 
 

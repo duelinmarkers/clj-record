@@ -1,4 +1,4 @@
-(ns clj_record.util
+(ns clj-record.util
   (:use clojure.contrib.test-is)
   (:use clojure.contrib.str-utils))
 

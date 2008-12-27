@@ -1,8 +1,8 @@
-(ns clj_record.test.core-test
+(ns clj-record.test.core-test
   (:require
-    [clj_record.core :as core]
-    [clj_record.test.model.manufacturer :as manufacturer]
-    [clj_record.test.model.product :as product])
+    [clj-record.core :as core]
+    [clj-record.test.model.manufacturer :as manufacturer]
+    [clj-record.test.model.product :as product])
   (:use clojure.contrib.test-is))
 
 

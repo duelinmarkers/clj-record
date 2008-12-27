@@ -1,14 +1,14 @@
 (def db {:classname "org.apache.derby.jdbc.EmbeddedDriver"
          :subprotocol "derby"
-         :subname "/tmp/clj_record.test.db"
+         :subname "/tmp/clj-record.test.db"
          :create true})
 
 
-(ns clj_record.test.main
+(ns clj-record.test.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]
-            [clj_record.test.model.manufacturer :as manufacturer]
-            [clj_record.test.model.product :as product]))
+            [clj-record.test.model.manufacturer :as manufacturer]
+            [clj-record.test.model.product :as product]))
 
 
 (defn drop-tables []

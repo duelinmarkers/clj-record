@@ -1,6 +1,6 @@
-(ns clj_record.core
+(ns clj-record.core
   (:require [clojure.contrib.sql :as sql])
-  (:use clj_record.util)
+  (:use clj-record.util)
   (:use clojure.contrib.str-utils)
   (:use clojure.contrib.test-is)
   (:load "associations"))
@@ -59,7 +59,7 @@
 
 (defn- defs-from-options [model-name options]
   (for [option-form options]
-    (apply (ns-resolve 'clj_record.core (first option-form)) model-name (rest option-form))))
+    (apply (ns-resolve 'clj-record.core (first option-form)) model-name (rest option-form))))
 
 (defmacro init-model [& options]
   (let [model-name (first (reverse (re-split #"\." (name (ns-name *ns*)))))

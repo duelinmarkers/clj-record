@@ -1,4 +1,4 @@
-(in-ns 'clj_record.core)
+(in-ns 'clj-record.core)
 
 
 (defn has-many [model-name association-name]
