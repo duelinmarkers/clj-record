@@ -21,11 +21,10 @@
     (product/destroy-record s3000xl)
     (manufacturer/destroy-record humedai)))
 
-(deftest has-many-creates-a-find-function
+(deftest has-many-creates-a-destroy-function
   (let [humedai (manufacturer/create {:name "Humedai Automotive"})
         s3000xi (product/create {:name "S-3000xi" :manufacturer_id (:id humedai)})
         s3000xl (product/create {:name "S-3000xl" :manufacturer_id (:id humedai)})]
-    (is (= [s3000xi s3000xl] (manufacturer/find-products humedai)))
-    (product/destroy-record s3000xi)
-    (product/destroy-record s3000xl)
+    (manufacturer/destroy-products humedai)
+    (is (empty? (manufacturer/find-products humedai)))
     (manufacturer/destroy-record humedai)))

@@ -4,12 +4,12 @@
   (let [associated-model-name (singularize (name association-name))
         foreign-key-attribute (keyword (str model-name "_id"))
         find-fn-name (symbol (str "find-" association-name))
-        clear-fn-name (symbol (str "clear-" association-name))]
+        destroy-fn-name (symbol (str "destroy-" association-name))]
     `(do
       (defn ~find-fn-name [record#]
         (find-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
-      (defn ~clear-fn-name [record#]
-        (println "Can't delete things yet!")))))
+      (defn ~destroy-fn-name [record#]
+        (destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)})))))
 
 (defn belongs-to [model-name association-name]
   (let [associated-model-name (str association-name)

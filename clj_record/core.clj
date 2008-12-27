@@ -52,6 +52,11 @@
       (format "delete from %s where id = ?" (table-name model-name))
       [(:id record)])))
 
+(defn destroy-records [model-name attributes]
+  (sql/with-connection db
+    (sql/do-prepared
+      (format "delete from %s where %s" (table-name model-name) (to-conditions attributes)) [])))
+
 (defn- defs-from-options [model-name options]
   (for [option-form options]
     (apply (ns-resolve 'clj_record.core (first option-form)) model-name (rest option-form))))
