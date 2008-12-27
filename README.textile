@@ -36,6 +36,10 @@ Then you can do things like this.
 
 See "core-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test/core-test.clj and "associations-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test/associations-test.clj for everything that works.
 
+h2. Running
+
+Run clj_record/test/main.clj as a script to run tests. In addition to clojure-contrib, you'll need "Apache Derby":http://db.apache.org/derby/ on your classpath.
+
 h2. The Name...
 
 ...is awful. Recommendations are welcome.
