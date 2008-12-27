@@ -46,11 +46,11 @@
             (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
       (find-record model-name id))))
 
-(defn destroy [model-name attributes]
+(defn destroy-record [model-name record]
   (sql/with-connection db
     (sql/do-prepared
       (format "delete from %s where id = ?" (table-name model-name))
-      [(:id attributes)])))
+      [(:id record)])))
 
 (defn- defs-from-options [model-name options]
   (for [option-form options]
@@ -67,8 +67,8 @@
         (find-records ~model-name attributes#))
       (defn ~'create [attributes#]
         (create ~model-name attributes#))
-      (defn ~'destroy [attributes#]
-        (destroy ~model-name attributes#))
+      (defn ~'destroy-record [record#]
+        (destroy-record ~model-name record#))
       ~@optional-forms)))
 
 
