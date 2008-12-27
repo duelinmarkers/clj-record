@@ -2,6 +2,7 @@
   (:require [clj_record.core :as cljrec])
   (:use clojure.contrib.test-is))
 
+
 (cljrec/init-model
   (has-many products))
 

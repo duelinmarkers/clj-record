@@ -3,6 +3,7 @@
          :subname "/tmp/clj_record.test.db"
          :create true})
 
+
 (ns clj_record.test.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]

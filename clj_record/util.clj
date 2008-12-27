@@ -2,6 +2,7 @@
   (:use clojure.contrib.test-is)
   (:use clojure.contrib.str-utils))
 
+
 (defn singularize 
   ([plural] (re-sub #"s$" "" plural))
   {:test (fn []

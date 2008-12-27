@@ -75,5 +75,3 @@
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
       ~@optional-forms)))
-
-

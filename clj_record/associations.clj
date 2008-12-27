@@ -1,5 +1,6 @@
 (in-ns 'clj_record.core)
 
+
 (defn has-many [model-name association-name]
   (let [associated-model-name (singularize (name association-name))
         foreign-key-attribute (keyword (str model-name "_id"))
@@ -17,4 +18,3 @@
         foreign-key-attribute (keyword (str associated-model-name "_id"))]
     `(defn ~find-fn-name [record#]
       (find-record ~associated-model-name (~foreign-key-attribute record#)))))
-
