@@ -3,7 +3,7 @@
   (:use clj-record.util)
   (:use clojure.contrib.str-utils)
   (:use clojure.contrib.test-is)
-  (:load "associations"))
+  (:load "associations" "validation"))
 
 
 (defn table-name
@@ -74,4 +74,6 @@
         (create ~model-name attributes#))
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
+      (defn ~'validate [record#]
+        (validate ~model-name record#))
       ~@optional-forms)))

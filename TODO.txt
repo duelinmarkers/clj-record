@@ -3,3 +3,4 @@ Create lazy seqs for multi-value associations?
 
 Get db configuration sane.
 
+Use prepared statements to get proper quoting.

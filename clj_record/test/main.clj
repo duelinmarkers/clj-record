@@ -38,4 +38,5 @@
 
 (load "core-test")
 (load "associations-test")
+(load "validation-test")
 (test-is/run-all-tests)
