@@ -8,3 +8,6 @@
   {:test (fn []
     (are (= _1 (singularize _2))
       "foo" "foos"))})
+
+(defn pluralize [word]
+  (str word "s"))

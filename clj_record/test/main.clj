@@ -11,12 +11,12 @@
     (catch Exception e)))
 
 (defn create-tables []
-  (sql/create-table :manufacturer
+  (sql/create-table :manufacturers
     [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
     [:name "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
     [:grade :real])
-  (sql/create-table :product
+  (sql/create-table :products
     [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
     [:name "VARCHAR(32)" "NOT NULL"]
     [:price "INT"]

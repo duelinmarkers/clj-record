@@ -8,14 +8,14 @@
 
 (deftest table-name-is-permissive
   (are (= _1 (core/table-name _2))
-    "foo" "foo"
-    "foo" 'foo
-    "foo" :foo))
+    "foos" "foo"
+    "foos" 'foo
+    "foos" :foo))
 
 (deftest table-name-answers-based-on-model-namespace
   (are (= _1 _2)
-    "manufacturer"  (manufacturer/table-name)
-    "product"       (product/table-name)))
+    "manufacturers"  (manufacturer/table-name)
+    "products"       (product/table-name)))
 
 (deftest find-record-by-id
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]

@@ -8,7 +8,7 @@
 
 
 (defn table-name [model-name]
-  (if (string? model-name) model-name (name model-name)))
+  (pluralize (if (string? model-name) model-name (name model-name))))
 
 (defn find-record [model-name id]
   (sql/with-connection db
