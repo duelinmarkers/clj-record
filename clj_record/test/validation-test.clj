@@ -10,3 +10,6 @@
 
 (deftest validate-returns-nil-for-a-valid-record
   (is (nil? (manufacturer/validate {:name "Not Empty"}))))
+
+(deftest validate-returns-errors-by-attribute-for-an-invalid-record
+  (is (= [["name" "Name cannot be empty."]] (manufacturer/validate {:name ""}))))

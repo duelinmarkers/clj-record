@@ -5,4 +5,4 @@
 
 (cljrec/init-model
   (has-many products)
-  (validates name #(not (empty? %))))
+  (validates name "Name cannot be empty." #(not (empty? %))))

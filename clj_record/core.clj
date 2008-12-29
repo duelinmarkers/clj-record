@@ -62,9 +62,15 @@
   (for [option-form options]
     (apply (ns-resolve 'clj-record.core (first option-form)) model-name (rest option-form))))
 
+(def all-models-metadata (ref {}))
+
+(defn- setup-model-metadata [model-name]
+  (dosync (commute all-models-metadata assoc model-name (ref {}))))
+
 (defmacro init-model [& options]
   (let [model-name (first (reverse (re-split #"\." (name (ns-name *ns*)))))
         optional-forms (defs-from-options model-name options)]
+    (setup-model-metadata model-name)
     `(do
       (defn ~'table-name [] (table-name ~model-name))
       (defn ~'find-record [id#]
