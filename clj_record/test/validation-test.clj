@@ -12,14 +12,14 @@
   (is (empty? (manufacturer/validate {:name "Good Name"}))))
 
 (deftest validate-returns-single-message-keyed-by-attribute-for-an-invalid-record
-  (is (= {:name ["Name cannot be empty."]} (manufacturer/validate {:name ""}))))
+  (is (= {:name ["empty!"]} (manufacturer/validate {:name ""}))))
 
 (deftest validate-with-multiple-messages-for-one-attribute
   (is (= 
-    {:name ["Name can't start with whitespace." "Name can't end with whitespace."]}
+    {:name ["starts with whitespace!" "ends with whitespace!"]}
     (manufacturer/validate {:name " Bad Name "}))))
 
 (deftest validate-with-errors-on-multiple-attributes
   (is (=
-    {:name ["Name cannot be empty."] :grade ["Grade can't be negative."]}
+    {:name ["empty!"] :grade ["negative!"]}
     (manufacturer/validate {:name "" :grade -2}))))
