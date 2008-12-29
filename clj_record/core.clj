@@ -7,14 +7,8 @@
   (:load "associations" "validation"))
 
 
-(defn table-name
-  ([model-name]
-    (if (string? model-name) model-name (name model-name)))
-  {:test (fn []
-    (are (= _1 (table-name _2))
-      "foo" "foo"
-      "foo" 'foo
-      "foo" :foo))})
+(defn table-name [model-name]
+  (if (string? model-name) model-name (name model-name)))
 
 (defn find-record [model-name id]
   (sql/with-connection db

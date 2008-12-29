@@ -6,6 +6,12 @@
   (:use clojure.contrib.test-is))
 
 
+(deftest table-name-is-permissive
+  (are (= _1 (core/table-name _2))
+    "foo" "foo"
+    "foo" 'foo
+    "foo" :foo))
+
 (deftest table-name-answers-based-on-model-namespace
   (are (= _1 _2)
     "manufacturer"  (manufacturer/table-name)
