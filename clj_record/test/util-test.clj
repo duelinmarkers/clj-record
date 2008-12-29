@@ -4,9 +4,10 @@
   (:use clojure.contrib.test-is))
 
 
-(deftest pluralizes-simple-words
-  (is (= "foos" (util/pluralize "foo"))))
+(deftest nil (are (= _1 (util/singularize _2))
+    "foo" "foos"
+    "baby" "babies"))
 
-(deftest pluralizes-words-ending-in-y-with-ies
-  (are (= _1 (util/pluralize _2))
+(deftest nil (are (= _1 (util/pluralize _2))
+    "foos" "foo"
     "babies" "baby"))

@@ -3,11 +3,10 @@
   (:use clojure.contrib.str-utils))
 
 
-(defn singularize 
-  ([plural] (re-sub #"s$" "" plural))
-  {:test (fn []
-    (are (= _1 (singularize _2))
-      "foo" "foos"))})
+(defn singularize [plural]
+  (if (.endsWith plural "ies")
+    (re-sub #"ies$" "y" plural)
+    (re-sub #"s$" "" plural)))
 
 (defn pluralize [word]
   (if (.endsWith word "y")
