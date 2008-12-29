@@ -3,15 +3,26 @@
 
 (declare all-models-metadata) ; ref def'd in core.clj
 
+(defn- validations-for [model-name] ((@all-models-metadata model-name) :validations))
+
 (defn validate [model-name record]
-  (for [[attribute-name message function] ((@all-models-metadata model-name) :validations)
-        :when (not (function (record (keyword attribute-name))))]
-    [attribute-name message]))
+  (reduce
+    (fn [errors [attr message validation-fn]]
+      (let [value (record attr)
+            valid (validation-fn value)]
+          (if valid
+            errors
+            (merge-with
+              (fn [result addl-val] (apply conj result addl-val))
+              errors
+              {attr [message]}))))
+    {}
+    (validations-for model-name)))
 
 (defn- validates [model-name attribute-name message function]
   (dosync
     (let [metadata (@all-models-metadata model-name)
           validations (or (@metadata :validations) [])]
       (ref-set metadata
-        (assoc @metadata :validations (conj validations [(name attribute-name) message (eval function)])))))
+        (assoc @metadata :validations (conj validations [(keyword (name attribute-name)) message (eval function)])))))
   nil)

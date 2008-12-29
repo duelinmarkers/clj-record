@@ -5,11 +5,16 @@
   (:use clojure.contrib.test-is))
 
 
-(deftest validate-returns-nil-for-a-model-without-validations
-  (is (nil? (product/validate {}))))
+(deftest validate-returns-empty-for-a-model-without-validations
+  (is (empty? (product/validate {}))))
 
-(deftest validate-returns-nil-for-a-valid-record
-  (is (nil? (manufacturer/validate {:name "Not Empty"}))))
+(deftest validate-returns-empty-for-a-valid-record
+  (is (empty? (manufacturer/validate {:name "Good Name"}))))
 
-(deftest validate-returns-errors-by-attribute-for-an-invalid-record
-  (is (= [["name" "Name cannot be empty."]] (manufacturer/validate {:name ""}))))
+(deftest validate-returns-single-message-keyed-by-attribute-for-an-invalid-record
+  (is (= {:name ["Name cannot be empty."]} (manufacturer/validate {:name ""}))))
+
+(deftest validate-with-multiple-messages-for-one-attribute
+  (is (= 
+    {:name ["Name can't start with whitespace." "Name can't end with whitespace."]}
+    (manufacturer/validate {:name " Bad Name "}))))
