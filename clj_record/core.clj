@@ -1,6 +1,7 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql :as sql])
   (:use clj-record.util)
+  (:use clj-record.config)
   (:use clojure.contrib.str-utils)
   (:use clojure.contrib.test-is)
   (:load "associations" "validation"))

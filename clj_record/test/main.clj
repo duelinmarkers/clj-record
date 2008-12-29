@@ -1,14 +1,7 @@
-(def db {:classname "org.apache.derby.jdbc.EmbeddedDriver"
-         :subprotocol "derby"
-         :subname "/tmp/clj-record.test.db"
-         :create true})
-
-
 (ns clj-record.test.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]
-            [clj-record.test.model.manufacturer :as manufacturer]
-            [clj-record.test.model.product :as product]))
+            clj-record.config))
 
 
 (defn drop-tables []
@@ -29,7 +22,7 @@
     [:price "INT"]
     [:manufacturer_id "INT" "NOT NULL"]))
 
-(sql/with-connection db
+(sql/with-connection clj-record.config/db
   (sql/transaction
     (drop-tables)
     (create-tables)))
