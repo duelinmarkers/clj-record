@@ -1,6 +1,6 @@
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
-Get db configuration sane.
+Get db configuration saner.
 
 Use prepared statements to get proper quoting.

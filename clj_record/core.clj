@@ -21,7 +21,7 @@
     (sql/with-results rows (format "select * from %s where id = %s" (table-name model-name) id)
       (merge {} (first rows)))))
 
-(defn- to-condition [[attribute value]]
+(defn- to-condition [[attribute value]] ; XXX: should be using PreparedStatement for smarter quoting
   (str
     (name attribute)
     (if (nil? value)
@@ -44,7 +44,7 @@
        val-vector (map attributes key-vector)
        id (sql/transaction
             (sql/insert-values (table-name model-name) key-vector val-vector)
-            (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))]
+            (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))] ; XXX: db-vendor-specific
       (find-record model-name id))))
 
 (defn destroy-record [model-name record]

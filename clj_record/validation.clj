@@ -25,4 +25,4 @@
           validations (or (@metadata :validations) [])]
       (ref-set metadata
         (assoc @metadata :validations (conj validations [(keyword (name attribute-name)) message (eval function)])))))
-  nil)
+  nil) ; XXX: Have to return nil since we're not returning def forms.
