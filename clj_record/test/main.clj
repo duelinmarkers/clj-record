@@ -6,8 +6,8 @@
 
 (defn drop-tables []
   (try
-    (sql/drop-table :manufacturer)
-    (sql/drop-table :product)
+    (sql/drop-table :manufacturers)
+    (sql/drop-table :products)
     (catch Exception e)))
 
 (defn create-tables []
