@@ -18,3 +18,8 @@
   (is (= 
     {:name ["Name can't start with whitespace." "Name can't end with whitespace."]}
     (manufacturer/validate {:name " Bad Name "}))))
+
+(deftest validate-with-errors-on-multiple-attributes
+  (is (=
+    {:name ["Name cannot be empty."] :grade ["Grade can't be negative."]}
+    (manufacturer/validate {:name "" :grade -2}))))

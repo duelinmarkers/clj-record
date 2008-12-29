@@ -7,4 +7,5 @@
   (has-many products)
   (validates name "Name cannot be empty." #(not (empty? %)))
   (validates name "Name can't start with whitespace." #(not (re-find #"^\s" %)))
-  (validates name "Name can't end with whitespace." #(not (re-find #"\s$" %))))
+  (validates name "Name can't end with whitespace." #(not (re-find #"\s$" %)))
+  (validates grade "Grade can't be negative." #(or (nil? %) (>= % 0))))
