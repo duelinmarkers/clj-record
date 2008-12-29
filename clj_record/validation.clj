@@ -8,14 +8,12 @@
 (defn validate [model-name record]
   (reduce
     (fn [errors [attr message validation-fn]]
-      (let [value (record attr)
-            valid (validation-fn value)]
-          (if valid
-            errors
-            (merge-with
-              (fn [result addl-val] (apply conj result addl-val))
-              errors
-              {attr [message]}))))
+      (if (validation-fn (record attr))
+        errors
+        (merge-with
+          (fn [result addl-val] (apply conj result addl-val))
+          errors
+          {attr [message]})))
     {}
     (validations-for model-name)))
 
