@@ -10,4 +10,6 @@
       "foo" "foos"))})
 
 (defn pluralize [word]
-  (str word "s"))
+  (if (.endsWith word "y")
+    (re-sub #"y$" "ies" word)
+    (str word "s")))

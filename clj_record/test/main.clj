@@ -29,6 +29,7 @@
 
 (println "Setup complete.")
 
+(load "util-test")
 (load "core-test")
 (load "associations-test")
 (load "validation-test")
