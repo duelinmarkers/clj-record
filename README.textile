@@ -20,6 +20,8 @@ h3. Associations
 Do this.
 
 <pre><code>
+  (ns ...)
+
   (clj-record.core/init-model
     (belongs-to account)
     (has-many subscriptions))
@@ -40,6 +42,8 @@ h3. Validations
 Do this.
 
 <pre><code>
+  (ns ...)
+
   (clj-record.core/init-model
     (validates name "Longer please." #(> (count %) 3)))
 </code></pre>
