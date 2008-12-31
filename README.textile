@@ -9,16 +9,17 @@ h2. The API
 To define a model, you do something like this.
 
 <pre><code>
-  (ns com.example.user)
+  (ns com.example.user
+    (:require clj-record.core))
 
   (clj-record.core/init-model)
 </code></pre>
 
-To define associations, you add something like this.
+h3. Associations
+
+Do this.
 
 <pre><code>
-  (ns com.example.user)
-
   (clj-record.core/init-model
     (belongs-to account)
     (has-many subscriptions))
@@ -33,6 +34,24 @@ Then you can do things like this.
     (user/destroy-subscriptions mikey)
     (println "But not any more."))
 </code></pre>
+
+h3. Validations
+
+Do this.
+
+<pre><code>
+  (clj-record.core/init-model
+    (validates name "Longer please." #(> (count %) 3)))
+</code></pre>
+
+Then you get validation errors like this.
+
+<pre><code>
+  user=> (user/validate {:name "POO"})
+  {:name ["Longer please."]}
+</code></pre>
+
+---
 
 See "core-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test/core-test.clj and "associations-test.clj":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test/associations-test.clj for everything that works.
 
