@@ -51,7 +51,7 @@ Do this.
 Then you get validation errors like this.
 
 <pre><code>
-  user=> (user/validate {:name "POO"})
+  => (user/validate {:name "POO"})
   {:name ["Longer please."]}
 </code></pre>
 
