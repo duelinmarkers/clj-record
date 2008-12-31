@@ -62,7 +62,7 @@
   (dosync (commute all-models-metadata assoc model-name (ref {}))))
 
 (defmacro init-model [& options]
-  (let [model-name (first (reverse (re-split #"\." (name (ns-name *ns*)))))
+  (let [model-name (last (re-split #"\." (name (ns-name *ns*))))
         optional-forms (defs-from-options model-name options)]
     (setup-model-metadata model-name)
     `(do
