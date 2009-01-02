@@ -4,3 +4,9 @@ Create lazy seqs for multi-value associations?
 Get db configuration saner.
 
 Use prepared statements to get proper quoting.
+
+Support for IN clause when a seq is given in the conditions map.
+
+Eager fetching of associations.
+
+Migrations.
