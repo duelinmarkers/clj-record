@@ -1,4 +1,4 @@
-(ns clj-record.test.assocations-test
+(ns clj-record.test.associations-test
   (:require
     [clj-record.test.model.manufacturer :as manufacturer]
     [clj-record.test.model.product :as product])

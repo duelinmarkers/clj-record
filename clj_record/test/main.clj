@@ -29,8 +29,11 @@
 
 (println "Setup complete.")
 
-(load "util-test")
-(load "core-test")
-(load "associations-test")
-(load "validation-test")
-(test-is/run-all-tests)
+(def files ["util-test" "core-test" "validation-test" "associations-test"])
+
+(doseq [file files]
+  (load file))
+
+(def base-ns (re-find #"^\w*.*\." (str *ns*)))
+
+(apply test-is/run-tests (map #(symbol (str base-ns %)) files))
