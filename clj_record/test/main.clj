@@ -29,11 +29,8 @@
 
 (println "Setup complete.")
 
-(def files ["util-test" "core-test" "validation-test" "associations-test"])
-
-(doseq [file files]
-  (load file))
-
-(def base-ns (re-find #"^\w*.*\." (str *ns*)))
-
-(apply test-is/run-tests (map #(symbol (str base-ns %)) files))
+(let [test-files ["util-test" "core-test" "validation-test" "associations-test"]
+      base-ns (re-find #"^\w*.*\." (str *ns*))]
+  (doseq [file test-files]
+    (load file))
+  (apply test-is/run-tests (map #(symbol (str base-ns %)) test-files)))
