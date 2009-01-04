@@ -1,6 +1,6 @@
 h1. clj-record
 
-clj-record is an API inspired by Rails' ActiveRecord but implemented in the "Clojure programming language":http://www.clojure.org/ and intended to use its idioms.
+clj-record is a library inspired by Rails' ActiveRecord but implemented in the "Clojure programming language":http://www.clojure.org/ and intended to use its idioms.
 
 This is a learning exercise and (at least for now) not intended for real-world use. Contributions to harden it are welcome, but I'm even more interested in recommendations for how to make it more idiomatically lisp-ey.
 
