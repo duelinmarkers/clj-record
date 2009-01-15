@@ -1,6 +1,7 @@
 (ns clj-record.test.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]
+            [clojure.contrib.str-utils :as str-utils]
             clj-record.config))
 
 
@@ -30,10 +31,10 @@
 (println "Setup complete.")
 
 (let [test-files  (for [f (.list (.getParentFile (java.io.File. *file*)))
-                        :when (re-find #"-test.clj$" f)]
+                        :when (re-find #"test.clj$" f)]
                     (re-find #"[^.]+" f))
-      base-ns (re-find #"^\w*.*\." (str *ns*))
-      test-namespaces (map #(symbol (str base-ns %)) test-files)]
+      base-namespace (re-find #"^\w*.*\." (str *ns*))
+      test-namespaces (map #(symbol (str base-namespace (str-utils/re-sub #"_" "-" %))) test-files)]
   (doseq [file test-files]
     (load file))
   (apply test-is/run-tests test-namespaces))
