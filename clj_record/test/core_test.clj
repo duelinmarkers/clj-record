@@ -6,7 +6,7 @@
   (:use clojure.contrib.test-is))
 
 
-(deftest table-name-is-permissive
+(deftest table-name-is-permissive-about-input-type
   (are (= _1 (core/table-name _2))
     "foos" "foo"
     "foos" 'foo
