@@ -5,6 +5,8 @@
   (:use clojure.contrib.test-is))
 
 
+(defn my-grade-validation-fn [grade] (or (nil? grade) (>= grade 0)))
+
 (cljrec/init-model
   (:associations
     (has-many products))
@@ -12,4 +14,4 @@
     (validates name "empty!" #(not (empty? %)))
     (validates name "starts with whitespace!" #(not (re-find #"^\s" %)))
     (validates name "ends with whitespace!" #(not (re-find #"\s$" %)))
-    (validates grade "negative!" #(or (nil? %) (>= % 0)))))
+    (validates grade "negative!" my-grade-validation-fn)))
