@@ -23,4 +23,4 @@
           validations (or (@metadata :validations) [])]
       (ref-set metadata
         (assoc @metadata :validations (conj validations [(keyword (name attribute-name)) message (eval function)])))))
-  '(identity 1)) ; XXX: Have to return a no-op form since we don't need any defs.
+  nil)
