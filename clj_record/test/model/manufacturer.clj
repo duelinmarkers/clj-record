@@ -5,6 +5,7 @@
   (:use clojure.contrib.test-is))
 
 
+(def my-grade-validation-message "negative!")
 (defn my-grade-validation-fn [grade] (or (nil? grade) (>= grade 0)))
 
 (cljrec/init-model
@@ -14,4 +15,5 @@
     (validates name "empty!" #(not (empty? %)))
     (validates name "starts with whitespace!" #(not (re-find #"^\s" %)))
     (validates name "ends with whitespace!" #(not (re-find #"\s$" %)))
-    (validates grade "negative!" my-grade-validation-fn)))
+    (validates founded "must be numeric" #(or (nil? %) (not (re-find #"\D" %))))
+    (validates grade my-grade-validation-message my-grade-validation-fn)))
