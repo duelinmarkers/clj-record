@@ -17,7 +17,7 @@
     {}
     (validations-for model-name)))
 
-(defn- validates [model-name attribute-name message function]
+(defn handle-option [model-name attribute-name message function]
   (dosync
     (let [metadata (@all-models-metadata model-name)
           validations (or (@metadata :validations) [])]
@@ -27,7 +27,3 @@
             (eval message)
             (eval function)])))))
   nil)
-
-(defn handle-option [model-name _ attribute-name message function]
-  (validates model-name attribute-name message function))
-

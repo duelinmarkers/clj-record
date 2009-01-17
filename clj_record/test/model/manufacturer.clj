@@ -12,8 +12,8 @@
   (:associations
     (has-many products))
   (:validation
-    (validates name "empty!" #(not (empty? %)))
-    (validates name "starts with whitespace!" #(not (re-find #"^\s" %)))
-    (validates name "ends with whitespace!" #(not (re-find #"\s$" %)))
-    (validates founded "must be numeric" #(or (nil? %) (not (re-find #"\D" %))))
-    (validates grade my-grade-validation-message my-grade-validation-fn)))
+    (name "empty!" #(not (empty? %)))
+    (name "starts with whitespace!" #(not (re-find #"^\s" %)))
+    (name "ends with whitespace!" #(not (re-find #"\s$" %)))
+    (founded "must be numeric" #(or (nil? %) (not (re-find #"\D" %))))
+    (grade my-grade-validation-message my-grade-validation-fn)))
