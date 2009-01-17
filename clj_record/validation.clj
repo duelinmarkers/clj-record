@@ -1,7 +1,7 @@
-(in-ns 'clj-record.core)
+(ns clj-record.validation
+  (:use clj-record.util)
+  (:use clj-record.core))
 
-
-(declare all-models-metadata) ; ref def'd in core.clj
 
 (defn- validations-for [model-name] ((@all-models-metadata model-name) :validations))
 
@@ -23,4 +23,4 @@
           validations (or (@metadata :validations) [])]
       (ref-set metadata
         (assoc @metadata :validations (conj validations [(keyword (name attribute-name)) message (eval function)])))))
-  nil) ; XXX: Have to return nil since we're not returning def forms.
+  '(identity 1)) ; XXX: Have to return a no-op form since we don't need any defs.

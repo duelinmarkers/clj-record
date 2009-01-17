@@ -3,8 +3,7 @@
   (:use clj-record.util)
   (:use clj-record.config)
   (:use clojure.contrib.str-utils)
-  (:use clojure.contrib.test-is)
-  (:load "associations" "validation"))
+  (:use clojure.contrib.test-is))
 
 
 (defn table-name [model-name]
@@ -53,8 +52,10 @@
       (format "delete from %s where %s" (table-name model-name) (to-conditions attributes)) [])))
 
 (defn- defs-from-options [model-name options]
-  (for [option-form options]
-    (apply (ns-resolve 'clj-record.core (first option-form)) model-name (rest option-form))))
+  (for [option-group options]
+    (let [option-ns (symbol (str "clj-record." (name (first option-group))))]
+      (for [option-form (rest option-group)]
+        (apply (ns-resolve option-ns (first option-form)) model-name (rest option-form))))))
 
 (def all-models-metadata (ref {}))
 
@@ -76,5 +77,5 @@
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
       (defn ~'validate [record#]
-        (validate ~model-name record#))
+        (clj-record.validation/validate ~model-name record#))
       ~@optional-forms)))

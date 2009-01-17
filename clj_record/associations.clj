@@ -1,4 +1,5 @@
-(in-ns 'clj-record.core)
+(ns clj-record.associations
+  (:use clj-record.util))
 
 
 (defn has-many [model-name association-name]
@@ -8,9 +9,11 @@
         destroy-fn-name (symbol (str "destroy-" association-name))]
     `(do
       (defn ~find-fn-name [record#]
-        (find-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
+        (clj-record.core/find-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
       (defn ~destroy-fn-name [record#]
-        (destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)})))))
+        (clj-record.core/destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
+      (defn ~'some-other-thing [*a#] nil)
+      )))
 
 (defn belongs-to [model-name association-name]
   (let [associated-model-name (str association-name)

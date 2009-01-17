@@ -3,4 +3,5 @@
 
 
 (cljrec/init-model
-  (belongs-to manufacturer))
+  (:associations
+    (belongs-to manufacturer)))
