@@ -11,7 +11,7 @@
 
 (defn find-record [model-name id]
   (sql/with-connection db
-    (sql/with-results rows (format "select * from %s where id = %s" (table-name model-name) id)
+    (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
       (merge {} (first rows)))))
 
 (defn- to-condition [[attribute value]] ; XXX: should be using PreparedStatement for smarter quoting
@@ -27,7 +27,7 @@
 (defn find-records [model-name attributes]
   (let [select-query (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))]
     (sql/with-connection db
-      (sql/with-results rows select-query
+      (sql/with-query-results rows [select-query]
         (doall (map #(merge {} %) rows))))))
 
 (defn create [model-name attributes]
@@ -37,7 +37,7 @@
        val-vector (map attributes key-vector)
        id (sql/transaction
             (sql/insert-values (table-name model-name) key-vector val-vector)
-            (sql/with-results rows "VALUES IDENTITY_VAL_LOCAL()" (:1 (first rows))))] ; XXX: db-vendor-specific
+            (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows))))] ; XXX: db-vendor-specific
       (find-record model-name id))))
 
 (defn destroy-record [model-name record]
