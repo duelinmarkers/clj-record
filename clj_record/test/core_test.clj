@@ -22,6 +22,9 @@
     (is (= humedai (manufacturer/get-record (:id humedai))))
     (manufacturer/destroy-record humedai)))
 
+(deftest get-record-throws-if-not-found
+  (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
+
 (deftest find-records-by-attribute-equality-conditions
   (let [humedai (manufacturer/create {:name "Humedai Motors"})
         other-1 (manufacturer/create {:name "Some Other"})

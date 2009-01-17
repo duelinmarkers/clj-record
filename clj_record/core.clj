@@ -11,6 +11,7 @@
 (defn get-record [model-name id]
   (sql/with-connection db
     (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
+      (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
       (merge {} (first rows)))))
 
 (defn to-conditions [attributes]
