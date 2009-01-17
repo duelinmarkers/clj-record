@@ -42,9 +42,7 @@
 
 (defn destroy-record [model-name record]
   (sql/with-connection db
-    (sql/do-prepared
-      (format "delete from %s where id = ?" (table-name model-name))
-      [(:id record)])))
+    (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])))
 
 (defn destroy-records [model-name attributes]
   (sql/with-connection db
