@@ -47,7 +47,7 @@ Do this.
 
   (clj-record.core/init-model
     (:validation
-      (validates name "Longer please." #(> (count %) 3)))) ; The leading "validates " will go away soon.
+      (:name "Longer please." #(> (count %) 3))))
 </code></pre>
 
 Then you get validation errors like this.
