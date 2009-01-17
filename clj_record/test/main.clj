@@ -13,15 +13,15 @@
 
 (defn create-tables []
   (sql/create-table :manufacturers
-    [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
-    [:name "VARCHAR(32)" "NOT NULL"]
+    [:id      :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
+    [:name    "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
-    [:grade "INT"])
+    [:grade   :int])
   (sql/create-table :products
-    [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
-    [:name "VARCHAR(32)" "NOT NULL"]
-    [:price "INT"]
-    [:manufacturer_id "INT" "NOT NULL"]))
+    [:id              :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
+    [:name            "VARCHAR(32)" "NOT NULL"]
+    [:price           :int]
+    [:manufacturer_id :int "NOT NULL"]))
 
 (sql/with-connection clj-record.config/db
   (sql/transaction
