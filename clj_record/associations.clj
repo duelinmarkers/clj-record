@@ -11,13 +11,11 @@
       (defn ~find-fn-name [record#]
         (clj-record.core/find-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
       (defn ~destroy-fn-name [record#]
-        (clj-record.core/destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
-      (defn ~'some-other-thing [*a#] nil)
-      )))
+        (clj-record.core/destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)})))))
 
 (defn belongs-to [model-name association-name]
   (let [associated-model-name (str association-name)
         find-fn-name (symbol (str "find-" associated-model-name))
         foreign-key-attribute (keyword (str associated-model-name "_id"))]
     `(defn ~find-fn-name [record#]
-      (find-record ~associated-model-name (~foreign-key-attribute record#)))))
+      (clj-record.core/find-record ~associated-model-name (~foreign-key-attribute record#)))))

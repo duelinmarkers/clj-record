@@ -51,11 +51,18 @@
     (sql/do-prepared
       (format "delete from %s where %s" (table-name model-name) (to-conditions attributes)) [])))
 
-(defn- defs-from-options [model-name options]
-  (for [option-group options]
-    (let [option-ns (symbol (str "clj-record." (name (first option-group))))]
-      (for [option-form (rest option-group)]
-        (apply (ns-resolve option-ns (first option-form)) model-name (rest option-form))))))
+(defn- defs-from-option-groups [model-name options]
+  (reduce
+    (fn [forms option-group]
+      (let [option-ns (symbol (str "clj-record." (name (first option-group))))]
+        (reduce
+          (fn [forms option-form]
+            (let [defs (apply (ns-resolve option-ns (first option-form)) model-name (rest option-form))]
+              (if defs (conj forms defs) forms)))
+          forms
+          (rest option-group))))
+    []
+    options))
 
 (def all-models-metadata (ref {}))
 
@@ -63,9 +70,9 @@
   (dosync (commute all-models-metadata assoc model-name (ref {}))))
 
 (defmacro init-model [& options]
-  (let [model-name (last (re-split #"\." (name (ns-name *ns*))))
-        optional-forms (defs-from-options model-name options)]
+  (let [model-name (last (re-split #"\." (name (ns-name *ns*))))]
     (setup-model-metadata model-name)
+    (let [optional-forms (defs-from-option-groups model-name options)]
     `(do
       (defn ~'table-name [] (table-name ~model-name))
       (defn ~'find-record [id#]
@@ -78,4 +85,4 @@
         (destroy-record ~model-name record#))
       (defn ~'validate [record#]
         (clj-record.validation/validate ~model-name record#))
-      ~@optional-forms)))
+      ~@optional-forms))))
