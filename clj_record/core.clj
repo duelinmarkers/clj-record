@@ -48,6 +48,10 @@
   (sql/with-connection db
     (sql/delete-rows (table-name model-name) (to-conditions attributes))))
 
+(defn update [model-name attributes]
+  (sql/with-connection db
+    (sql/update-values (table-name model-name) ["id = ?" (:id attributes)] (dissoc attributes :id))))
+
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
     (fn [def-forms [option-group-name & options]]
@@ -81,6 +85,8 @@
         (find-records ~model-name attributes#))
       (defn ~'create [attributes#]
         (create ~model-name attributes#))
+      (defn ~'update [attributes#]
+        (update ~model-name attributes#))
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
       (defn ~'validate [record#]

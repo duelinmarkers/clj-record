@@ -35,6 +35,14 @@
     (manufacturer/destroy-record {:id (:id humedai)})
     (is (empty? (manufacturer/find-records {:id (:id humedai)})))))
 
+(deftest update-uses-id-to-update-other-given-attributes-leaving-unspecified-attributes-untouched
+  (let [humedai (manufacturer/create {:name "Humedai Motors" :grade 90})
+        id (:id humedai)]
+    (manufacturer/update {:id id :name "Schmoomdai Motors" :founded "2008"})
+    (is (= 
+      {:name "Schmoomdai Motors" :grade 90 :founded "2008"}
+      (select-keys (manufacturer/find-record id) [:name :grade :founded])))))
+
 (deftest to-conditions
   (are (= _1 (core/to-conditions _2))
     ["a = ?" 1] {:a 1}

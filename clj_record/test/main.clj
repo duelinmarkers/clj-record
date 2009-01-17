@@ -16,7 +16,7 @@
     [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
     [:name "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
-    [:grade :real])
+    [:grade "INT"])
   (sql/create-table :products
     [:id "INT" "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
     [:name "VARCHAR(32)" "NOT NULL"]
