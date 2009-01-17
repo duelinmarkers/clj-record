@@ -51,18 +51,18 @@
     (sql/do-prepared
       (format "delete from %s where %s" (table-name model-name) (to-conditions attributes)) [])))
 
-(defn- defs-from-option-groups [model-name options]
+(defn- defs-from-option-groups [model-name option-groups]
   (reduce
-    (fn [forms option-group]
-      (let [option-ns (symbol (str "clj-record." (name (first option-group))))]
+    (fn [forms [option-group-name & options]]
+      (let [option-ns (symbol (str "clj-record." (name option-group-name)))]
         (reduce
-          (fn [forms option-form]
-            (let [defs (apply (ns-resolve option-ns (first option-form)) model-name (rest option-form))]
+          (fn [forms [option-fn & option-args]]
+            (let [defs (apply (ns-resolve option-ns option-fn) model-name option-args)]
               (if defs (conj forms defs) forms)))
           forms
-          (rest option-group))))
+          options)))
     []
-    options))
+    option-groups))
 
 (def all-models-metadata (ref {}))
 
