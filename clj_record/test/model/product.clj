@@ -1,7 +1,7 @@
 (ns clj-record.test.model.product
-  (:require [clj-record.core :as cljrec]))
+  (:require clj-record.boot))
 
 
-(cljrec/init-model
+(clj-record.core/init-model
   (:associations
     (belongs-to manufacturer)))

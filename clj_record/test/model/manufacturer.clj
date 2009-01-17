@@ -1,14 +1,11 @@
 (ns clj-record.test.model.manufacturer
-  (:require [clj-record.core :as cljrec])
-  (:require clj-record.validation) ; XXX: Could we load these from someplace else or do we need them in every model?
-  (:require clj-record.associations)
-  (:use clojure.contrib.test-is))
+  (:require clj-record.boot))
 
 
 (def my-grade-validation-message "negative!")
 (defn my-grade-validation-fn [grade] (or (nil? grade) (>= grade 0)))
 
-(cljrec/init-model
+(clj-record.core/init-model
   (:associations
     (has-many products))
   (:validation
