@@ -53,13 +53,13 @@
 
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
-    (fn [forms [option-group-name & options]]
+    (fn [def-forms [option-group-name & options]]
       (let [option-ns (symbol (str "clj-record." (name option-group-name)))]
         (reduce
-          (fn [forms [option-fn & option-args]]
+          (fn [def-forms [option-fn & option-args]]
             (let [defs (apply (ns-resolve option-ns option-fn) model-name option-args)]
-              (if defs (conj forms defs) forms)))
-          forms
+              (if defs (conj def-forms defs) def-forms)))
+          def-forms
           options)))
     []
     option-groups))
