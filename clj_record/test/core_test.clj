@@ -37,7 +37,8 @@
 
 (deftest to-conditions
   (are (= _1 (core/to-conditions _2))
-    "a = 1" {:a 1}
-    "a = 'one'" {:a "one"}
-    "a = 1 AND b = 2" [[:a 1] [:b 2]] ; Vector makes order reliable.
-    "a IS NULL" {:a nil}))
+    ["a = ?" 1] {:a 1}
+    ["a = ?" "one"] {:a "one"}
+    ["a IS NULL"] {:a nil})
+  (let [r (core/to-conditions {:a 1 :b 2})]
+    (is (or (= r ["a = ? AND b = ?" 1 2]) (= r ["b = ? AND a = ?" 2 1])))))

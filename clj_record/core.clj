@@ -14,20 +14,21 @@
     (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
       (merge {} (first rows)))))
 
-(defn- to-condition [[attribute value]] ; XXX: should be using PreparedStatement for smarter quoting
-  (str
-    (name attribute)
-    (if (nil? value)
-      " IS NULL"
-      (str " = " (if (string? value) (format "'%s'" value) value)))))
-
 (defn to-conditions [attributes]
-  (str-join " AND " (map to-condition attributes)))
+  (let [[parameterized-conditions values] (reduce
+      (fn [[parameterized-conditions values] [attribute value]]
+        (if (nil? value)
+          [(conj parameterized-conditions (format "%s IS NULL" (name attribute))) values]
+          [(conj parameterized-conditions (format "%s = ?" (name attribute))) (conj values value)]))
+      [[] []]
+      attributes)]
+    (apply vector (str-join " AND " parameterized-conditions) values)))
 
 (defn find-records [model-name attributes]
-  (let [select-query (format "select * from %s where %s" (table-name model-name) (to-conditions attributes))]
+  (let [[parameterized-where & values] (to-conditions attributes)
+        select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
     (sql/with-connection db
-      (sql/with-query-results rows [select-query]
+      (sql/with-query-results rows (apply vector select-query values)
         (doall (map #(merge {} %) rows))))))
 
 (defn create [model-name attributes]
@@ -46,8 +47,7 @@
 
 (defn destroy-records [model-name attributes]
   (sql/with-connection db
-    (sql/do-prepared
-      (format "delete from %s where %s" (table-name model-name) (to-conditions attributes)) [])))
+    (sql/delete-rows (table-name model-name) (to-conditions attributes))))
 
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
