@@ -2,6 +2,10 @@
   (:use clj-record.util))
 
 
+(defn handle-option [model-name association-type-sym association-name]
+  (let [assoc-fn (ns-resolve 'clj-record.associations association-type-sym)]
+    (assoc-fn model-name association-name)))
+
 (defn has-many [model-name association-name]
   (let [associated-model-name (singularize (name association-name))
         foreign-key-attribute (keyword (str model-name "_id"))

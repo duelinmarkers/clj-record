@@ -27,3 +27,7 @@
             (eval message)
             (eval function)])))))
   nil)
+
+(defn handle-option [model-name _ attribute-name message function]
+  (validates model-name attribute-name message function))
+
