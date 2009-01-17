@@ -1,9 +1,8 @@
 (ns clj-record.core
-  (:require [clojure.contrib.sql :as sql])
-  (:use clj-record.util)
-  (:use clj-record.config)
-  (:use clojure.contrib.str-utils)
-  (:use clojure.contrib.test-is))
+  (:require
+    [clojure.contrib.sql :as sql]
+    [clojure.contrib.str-utils :as str-utils])
+  (:use (clj-record util config)))
 
 
 (defn table-name [model-name]
@@ -22,7 +21,7 @@
           [(conj parameterized-conditions (format "%s = ?" (name attribute))) (conj values value)]))
       [[] []]
       attributes)]
-    (apply vector (str-join " AND " parameterized-conditions) values)))
+    (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
 
 (defn find-records [model-name attributes]
   (let [[parameterized-where & values] (to-conditions attributes)
@@ -71,7 +70,7 @@
   (dosync (commute all-models-metadata assoc model-name (ref {}))))
 
 (defmacro init-model [& options]
-  (let [model-name (last (re-split #"\." (name (ns-name *ns*))))]
+  (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))]
     (setup-model-metadata model-name)
     (let [optional-forms (defs-from-option-groups model-name options)]
     `(do
