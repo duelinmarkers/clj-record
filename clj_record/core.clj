@@ -8,12 +8,6 @@
 (defn table-name [model-name]
   (pluralize (if (string? model-name) model-name (name model-name))))
 
-(defn get-record [model-name id]
-  (sql/with-connection db
-    (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
-      (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
-      (merge {} (first rows)))))
-
 (defn to-conditions [attributes]
   (let [[parameterized-conditions values] (reduce
       (fn [[parameterized-conditions values] [attribute value]]
@@ -23,13 +17,6 @@
       [[] []]
       attributes)]
     (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
-
-(defn find-records [model-name attributes]
-  (let [[parameterized-where & values] (to-conditions attributes)
-        select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
-    (sql/with-connection db
-      (sql/with-query-results rows (apply vector select-query values)
-        (doall (map #(merge {} %) rows))))))
 
 (defn create [model-name attributes]
   (sql/with-connection db
@@ -41,6 +28,23 @@
             (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows))))] ; XXX: db-vendor-specific
       (get-record model-name id))))
 
+(defn get-record [model-name id]
+  (sql/with-connection db
+    (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
+      (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
+      (merge {} (first rows)))))
+
+(defn find-records [model-name attributes]
+  (let [[parameterized-where & values] (to-conditions attributes)
+        select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
+    (sql/with-connection db
+      (sql/with-query-results rows (apply vector select-query values)
+        (doall (map #(merge {} %) rows))))))
+
+(defn update [model-name attributes]
+  (sql/with-connection db
+    (sql/update-values (table-name model-name) ["id = ?" (:id attributes)] (dissoc attributes :id))))
+
 (defn destroy-record [model-name record]
   (sql/with-connection db
     (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])))
@@ -48,10 +52,6 @@
 (defn destroy-records [model-name attributes]
   (sql/with-connection db
     (sql/delete-rows (table-name model-name) (to-conditions attributes))))
-
-(defn update [model-name attributes]
-  (sql/with-connection db
-    (sql/update-values (table-name model-name) ["id = ?" (:id attributes)] (dissoc attributes :id))))
 
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
