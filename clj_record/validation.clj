@@ -22,5 +22,8 @@
     (let [metadata (@all-models-metadata model-name)
           validations (or (@metadata :validations) [])]
       (ref-set metadata
-        (assoc @metadata :validations (conj validations [(keyword (name attribute-name)) (eval message) (eval function)])))))
+        (assoc @metadata :validations (conj validations
+          [ (keyword (name attribute-name))
+            (eval message)
+            (eval function)])))))
   nil)

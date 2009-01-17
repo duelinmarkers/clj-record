@@ -28,9 +28,9 @@
     (drop-tables)
     (create-tables)))
 
-(println "Setup complete.")
+(println "DB setup complete.")
 
-(let [test-files  (for [f (.list (.getParentFile (java.io.File. *file*)))
+(let [test-files  (for [f (-> *file* java.io.File. .getParentFile .list)
                         :when (re-find #"test.clj$" f)]
                     (re-find #"[^.]+" f))
       base-namespace (re-find #"^\w*.*\." (str *ns*))
