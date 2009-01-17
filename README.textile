@@ -10,7 +10,7 @@ To define a model, you do something like this.
 
 <pre><code>
   (ns com.example.user
-    (:require clj-record.core))
+    (:require clj-record.boot))
 
   (clj-record.core/init-model)
 </code></pre>
