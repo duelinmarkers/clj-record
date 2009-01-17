@@ -23,8 +23,9 @@ Do this.
   (ns ...)
 
   (clj-record.core/init-model
-    (belongs-to account)
-    (has-many subscriptions))
+    (:associations
+      (belongs-to account)
+      (has-many subscriptions)))
 </code></pre>
 
 Then you can do things like this.
@@ -45,7 +46,8 @@ Do this.
   (ns ...)
 
   (clj-record.core/init-model
-    (validates name "Longer please." #(> (count %) 3)))
+    (:validation
+      (validates name "Longer please." #(> (count %) 3)))) ; The leading "validates " will go away soon.
 </code></pre>
 
 Then you get validation errors like this.

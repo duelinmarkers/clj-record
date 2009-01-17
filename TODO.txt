@@ -1,3 +1,5 @@
+Let each option group do its own option parsing so the first item in each doesn't have to be a function (to remove the redundant "validate").
+
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
