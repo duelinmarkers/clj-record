@@ -17,9 +17,9 @@
     "manufacturers"  (manufacturer/table-name)
     "products"       (product/table-name)))
 
-(deftest find-record-by-id
+(deftest get-record-by-id
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]
-    (is (= humedai (manufacturer/find-record (:id humedai))))
+    (is (= humedai (manufacturer/get-record (:id humedai))))
     (manufacturer/destroy-record humedai)))
 
 (deftest find-records-by-attribute-equality-conditions
@@ -41,7 +41,7 @@
     (manufacturer/update {:id id :name "Schmoomdai Motors" :founded "2008"})
     (is (= 
       {:name "Schmoomdai Motors" :grade 90 :founded "2008"}
-      (select-keys (manufacturer/find-record id) [:name :grade :founded])))))
+      (select-keys (manufacturer/get-record id) [:name :grade :founded])))))
 
 (deftest to-conditions
   (are (= _1 (core/to-conditions _2))

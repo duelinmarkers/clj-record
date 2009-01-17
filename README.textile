@@ -31,7 +31,7 @@ Do this.
 Then you can do things like this.
 
 <pre><code>
-  (let [mikey (user/find-record 2)
+  (let [mikey (user/get-record 2)
         subs (user/find-subscriptions mikey)]
     (doseq [subscription subs] (println (format "%s subscribed to %s" (:name mikey) (:name sub))))
     (user/destroy-subscriptions mikey)

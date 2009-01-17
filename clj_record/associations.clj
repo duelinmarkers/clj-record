@@ -22,4 +22,4 @@
         find-fn-name (symbol (str "find-" associated-model-name))
         foreign-key-attribute (keyword (str associated-model-name "_id"))]
     `(defn ~find-fn-name [record#]
-      (clj-record.core/find-record ~associated-model-name (~foreign-key-attribute record#)))))
+      (clj-record.core/get-record ~associated-model-name (~foreign-key-attribute record#)))))

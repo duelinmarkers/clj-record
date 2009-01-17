@@ -8,7 +8,7 @@
 (defn table-name [model-name]
   (pluralize (if (string? model-name) model-name (name model-name))))
 
-(defn find-record [model-name id]
+(defn get-record [model-name id]
   (sql/with-connection db
     (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
       (merge {} (first rows)))))
@@ -38,7 +38,7 @@
        id (sql/transaction
             (sql/insert-values (table-name model-name) key-vector val-vector)
             (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows))))] ; XXX: db-vendor-specific
-      (find-record model-name id))))
+      (get-record model-name id))))
 
 (defn destroy-record [model-name record]
   (sql/with-connection db
@@ -79,8 +79,8 @@
     (let [optional-forms (defs-from-option-groups model-name options)]
     `(do
       (defn ~'table-name [] (table-name ~model-name))
-      (defn ~'find-record [id#]
-        (find-record ~model-name id#))
+      (defn ~'get-record [id#]
+        (get-record ~model-name id#))
       (defn ~'find-records [attributes#]
         (find-records ~model-name attributes#))
       (defn ~'create [attributes#]
