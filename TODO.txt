@@ -15,6 +15,7 @@ Test with hsqldb in addition to derby, different connections for different model
   * getting db configuration saner.
 
 Allow a series of expressions to be executed on one connection, in one transaction.
+  * Once that's done, get transactions wrapped around most tests.
 
 (io!) bomb if any database work is attempted in a dosync block?
 

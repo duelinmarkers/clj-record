@@ -33,11 +33,21 @@
 
 (deftest find-records-by-attribute-equality-conditions
   (let [humedai (manufacturer/create {:name "Humedai Motors"})
-        other-1 (manufacturer/create {:name "Some Other"})
-        results (manufacturer/find-records {:name "Humedai Motors"})]
-    (is (= [humedai] results))
-    (manufacturer/destroy-record humedai)
-    (manufacturer/destroy-record other-1)))
+        other-1 (manufacturer/create {:name "Some Other"})]
+    (try
+      (is (= [humedai] (manufacturer/find-records {:name "Humedai Motors"})))
+      (finally
+        (manufacturer/destroy-record humedai)
+        (manufacturer/destroy-record other-1)))))
+
+(deftest find-records-by-SQL-conditions
+  (let [humedai (manufacturer/create {:name "Humedai Motors"})
+        other-1 (manufacturer/create {:name "Some Other"})]
+    (try
+      (is (= [humedai] (manufacturer/find-records ["name = ?" "Humedai Motors"])))
+      (finally
+        (manufacturer/destroy-record humedai)
+        (manufacturer/destroy-record other-1)))))
 
 (deftest destroy-record-destroys-by-id-from-record
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]

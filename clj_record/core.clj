@@ -47,9 +47,14 @@
       (get-record model-name id))))
 
 (defn find-records
-  "Returns a vector of records matching (-> attributes to-conditions)."
-  [model-name attributes]
-  (let [[parameterized-where & values] (to-conditions attributes)
+  "Returns a vector of matching records.
+  Given a where-params vector, uses it as-is. (See clojure.contrib.sql/with-query-results.)
+  Given a map of attribute-value pairs, uses to-conditions to convert to where-params."
+  [model-name attributes-or-where-params]
+  (let [[parameterized-where & values]
+          (if (map? attributes-or-where-params)
+            (to-conditions attributes-or-where-params)
+            attributes-or-where-params)
         select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
     (sql/with-connection db
       (sql/with-query-results rows (apply vector select-query values)
