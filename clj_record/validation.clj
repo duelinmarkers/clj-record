@@ -17,9 +17,8 @@
     {}
     (validations-for model-name)))
 
-(defn handle-option
-  "Called via init-model when a :validation option group is encountered."
-  ; XXX: Side-effects during macro-expansion are lost when doing AOT!!!
+(defn add-validation
+  "Adds a validation to the named model."
   [model-name attribute-name message function]
   (dosync
     (let [metadata (@all-models-metadata model-name)
@@ -28,5 +27,9 @@
         (assoc @metadata :validations (conj validations
           [ (keyword (name attribute-name))
             (eval message)
-            (eval function)])))))
-  nil)
+            (eval function)]))))))
+
+(defn handle-option
+  "init-model macro-expansion delegate that generates a call to add-validation."
+  [model-name attribute-name message function]
+  `(add-validation ~model-name ~attribute-name ~message ~function))

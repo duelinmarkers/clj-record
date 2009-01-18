@@ -96,7 +96,7 @@
 
 (def all-models-metadata (ref {}))
 
-(defn- setup-model-metadata [model-name]
+(defn init-model-metadata [model-name]
   (dosync (commute all-models-metadata assoc model-name (ref {}))))
 
 (defmacro init-model
@@ -108,9 +108,9 @@
   See clj_record/test/model/manufacturer.clj for an example."
   [& option-groups]
   (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))]
-    (setup-model-metadata model-name)
     (let [optional-defs (defs-from-option-groups model-name option-groups)]
       `(do
+        (init-model-metadata ~model-name)
         (defn ~'table-name [] (table-name ~model-name))
         (defn ~'get-record [id#]
           (get-record ~model-name id#))

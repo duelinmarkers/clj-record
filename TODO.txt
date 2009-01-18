@@ -1,5 +1,3 @@
-Eliminate reliance on side-effects from macro expansion in validation. Doesn't work with AOT compilation.
-
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
