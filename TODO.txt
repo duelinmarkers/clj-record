@@ -1,12 +1,16 @@
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
-Get db configuration saner.
-
-Use prepared statements to get proper quoting.
-
-Support for IN clause when a seq is given in the conditions map.
-
 Eager fetching of associations.
 
-Migrations.
+Test with hsqldb in addition to derby, different connections for different models. Will hopefully force:
+  * eliminating vendor-specific bits.
+  * getting db configuration saner.
+
+Allow a series of expressions to be executed on one connection, in one transaction.
+
+(io!) bomb if any database work is attempted in a dosync block?
+
+Generate an IN clause when a seqable is given in the conditions map.
+
+Pretty migrations. Maybe just a series of contributions to clojure.contrib.sql.
