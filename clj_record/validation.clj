@@ -29,7 +29,7 @@
             (eval message)
             (eval function)]))))))
 
-(defn handle-option
+(defn expand-init-option
   "init-model macro-expansion delegate that generates a call to add-validation."
   [model-name attribute-name message function]
   `(add-validation ~model-name ~attribute-name ~message ~function))

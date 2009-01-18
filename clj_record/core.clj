@@ -82,12 +82,12 @@
   (reduce
     (fn [def-forms [option-group-name & options]]
       (let [option-ns (symbol (str "clj-record." (name option-group-name)))
-            fn-sym 'handle-option
-            handle-option-fn (ns-resolve option-ns fn-sym)]
-        (if (nil? handle-option-fn) (throw (RuntimeException. (format "%s/%s not defined" option-ns fn-sym))))
+            expand-init-option-fn (ns-resolve option-ns 'expand-init-option)]
+        (if (nil? expand-init-option-fn)
+          (throw (IllegalArgumentException. (format "%s/expand-init-option not defined" option-ns))))
         (reduce
           (fn [def-forms option-form]
-            (let [new-defs (apply handle-option-fn model-name option-form)]
+            (let [new-defs (apply expand-init-option-fn model-name option-form)]
               (if new-defs (conj def-forms new-defs) def-forms)))
           def-forms
           options)))

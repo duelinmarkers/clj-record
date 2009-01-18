@@ -2,7 +2,7 @@
   (:use clj-record.util))
 
 
-(defn handle-option
+(defn expand-init-option
   "Called via init-model when an :associations option group is encountered."
   [model-name association-type-sym association-name]
   (let [assoc-fn (ns-resolve 'clj-record.associations association-type-sym)]
