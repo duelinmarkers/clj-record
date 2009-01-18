@@ -8,13 +8,10 @@
   (pluralize (if (string? model-name) model-name (name model-name))))
 
 (defn run-callbacks [model-name record hook] ; XXX: Reasonable way to move this? Argh dependencies.
-  (let [callbacks (model-metadata-for model-name :callbacks)]
-    (if (nil? callbacks)
-      record
-      (let [funcs (callbacks hook)]
-        (loop [r record fs funcs]
-          (if (empty? fs) r
-            (recur ((first fs) r) (rest fs))))))))
+  (loop [r record
+         funcs ((or (model-metadata-for model-name :callbacks) {}) hook)]
+    (if (empty? funcs) r
+      (recur ((first funcs) r) (rest funcs)))))
 
 (defn to-conditions
   "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
