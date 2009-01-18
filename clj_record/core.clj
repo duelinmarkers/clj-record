@@ -1,7 +1,6 @@
 (ns clj-record.core
-  (:require
-    [clojure.contrib.sql :as sql]
-    [clojure.contrib.str-utils :as str-utils])
+  (:require [clojure.contrib.sql        :as sql]
+            [clojure.contrib.str-utils  :as str-utils])
   (:use (clj-record util config)))
 
 
@@ -14,6 +13,7 @@
   Conditions will be ANDed together.
   Nil attributes will be turned into 'attr_name IS NULL' with no value in the vector."
   [attributes]
+  ; XXX: Surely there's a better way.
   (let [[parameterized-conditions values] (reduce
       (fn [[parameterized-conditions values] [attribute value]]
         (if (nil? value)

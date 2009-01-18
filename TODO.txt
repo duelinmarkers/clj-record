@@ -1,7 +1,14 @@
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
+Support specifying (not inferring):
+  * table-name
+  * model-name of an association
+  * foreign-key-name
+
 Eager fetching of associations.
+
+Query by arbitrary conditions, not just attribute maps.
 
 Test with hsqldb in addition to derby, different connections for different models. Will hopefully force:
   * eliminating vendor-specific bits.
