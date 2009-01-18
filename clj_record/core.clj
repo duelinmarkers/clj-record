@@ -85,12 +85,7 @@
             expand-init-option-fn (ns-resolve option-ns 'expand-init-option)]
         (if (nil? expand-init-option-fn)
           (throw (IllegalArgumentException. (format "%s/expand-init-option not defined" option-ns))))
-        (reduce
-          (fn [def-forms option-form]
-            (let [new-defs (apply expand-init-option-fn model-name option-form)]
-              (if new-defs (conj def-forms new-defs) def-forms)))
-          def-forms
-          options)))
+        (into def-forms (map #(apply expand-init-option-fn model-name %) options))))
     []
     option-groups))
 
