@@ -17,7 +17,9 @@
     {}
     (validations-for model-name)))
 
-(defn handle-option [model-name attribute-name message function]
+(defn handle-option
+  "Called via init-model when a :validation option group is encountered."
+  [model-name attribute-name message function]
   (dosync
     (let [metadata (@all-models-metadata model-name)
           validations (or (@metadata :validations) [])]
