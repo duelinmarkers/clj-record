@@ -17,6 +17,12 @@
     "manufacturers"  (manufacturer/table-name)
     "products"       (product/table-name)))
 
+(deftest insert-returns-id-of-new-record
+  (let [id (manufacturer/insert {:name "ACME"})
+        acme (manufacturer/get-record id)]
+    (is (= "ACME" (acme :name)))
+    (manufacturer/destroy-record {:id id})))
+
 (deftest get-record-by-id
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]
     (is (= humedai (manufacturer/get-record (:id humedai))))

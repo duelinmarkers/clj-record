@@ -23,6 +23,14 @@
       attributes)]
     (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
 
+(defn insert
+  "Inserts a record populated with attributes and returns the generated id."
+  [model-name attributes]
+  (sql/with-connection db
+    (sql/transaction
+      (sql/insert-values (table-name model-name) (keys attributes) (vals attributes))
+      (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows)))))) ; XXX: db-vendor-specific
+
 (defn get-record
   "Retrieves record by id, throwing if not found."
   [model-name id]
@@ -34,13 +42,8 @@
 (defn create
   "Inserts a record populated with attributes and returns it."
   [model-name attributes]
-  (sql/with-connection db
-    (let
-      [key-vector (keys attributes)
-       val-vector (map attributes key-vector)
-       id (sql/transaction
-            (sql/insert-values (table-name model-name) key-vector val-vector)
-            (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows))))] ; XXX: db-vendor-specific
+  (let [id (insert model-name attributes)]
+    (sql/with-connection db
       (get-record model-name id))))
 
 (defn find-records
@@ -110,6 +113,8 @@
           (find-records ~model-name attributes#))
         (defn ~'create [attributes#]
           (create ~model-name attributes#))
+        (defn ~'insert [attributes#]
+          (insert ~model-name attributes#))
         (defn ~'update [attributes#]
           (update ~model-name attributes#))
         (defn ~'destroy-record [record#]
