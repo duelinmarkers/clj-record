@@ -19,6 +19,7 @@
 
 (defn handle-option
   "Called via init-model when a :validation option group is encountered."
+  ; XXX: Side-effects during macro-expansion are lost when doing AOT!!!
   [model-name attribute-name message function]
   (dosync
     (let [metadata (@all-models-metadata model-name)

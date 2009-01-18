@@ -1,3 +1,5 @@
+Eliminate reliance on side-effects from macro expansion in validation. Doesn't work with AOT compilation.
+
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
@@ -22,5 +24,3 @@ Allow a series of expressions to be executed on one connection, in one transacti
 Generate an IN clause when a seqable is given in the conditions map.
 
 Pretty migrations. Maybe just a series of contributions to clojure.contrib.sql.
-
-Look into whether side effects at macro expansion time work with AOT compilation.
