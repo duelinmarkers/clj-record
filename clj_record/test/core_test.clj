@@ -6,6 +6,16 @@
   (:use clojure.contrib.test-is))
 
 
+(defmacro deftxntest [name & body]
+  `(deftest ~name
+    (clojure.contrib.sql/with-connection clj-record.config/db
+      (clojure.contrib.sql/transaction
+        (try
+          ~@body
+          (finally
+            (println "about to rollback on " (clojure.contrib.sql/connection))
+            (.rollback (clojure.contrib.sql/connection))))))))
+
 (deftest table-name-is-permissive-about-input-type
   (are (= _1 (core/table-name _2))
     "foos" "foo"
@@ -17,16 +27,14 @@
     "manufacturers"  (manufacturer/table-name)
     "products"       (product/table-name)))
 
-(deftest insert-returns-id-of-new-record
+(deftxntest insert-returns-id-of-new-record
   (let [id (manufacturer/insert {:name "ACME"})
         acme (manufacturer/get-record id)]
-    (is (= "ACME" (acme :name)))
-    (manufacturer/destroy-record {:id id})))
+    (is (= "ACME" (acme :name)))))
 
-(deftest get-record-by-id
+(deftxntest get-record-by-id
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]
-    (is (= humedai (manufacturer/get-record (:id humedai))))
-    (manufacturer/destroy-record humedai)))
+    (is (= humedai (manufacturer/get-record (:id humedai))))))
 
 (deftest get-record-throws-if-not-found
   (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
@@ -60,7 +68,8 @@
     (manufacturer/update {:id id :name "Schmoomdai Motors" :founded "2008"})
     (is (= 
       {:name "Schmoomdai Motors" :grade 90 :founded "2008"}
-      (select-keys (manufacturer/get-record id) [:name :grade :founded])))))
+      (select-keys (manufacturer/get-record id) [:name :grade :founded])))
+    (manufacturer/destroy-record humedai)))
 
 (deftest to-conditions
   (are (= _1 (core/to-conditions _2))
