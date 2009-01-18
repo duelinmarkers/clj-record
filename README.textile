@@ -6,14 +6,16 @@ This is a learning exercise and (at least for now) not intended for real-world u
 
 h2. The API
 
-To define a model, you do something like this.
+To define a model (in this case called "employee"), you do something like this.
 
 <pre><code>
-  (ns com.example.user
+  (ns com.example.employee
     (:require clj-record.boot))
 
   (clj-record.core/init-model)
 </code></pre>
+
+It'll expect there to be an employees table. (At the moment you can't specify a different table name.)
 
 h3. Associations
 
@@ -57,9 +59,19 @@ Then you get validation errors like this.
   {:name ["Longer please."]}
 </code></pre>
 
+h3. Callbacks...
+
+...have just started making their way into working. It's about what you'd expect.
+
+<pre><code>
+  (clj-record.core/init-model
+    (:callbacks
+      (:before-save fn-that-transforms-a-record)))
+</pre></code>
+
 ---
 
-See "the tests":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test for everything that works.
+See "the tests":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test for everything that works. See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt for what else I'm thinking about, and feel free to suggest.
 
 h2. Running
 
