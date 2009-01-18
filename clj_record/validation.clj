@@ -1,5 +1,6 @@
 (ns clj-record.validation
   (:use clj-record.util)
+  (:use clj-record.meta)
   (:use clj-record.core))
 
 
@@ -21,13 +22,12 @@
   "Adds a validation to the named model."
   [model-name attribute-name message function]
   (dosync
-    (let [metadata (@all-models-metadata model-name)
-          validations (or (@metadata :validations) [])]
-      (ref-set metadata
-        (assoc @metadata :validations (conj validations
+    (let [validations (or (model-metadata-for model-name :validations) [])]
+      (set-model-metadata-for model-name :validations
+        (conj validations
           [ (keyword (name attribute-name))
             (eval message)
-            (eval function)]))))))
+            (eval function)])))))
 
 (defn expand-init-option
   "init-model macro-expansion delegate that generates a call to add-validation."

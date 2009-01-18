@@ -1,11 +1,20 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql        :as sql]
             [clojure.contrib.str-utils  :as str-utils])
-  (:use (clj-record util config)))
+  (:use (clj-record meta util config)))
 
 
 (defn table-name [model-name]
   (pluralize (if (string? model-name) model-name (name model-name))))
+
+(defn run-callbacks [model-name record hook] ; XXX: Reasonable way to move this? Argh dependencies.
+  (let [callbacks (model-metadata-for model-name :callbacks)]
+    (if (nil? callbacks)
+      record
+      (let [funcs (callbacks hook)]
+        (loop [r record fs funcs]
+          (if (empty? fs) r
+            (recur ((first fs) r) (rest fs))))))))
 
 (defn to-conditions
   "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
@@ -28,7 +37,8 @@
   [model-name attributes]
   (sql/with-connection db
     (sql/transaction
-      (sql/insert-values (table-name model-name) (keys attributes) (vals attributes))
+      (let [attributes (run-callbacks model-name attributes :before-save)]
+        (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
       (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows)))))) ; XXX: db-vendor-specific
 
 (defn get-record
@@ -88,11 +98,6 @@
         (into def-forms (map #(apply expand-init-option-fn model-name %) options))))
     []
     option-groups))
-
-(def all-models-metadata (ref {}))
-
-(defn init-model-metadata [model-name]
-  (dosync (commute all-models-metadata assoc model-name (ref {}))))
 
 (defmacro init-model
   "Macro to turn a namespace into a 'model.'
