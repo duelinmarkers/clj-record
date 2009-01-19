@@ -60,3 +60,14 @@
     ["a IS NULL"] {:a nil})
   (let [r (core/to-conditions {:a 1 :b 2})]
     (is (or (= r ["a = ? AND b = ?" 1 2]) (= r ["b = ? AND a = ?" 2 1])))))
+
+(deftest model-metadata-with-no-args
+  (is (= 
+    (@clj-record.meta/all-models-metadata "manufacturer")
+    (manufacturer/model-metadata)))
+  (is (=
+    #{:validations :callbacks}
+    (set (keys @(manufacturer/model-metadata))))))
+
+(deftest model-metadata-with-one-arg
+  (is (map? (manufacturer/model-metadata :callbacks))))

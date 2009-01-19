@@ -82,9 +82,10 @@
   "Updates by (partial-record :id), updating only those columns included in partial-record."
   [model-name partial-record]
   (connected
-    (sql/update-values (table-name model-name)
-      ["id = ?" (:id partial-record)]
-      (-> partial-record (run-callbacks model-name :before-save) (dissoc :id)))))
+    (let [id (partial-record :id)
+          partial-record (-> partial-record (run-callbacks model-name :before-save) (dissoc :id))]
+      (sql/update-values (table-name model-name) ["id = ?" id] partial-record)
+      (assoc partial-record :id id))))
 
 (defn destroy-record
   "Deletes by (record :id)."

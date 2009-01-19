@@ -13,3 +13,11 @@
       ~@body
       (finally
         (clojure.contrib.sql/set-rollback-only)))))
+
+(defmacro restoring-ref [ref & body]
+  `(let [old-value# (deref ~ref)]
+    (try
+      ~@body
+      (finally
+        old-value#
+        (dosync (ref-set ~ref old-value#))))))

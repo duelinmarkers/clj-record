@@ -16,6 +16,10 @@
     (manufacturer/update {:id id :founded "68"})
     (is (= "1968" ((manufacturer/get-record id) :founded)))))
 
-;(deftest before-update-can-transform-record
-;  (restoring-ref (manufacturer/model-metadata)
-;    (callbacks/add-callback )))
+(deftest before-update-can-transform-record
+  (restoring-ref (manufacturer/model-metadata)
+    (callbacks/add-callback "manufacturer" :before-update #(assoc % :founded "0000"))
+    (rolling-back
+      (let [m (manufacturer/create {:name "A" :founded "2008"})]
+        (is (= "2008" (:founded m)))
+        (is (= "0000" (:founded (manufacturer/update (select-keys m [:id :founded])))))))))
