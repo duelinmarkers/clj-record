@@ -8,7 +8,7 @@
 (defn table-name [model-name]
   (pluralize (if (string? model-name) model-name (name model-name))))
 
-(defn run-callbacks [model-name record hook] ; XXX: Reasonable way to move this? Argh dependencies.
+(defn run-callbacks [record model-name hook] ; XXX: Reasonable way to move this? Argh dependencies.
   (loop [r record
          funcs ((or (model-metadata-for model-name :callbacks) {}) hook)]
     (if (empty? funcs) r
@@ -41,7 +41,7 @@
   [model-name attributes]
   (connected
     (sql/transaction
-      (let [attributes (run-callbacks model-name attributes :before-save)]
+      (let [attributes (run-callbacks attributes model-name :before-save)]
         (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
       (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows)))))) ; XXX: db-vendor-specific
 
@@ -78,7 +78,9 @@
   "Updates by (partial-record :id), updating only those columns included in partial-record."
   [model-name partial-record]
   (connected
-    (sql/update-values (table-name model-name) ["id = ?" (:id partial-record)] (dissoc partial-record :id))))
+    (sql/update-values (table-name model-name)
+      ["id = ?" (:id partial-record)]
+      (-> partial-record (run-callbacks model-name :before-save) (dissoc :id)))))
 
 (defn destroy-record
   "Deletes by (record :id)."
