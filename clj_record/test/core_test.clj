@@ -6,7 +6,7 @@
   (:use clojure.contrib.test-is))
 
 
-(defmacro deftxntest [name & body]
+(defmacro defdbtest [name & body]
   `(deftest ~name
     (io! "DB test running. No STM allowed."
       (clojure.contrib.sql/with-connection clj-record.config/db
@@ -27,12 +27,12 @@
     "manufacturers"  (manufacturer/table-name)
     "products"       (product/table-name)))
 
-(deftxntest insert-returns-id-of-new-record
+(defdbtest insert-returns-id-of-new-record
   (let [id (manufacturer/insert {:name "ACME"})
         acme (manufacturer/get-record id)]
     (is (= "ACME" (acme :name)))))
 
-(deftxntest get-record-by-id
+(defdbtest get-record-by-id
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]
     (is (= humedai (manufacturer/get-record (:id humedai))))))
 
