@@ -33,14 +33,20 @@
       (func#)
       (sql/with-connection db (func#)))))
 
+(defmacro transaction
+  "Runs body in a single DB transaction, first ensuring there's a connection."
+  [& body]
+  `(connected
+    (sql/transaction
+      ~@body)))
+
 (defn insert
   "Inserts a record populated with attributes and returns the generated id."
   [model-name attributes]
-  (connected
-    (sql/transaction
-      (let [attributes (run-callbacks attributes model-name :before-save)]
-        (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
-      (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows)))))) ; XXX: db-vendor-specific
+  (transaction
+    (let [attributes (run-callbacks attributes model-name :before-save)]
+      (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
+    (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows))))) ; XXX: db-vendor-specific
 
 (defn get-record
   "Retrieves record by id, throwing if not found."
