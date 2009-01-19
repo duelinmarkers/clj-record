@@ -11,8 +11,12 @@
       (set-model-metadata-for model-name :callbacks
         (merge-with concat callbacks {hook [func]})))))
 
-(defn run-callbacks [record model-name hook]
+(defn callback-functions [model-name hooks]
+  (let [callbacks (model-metadata-for model-name :callbacks)]
+    (reduce #(concat %1 (%2 callbacks)) [] hooks)))
+
+(defn run-callbacks [record model-name & hooks]
   (loop [r record
-         funcs ((or (model-metadata-for model-name :callbacks) {}) hook)]
+         funcs (callback-functions model-name hooks)]
     (if (empty? funcs) r
       (recur ((first funcs) r) (rest funcs)))))

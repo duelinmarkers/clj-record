@@ -83,7 +83,7 @@
   [model-name partial-record]
   (connected
     (let [id (partial-record :id)
-          partial-record (-> partial-record (run-callbacks model-name :before-save) (dissoc :id))]
+          partial-record (-> partial-record (run-callbacks model-name :before-save :before-update) (dissoc :id))]
       (sql/update-values (table-name model-name) ["id = ?" id] partial-record)
       (assoc partial-record :id id))))
 
