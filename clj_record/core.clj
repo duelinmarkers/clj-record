@@ -121,6 +121,8 @@
     (let [optional-defs (defs-from-option-groups model-name option-groups)]
       `(do
         (init-model-metadata ~model-name)
+        (defn ~'model-metadata [& args#]
+          (apply model-metadata-for ~model-name args#))
         (defn ~'table-name [] (table-name ~model-name))
         (defn ~'get-record [id#]
           (get-record ~model-name id#))

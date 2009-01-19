@@ -5,9 +5,11 @@
 
 (defmacro defdbtest [name & body]
   `(deftest ~name
-    (io! "DB test running. No STM allowed."
-      (core/transaction
-        (try
-          ~@body
-          (finally
-            (clojure.contrib.sql/set-rollback-only)))))))
+    (rolling-back ~@body)))
+
+(defmacro rolling-back [& body]
+  `(core/transaction
+    (try
+      ~@body
+      (finally
+        (clojure.contrib.sql/set-rollback-only)))))

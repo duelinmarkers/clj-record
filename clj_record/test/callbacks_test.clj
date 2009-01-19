@@ -1,6 +1,7 @@
 (ns clj-record.test.callbacks-test
   (:require
-    [clj-record.test.model.manufacturer :as manufacturer])
+    [clj-record.test.model.manufacturer :as manufacturer]
+    [clj-record.callbacks :as callbacks])
   (:use clojure.contrib.test-is
         clj-record.test.test-helper))
 
@@ -14,3 +15,7 @@
         id (m :id)]
     (manufacturer/update {:id id :founded "68"})
     (is (= "1968" ((manufacturer/get-record id) :founded)))))
+
+;(deftest before-update-can-transform-record
+;  (restoring-ref (manufacturer/model-metadata)
+;    (callbacks/add-callback )))
