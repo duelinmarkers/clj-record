@@ -1,5 +1,6 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql        :as sql]
+            [clojure.contrib.sql.internal :as sql.internal]
             [clojure.contrib.str-utils  :as str-utils])
   (:use (clj-record meta util config)))
 
@@ -29,10 +30,16 @@
       attributes)]
     (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
 
+(defmacro connected [& body]
+  `(let [func# (fn [] ~@body)]
+    (if (sql.internal/*db* :connection) ; XXX: Bad evil sql.internal dependency.
+      (func#)
+      (sql/with-connection db (func#)))))
+
 (defn insert
   "Inserts a record populated with attributes and returns the generated id."
   [model-name attributes]
-  (sql/with-connection db
+  (connected
     (sql/transaction
       (let [attributes (run-callbacks model-name attributes :before-save)]
         (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
@@ -41,7 +48,7 @@
 (defn get-record
   "Retrieves record by id, throwing if not found."
   [model-name id]
-  (sql/with-connection db
+  (connected
     (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
       (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
       (merge {} (first rows)))))
@@ -50,7 +57,7 @@
   "Inserts a record populated with attributes and returns it."
   [model-name attributes]
   (let [id (insert model-name attributes)]
-    (sql/with-connection db
+    (connected
       (get-record model-name id))))
 
 (defn find-records
@@ -63,26 +70,26 @@
             (to-conditions attributes-or-where-params)
             attributes-or-where-params)
         select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
-    (sql/with-connection db
+    (connected
       (sql/with-query-results rows (apply vector select-query values)
         (doall (map #(merge {} %) rows))))))
 
 (defn update
   "Updates by (partial-record :id), updating only those columns included in partial-record."
   [model-name partial-record]
-  (sql/with-connection db
+  (connected
     (sql/update-values (table-name model-name) ["id = ?" (:id partial-record)] (dissoc partial-record :id))))
 
 (defn destroy-record
   "Deletes by (record :id)."
   [model-name record]
-  (sql/with-connection db
+  (connected
     (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])))
 
 (defn destroy-records
   "Deletes all records matching (-> attributes to-conditions)."
   [model-name attributes]
-  (sql/with-connection db
+  (connected
     (sql/delete-rows (table-name model-name) (to-conditions attributes))))
 
 (defn- defs-from-option-groups [model-name option-groups]

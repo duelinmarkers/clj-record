@@ -12,13 +12,9 @@
       (clojure.contrib.sql/with-connection clj-record.config/db
         (clojure.contrib.sql/transaction
           (try
-            (println "Autocommit? " (.getAutoCommit (clojure.contrib.sql/connection)))
             ~@body
             (finally
-              (let [e# (Exception. "ROLL it back")]
-                (println "about to throw to force rollback at " (System/currentTimeMillis) " on " (clojure.contrib.sql/connection) " with stack:")
-                (.printStackTrace e#)
-                (throw e#)))))))))
+              (clojure.contrib.sql/set-rollback-only))))))))
 
 (deftest table-name-is-permissive-about-input-type
   (are (= _1 (core/table-name _2))
