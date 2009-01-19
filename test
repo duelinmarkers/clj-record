@@ -1,0 +1,2 @@
+#!/usr/bin/env clj
+(load-file "clj_record/test/main.clj")
