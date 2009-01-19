@@ -24,7 +24,10 @@
       attributes)]
     (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
 
-(defmacro connected [& body]
+(defmacro connected
+  "Ensures that the body is run with a single DB connection.
+  Doesn't create a new connection if there already is one."
+  [& body]
   `(let [func# (fn [] ~@body)]
     (if (sql.internal/*db* :connection) ; XXX: Bad evil sql.internal dependency.
       (func#)
