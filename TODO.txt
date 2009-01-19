@@ -3,9 +3,14 @@ Support specifying (not inferring):
   * model-name of an association
   * foreign-key-name
 
+Sort out what we want to return from update.
+
+Allow update to be called with nil values. (Should be a patch to clojure.contrib.sql I think.)
+
 More callbacks.
 
 "Serialization" of data structures as attribute values.
+  * Use this http://groups.google.com/group/clojure/msg/e21bf475b45bd2d5
 
 :stop-if-invalid to abort early inside (:validation ...) form.
 
