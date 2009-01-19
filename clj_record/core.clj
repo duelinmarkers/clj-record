@@ -2,17 +2,11 @@
   (:require [clojure.contrib.sql        :as sql]
             [clojure.contrib.sql.internal :as sql.internal]
             [clojure.contrib.str-utils  :as str-utils])
-  (:use (clj-record meta util config)))
+  (:use (clj-record meta util config callbacks)))
 
 
 (defn table-name [model-name]
   (pluralize (if (string? model-name) model-name (name model-name))))
-
-(defn run-callbacks [record model-name hook] ; XXX: Reasonable way to move this? Argh dependencies.
-  (loop [r record
-         funcs ((or (model-metadata-for model-name :callbacks) {}) hook)]
-    (if (empty? funcs) r
-      (recur ((first funcs) r) (rest funcs)))))
 
 (defn to-conditions
   "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
