@@ -36,40 +36,31 @@
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]
     (is (= humedai (manufacturer/get-record (:id humedai))))))
 
-(deftest get-record-throws-if-not-found
+(defdbtest get-record-throws-if-not-found
   (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
 
-(deftest find-records-by-attribute-equality-conditions
+(defdbtest find-records-by-attribute-equality-conditions
   (let [humedai (manufacturer/create {:name "Humedai Motors"})
         other-1 (manufacturer/create {:name "Some Other"})]
-    (try
-      (is (= [humedai] (manufacturer/find-records {:name "Humedai Motors"})))
-      (finally
-        (manufacturer/destroy-record humedai)
-        (manufacturer/destroy-record other-1)))))
+    (is (= [humedai] (manufacturer/find-records {:name "Humedai Motors"})))))
 
-(deftest find-records-by-SQL-conditions
+(defdbtest find-records-by-SQL-conditions
   (let [humedai (manufacturer/create {:name "Humedai Motors"})
         other-1 (manufacturer/create {:name "Some Other"})]
-    (try
-      (is (= [humedai] (manufacturer/find-records ["name = ?" "Humedai Motors"])))
-      (finally
-        (manufacturer/destroy-record humedai)
-        (manufacturer/destroy-record other-1)))))
+    (is (= [humedai] (manufacturer/find-records ["name = ?" "Humedai Motors"])))))
 
-(deftest destroy-record-destroys-by-id-from-record
+(defdbtest destroy-record-destroys-by-id-from-record
   (let [humedai (manufacturer/create {:name "Humedai Motors"})]
     (manufacturer/destroy-record {:id (:id humedai)})
     (is (empty? (manufacturer/find-records {:id (:id humedai)})))))
 
-(deftest update-uses-id-to-update-other-given-attributes-leaving-unspecified-attributes-untouched
+(defdbtest update-uses-id-to-update-other-given-attributes-leaving-unspecified-attributes-untouched
   (let [humedai (manufacturer/create {:name "Humedai Motors" :grade 90})
         id (:id humedai)]
     (manufacturer/update {:id id :name "Schmoomdai Motors" :founded "2008"})
     (is (= 
       {:name "Schmoomdai Motors" :grade 90 :founded "2008"}
-      (select-keys (manufacturer/get-record id) [:name :grade :founded])))
-    (manufacturer/destroy-record humedai)))
+      (select-keys (manufacturer/get-record id) [:name :grade :founded])))))
 
 (deftest to-conditions
   (are (= _1 (core/to-conditions _2))
