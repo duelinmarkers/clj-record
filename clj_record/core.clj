@@ -47,7 +47,7 @@
   (transaction
     (let [attributes (run-callbacks attributes model-name :before-save)]
       (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
-    (sql/with-query-results rows ["VALUES IDENTITY_VAL_LOCAL()"] (:1 (first rows))))) ; XXX: db-vendor-specific
+    (sql/with-query-results rows [(id-query-for db)] (:1 (first rows)))))
 
 (defn get-record
   "Retrieves record by id, throwing if not found."

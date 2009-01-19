@@ -12,3 +12,10 @@
   (if (.endsWith word "y")
     (re-sub #"y$" "ies" word)
     (str word "s")))
+
+(defn id-query-for [{:keys [subprotocol] :as db-spec}]
+  (cond
+    (= subprotocol "derby")
+      "VALUES IDENTITY_VAL_LOCAL()"
+    :else
+      (throw (Exception. (str "Unrecognized db-spec: " db-spec)))))
