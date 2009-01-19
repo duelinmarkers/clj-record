@@ -1,8 +1,11 @@
 h1. clj-record
 
-clj-record is a library inspired by Rails' ActiveRecord but implemented in the "Clojure programming language":http://www.clojure.org/ and intended to use its idioms.
+clj-record is a library inspired by Rails' ActiveRecord but implemented in the 
+"Clojure programming language":http://www.clojure.org/ and intended to use its 
+functional idioms. It's a fairly thin layer on top of clojure.contrib.sql that 
+provides validation, associations, and callbacks.
 
-This is a learning exercise and (at least for now) not intended for real-world use. Contributions to harden it are welcome, but I'm even more interested in recommendations for how to make it more idiomatically lisp-ey.
+Contributions are welcome, as are recommendations for how to improve the API.
 
 h2. The API
 
@@ -16,6 +19,24 @@ To define a model (in this case called "employee"), you do something like this.
 </code></pre>
 
 It'll expect there to be an employees table. (At the moment you can't specify a different table name.)
+
+The (clj-record.core/init-model) macro form with no extra arguments will expand 
+into function definitions for basic crud operations: 
+
+* get-record (by id)
+* find-records (by map of attributes)
+* insert (from a map of attributes, returning the generated id)
+* create (from a map of attributes, returning the record itself)
+* update (from a map of attributes including :id)
+* destroy-record (from a map of attributes including :id)
+
+See the functions of the same name in 
+"clj-record.core":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/core.clj 
+for documentation.
+(The model-name argument of the functions in clj-record.core is not needed 
+when calling functions on the model namespace.)
+
+Additional optional arguments can generate richer functionality.
 
 h3. Associations
 
@@ -71,7 +92,13 @@ h3. Callbacks...
 
 ---
 
-See "the tests":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test for everything that works. See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt for what else I'm thinking about, and feel free to suggest.
+clj-record is being TDD'd (nearly 100%) using clojure.contrib.test-is, largely 
+with high-level full-stack tests, so see 
+"the tests":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test 
+for details of everything that works. 
+
+See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt 
+for what else I'm thinking about, and feel free to suggest.
 
 h2. Running
 
@@ -83,7 +110,8 @@ h2. The Name...
 
 h2. Thanks for Contributing
 
-Brian Doyle
+Brian Doyle for early interest and ideas. 
+Stephen Gilardi for making helpful changes to clojure.contrib.sql. 
 
 ---
 
