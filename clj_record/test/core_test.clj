@@ -3,18 +3,9 @@
     [clj-record.core :as core]
     [clj-record.test.model.manufacturer :as manufacturer]
     [clj-record.test.model.product :as product])
-  (:use clojure.contrib.test-is))
+  (:use clojure.contrib.test-is
+        clj-record.test.test-helper))
 
-
-(defmacro defdbtest [name & body]
-  `(deftest ~name
-    (io! "DB test running. No STM allowed."
-      (clojure.contrib.sql/with-connection clj-record.config/db
-        (clojure.contrib.sql/transaction
-          (try
-            ~@body
-            (finally
-              (clojure.contrib.sql/set-rollback-only))))))))
 
 (deftest table-name-is-permissive-about-input-type
   (are (= _1 (core/table-name _2))
