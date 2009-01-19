@@ -3,9 +3,11 @@ Support specifying (not inferring):
   * model-name of an association
   * foreign-key-name
 
-Callbacks.
+More callbacks.
 
-(:stop-if-invalid) to abort early inside (:validation ...) form.
+"Serialization" of data structures as attribute values.
+
+:stop-if-invalid to abort early inside (:validation ...) form.
 
 Eager fetching of associations.
 
@@ -14,10 +16,13 @@ Test with hsqldb in addition to derby, different connections for different model
   * getting db configuration saner.
 
 (io!) bomb if any database work is attempted in a dosync block?
+  * Gilardi has added this to sql/transaction.
 
 Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
-Generate an IN clause when a seqable is given in the conditions map.
+Generate fancier queries with some fancy query API.
 
 Pretty migrations. Maybe just a series of contributions to clojure.contrib.sql.
+
+Figure out a way to test init-model options without putting every bizarre case into manufacturer. It's getting ridiculous.
