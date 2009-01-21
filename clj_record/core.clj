@@ -1,6 +1,5 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql        :as sql]
-            [clojure.contrib.sql.internal :as sql.internal]
             [clojure.contrib.str-utils  :as str-utils])
   (:use (clj-record meta util config callbacks)))
 
@@ -30,7 +29,7 @@
   You're probably more interested in the 'transaction' macro."
   [& body]
   `(let [func# (fn [] ~@body)]
-    (if (sql.internal/*db* :connection) ; XXX: Bad evil sql.internal dependency.
+    (if (sql/find-connection)
       (func#)
       (sql/with-connection db (func#)))))
 
