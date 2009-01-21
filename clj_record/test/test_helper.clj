@@ -19,5 +19,4 @@
     (try
       ~@body
       (finally
-        old-value#
         (dosync (ref-set ~ref old-value#))))))
