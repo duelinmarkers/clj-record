@@ -34,7 +34,7 @@
                         :when (re-find #"test.clj$" f)]
                     (re-find #"[^.]+" f))
       base-namespace (re-find #"^\w*.*\." (str *ns*))
-      test-namespaces (map #(symbol (str base-namespace (str-utils/re-sub #"_" "-" %))) test-files)]
+      test-namespaces (map #(symbol (str base-namespace (str-utils/re-gsub #"_" "-" %))) test-files)]
   (doseq [file test-files]
     (load file))
   (apply test-is/run-tests test-namespaces))
