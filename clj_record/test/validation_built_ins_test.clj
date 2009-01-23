@@ -4,9 +4,15 @@
 
 
 (deftest match-creates-a-matching-fn-for-the-given-pattern
-  (is ((vfn/match #"foo") "yes foo can"))
-  (is (not ((vfn/match #"bar") "no foo can't"))))
+  (let [matches-foo? (vfn/match #"foo")]
+    (is (matches-foo? "yes foo does"))
+    (are (not (matches-foo? _1))
+      "no bar doesn't"
+      nil)))
 
 (deftest non-match-creates-an-anti-matching-fn-for-the-given-pattern
-  (is (not ((vfn/non-match #"foo") "yes foo can")))
-  (is ((vfn/non-match #"bar") "no foo can't")))
+  (let [non-matches-foo? (vfn/non-match #"foo")]
+    (is (not (non-matches-foo? "foo doesn't not")))
+    (are (non-matches-foo? _1)
+      "bar non-matches"
+      nil)))

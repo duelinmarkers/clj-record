@@ -2,7 +2,7 @@
 
 
 (defn match [pattern]
-  #(re-find pattern %))
+  #(and % (re-find pattern %)))
 
 (defn non-match [pattern]
   (complement (match pattern)))
