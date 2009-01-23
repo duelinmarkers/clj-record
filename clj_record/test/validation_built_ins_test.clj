@@ -20,3 +20,10 @@
       "bar non-matches"
       nil
       123)))
+
+(deftest numeric?
+  (are (vfn/numeric? _1)
+    123
+    "123")
+  (are (not (vfn/numeric? _1))
+    "foo"))

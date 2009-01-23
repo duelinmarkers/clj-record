@@ -15,9 +15,9 @@
     (has-many products))
   (:validation
     (:name "empty!" #(not (empty? %)))
-    (:name "starts with whitespace!" (vfn/match #"^\S"))
+    (:name "starts with whitespace!" (vfn/non-match #"^\s"))
     (:name "ends with whitespace!" (vfn/non-match #"\s$"))
-    (:founded "must be numeric" #(or (nil? %) (not (re-find #"\D" %))))
+    (:founded "must be numeric" #(or (nil? %) (vfn/numeric? %)))
     (:grade my-grade-validation-message #(or (nil? %) (>= % 0))))
   (:callbacks
     (:before-save #(let [year (infer-full-year (% :founded))] (if year (assoc % :founded year) %)))))

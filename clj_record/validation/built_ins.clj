@@ -6,3 +6,5 @@
 
 (defn non-match [pattern]
   (complement (match pattern)))
+
+(def numeric? (non-match #"\D"))
