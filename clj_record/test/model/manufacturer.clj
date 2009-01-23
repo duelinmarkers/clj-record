@@ -1,5 +1,6 @@
 (ns clj-record.test.model.manufacturer
-  (:require clj-record.boot))
+  (:require clj-record.boot
+            [clj-record.validation.built-ins :as vfn]))
 
 
 ; The following defs are to illustrate that validation messages and functions
@@ -15,8 +16,8 @@
     (has-many products))
   (:validation
     (:name "empty!" #(not (empty? %)))
-    (:name "starts with whitespace!" #(not (re-find #"^\s" %)))
-    (:name "ends with whitespace!" #(not (re-find #"\s$" %)))
+    (:name "starts with whitespace!" (vfn/non-match #"^\s"))
+    (:name "ends with whitespace!" (vfn/non-match #"\s$"))
     (:founded "must be numeric" #(or (nil? %) (not (re-find #"\D" %))))
     (:grade my-grade-validation-message my-grade-validation-fn))
   (:callbacks
