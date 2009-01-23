@@ -3,8 +3,7 @@
             [clj-record.validation.built-ins :as vfn]))
 
 
-; def'd here to illustrate that validation messages
-; don't have to live inline in the init-model form.
+; def'd here to illustrate that validation messages don't have to live inline in the init-model form.
 (def my-grade-validation-message "negative!")
 
 (defn infer-full-year [year]
