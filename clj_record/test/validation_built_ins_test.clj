@@ -8,11 +8,13 @@
     (is (matches-foo? "yes foo does"))
     (are (not (matches-foo? _1))
       "no bar doesn't"
-      nil)))
+      nil
+      123)))
 
 (deftest non-match-creates-an-anti-matching-fn-for-the-given-pattern
   (let [non-matches-foo? (vfn/non-match #"foo")]
     (is (not (non-matches-foo? "foo doesn't not")))
     (are (non-matches-foo? _1)
       "bar non-matches"
-      nil)))
+      nil
+      123)))
