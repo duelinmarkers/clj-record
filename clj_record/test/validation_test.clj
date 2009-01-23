@@ -19,7 +19,7 @@
     {:name ["starts with whitespace!" "ends with whitespace!"]}
     (manufacturer/validate {:name " Bad Name "}))))
 
-(deftest validation-message-and-function-can-be-defined-in-model-namespace
+(deftest validation-message-can-be-defined-in-model-namespace
   (is (= ["negative!"] (:grade (manufacturer/validate {:grade -2 :name "Bob"})))))
 
 (deftest validate-with-errors-on-multiple-attributes

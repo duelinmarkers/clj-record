@@ -3,10 +3,9 @@
             [clj-record.validation.built-ins :as vfn]))
 
 
-; The following defs are to illustrate that validation messages and functions
+; def'd here to illustrate that validation messages
 ; don't have to live inline in the init-model form.
 (def my-grade-validation-message "negative!")
-(defn my-grade-validation-fn [grade] (or (nil? grade) (>= grade 0)))
 
 (defn infer-full-year [year]
   (if (= 2 (count year)) (str "19" year) year))
@@ -16,9 +15,9 @@
     (has-many products))
   (:validation
     (:name "empty!" #(not (empty? %)))
-    (:name "starts with whitespace!" (vfn/non-match #"^\s"))
+    (:name "starts with whitespace!" (vfn/match #"^\S"))
     (:name "ends with whitespace!" (vfn/non-match #"\s$"))
     (:founded "must be numeric" #(or (nil? %) (not (re-find #"\D" %))))
-    (:grade my-grade-validation-message my-grade-validation-fn))
+    (:grade my-grade-validation-message #(or (nil? %) (>= % 0))))
   (:callbacks
     (:before-save #(let [year (infer-full-year (% :founded))] (if year (assoc % :founded year) %)))))
