@@ -9,7 +9,9 @@
     (are (not (matches-foo? _1))
       "no bar doesn't"
       nil
-      123)))
+      123))
+  (testing "non-strings are str'd so they may match"
+    (is ((vfn/match #"123") 41234))))
 
 (deftest non-match-creates-an-anti-matching-fn-for-the-given-pattern
   (let [non-matches-foo? (vfn/non-match #"foo")]
