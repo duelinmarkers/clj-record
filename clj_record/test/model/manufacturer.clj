@@ -2,7 +2,7 @@
   (:require clj-record.boot))
 
 
-; The following defs are here to illustrate validation messages and functions
+; The following defs are to illustrate that validation messages and functions
 ; don't have to live inline in the init-model form.
 (def my-grade-validation-message "negative!")
 (defn my-grade-validation-fn [grade] (or (nil? grade) (>= grade 0)))
