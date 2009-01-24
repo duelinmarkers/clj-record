@@ -19,34 +19,34 @@
     "products"       (product/table-name)))
 
 (defdbtest insert-returns-id-of-new-record
-  (let [id (manufacturer/insert {:name "ACME"})
+  (let [id (manufacturer/insert (valid-manufacturer-with {:name "ACME"}))
         acme (manufacturer/get-record id)]
     (is (= "ACME" (acme :name)))))
 
 (defdbtest get-record-by-id
-  (let [humedai (manufacturer/create {:name "Humedai Motors"})]
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
     (is (= humedai (manufacturer/get-record (:id humedai))))))
 
 (defdbtest get-record-throws-if-not-found
   (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
 
 (defdbtest find-records-by-attribute-equality-conditions
-  (let [humedai (manufacturer/create {:name "Humedai Motors"})
-        other-1 (manufacturer/create {:name "Some Other"})]
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
     (is (= [humedai] (manufacturer/find-records {:name "Humedai Motors"})))))
 
 (defdbtest find-records-by-SQL-conditions
-  (let [humedai (manufacturer/create {:name "Humedai Motors"})
-        other-1 (manufacturer/create {:name "Some Other"})]
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
     (is (= [humedai] (manufacturer/find-records ["name = ?" "Humedai Motors"])))))
 
 (defdbtest destroy-record-destroys-by-id-from-record
-  (let [humedai (manufacturer/create {:name "Humedai Motors"})]
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
     (manufacturer/destroy-record {:id (:id humedai)})
     (is (empty? (manufacturer/find-records {:id (:id humedai)})))))
 
 (defdbtest update-uses-id-to-update-other-given-attributes-leaving-unspecified-attributes-untouched
-  (let [humedai (manufacturer/create {:name "Humedai Motors" :grade 90})
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors" :grade 90}))
         id (:id humedai)]
     (manufacturer/update {:id id :name "Schmoomdai Motors" :founded "2008"})
     (is (= 
