@@ -11,4 +11,6 @@
   [pattern]
   (complement (match pattern)))
 
-(def numeric? (non-match #"\D"))
+(def
+  #^{:doc "Validation function that makes sure a value is numeric (though not necessarily a number)."}
+  numeric? (non-match #"\D"))
