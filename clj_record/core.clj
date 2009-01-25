@@ -11,9 +11,7 @@
   (model-metadata-for model-name :table-name))
 
 (defn set-table-name [model-name tbl-name]
-  (dosync
-    (let [m (model-metadata-for model-name)]
-      (ref-set m (assoc @m :table-name tbl-name)))))
+  (dosync (set-model-metadata-for model-name :table-name tbl-name)))
 
 (defn to-conditions
   "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
