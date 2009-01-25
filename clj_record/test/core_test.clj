@@ -7,16 +7,19 @@
         clj-record.test.test-helper))
 
 
-(deftest table-name-is-permissive-about-input-type
-  (are (= _1 (core/table-name _2))
+(deftest table-name-can-be-unconventional-with-table-name-option-to-init-model
+  (is (= "productos" (core/table-name "product"))))
+
+(deftest infer-table-name-is-permissive-about-input-type
+  (are (= _1 (core/infer-table-name _2))
     "foos" "foo"
     "foos" 'foo
     "foos" :foo))
 
-(deftest table-name-answers-based-on-model-namespace
+(deftest table-name-is-available-on-each-model-namespace
   (are (= _1 _2)
     "manufacturers"  (manufacturer/table-name)
-    "products"       (product/table-name)))
+    "productos"       (product/table-name)))
 
 (defdbtest insert-returns-id-of-new-record
   (let [id (manufacturer/insert (valid-manufacturer-with {:name "ACME"}))
@@ -65,9 +68,7 @@
   (is (= 
     (@clj-record.meta/all-models-metadata "manufacturer")
     (manufacturer/model-metadata)))
-  (is (=
-    #{:validations :callbacks}
-    (set (keys @(manufacturer/model-metadata))))))
+  (is (contains? @(manufacturer/model-metadata) :validations)))
 
 (deftest model-metadata-with-one-arg
   (is (map? (manufacturer/model-metadata :callbacks))))

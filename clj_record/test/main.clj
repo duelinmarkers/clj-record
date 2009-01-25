@@ -8,7 +8,7 @@
 (defn drop-tables []
   (try
     (sql/drop-table :manufacturers)
-    (sql/drop-table :products)
+    (sql/drop-table :productos)
     (catch Exception e)))
 
 (defn create-tables []
@@ -17,7 +17,7 @@
     [:name    "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
     [:grade   :int])
-  (sql/create-table :products
+  (sql/create-table :productos
     [:id              :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
     [:name            "VARCHAR(32)" "NOT NULL"]
     [:price           :int]

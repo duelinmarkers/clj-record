@@ -3,5 +3,6 @@
 
 
 (clj-record.core/init-model
+  :table-name "productos"
   (:associations
     (belongs-to manufacturer)))

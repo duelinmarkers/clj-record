@@ -4,8 +4,16 @@
   (:use (clj-record meta util config callbacks)))
 
 
-(defn table-name [model-name]
+(defn infer-table-name [model-name]
   (pluralize (if (string? model-name) model-name (name model-name))))
+
+(defn table-name [model-name]
+  (model-metadata-for model-name :table-name))
+
+(defn set-table-name [model-name tbl-name]
+  (dosync
+    (let [m (model-metadata-for model-name)]
+      (ref-set m (assoc @m :table-name tbl-name)))))
 
 (defn to-conditions
   "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
@@ -109,6 +117,15 @@
     []
     option-groups))
 
+(defn- split-out-init-options [init-options]
+  (loop [top-level-options {}
+         remaining-options init-options]
+    (if (keyword? (first remaining-options))
+      (recur
+        (assoc top-level-options (first remaining-options) (frest remaining-options))
+        (rrest remaining-options))
+      [top-level-options remaining-options])))
+
 (defmacro init-model
   "Macro to turn a namespace into a 'model.'
   The segment of the namespace name following the last dot is used as the model-name.
@@ -116,11 +133,15 @@
   in the model namespace (where the model-name as first argument can be omitted).
   Optional forms for associations and validation are specified here.
   See clj_record/test/model/manufacturer.clj for an example."
-  [& option-groups]
+  [& init-options]
   (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))
+        [top-level-options option-groups] (split-out-init-options init-options)
+        tbl-name (or (top-level-options :table-name) (infer-table-name model-name))
         optional-defs (defs-from-option-groups model-name option-groups)]
     `(do
       (init-model-metadata ~model-name)
+      (set-table-name ~model-name ~tbl-name)
+      (def ~'table-name (table-name ~model-name))
       (defn ~'model-metadata [& args#]
         (apply model-metadata-for ~model-name args#))
       (defn ~'table-name [] (table-name ~model-name))
