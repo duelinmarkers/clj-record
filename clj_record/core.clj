@@ -111,7 +111,7 @@
 
 (defmacro init-model
   "Macro to turn a namespace into a 'model.'
-  The segment of the namespace following the last dot is used as the model-name.
+  The segment of the namespace name following the last dot is used as the model-name.
   Model-specific versions of most public functions in clj-record.core are defined 
   in the model namespace (where the model-name as first argument can be omitted).
   Optional forms for associations and validation are specified here.
