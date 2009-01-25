@@ -1,9 +1,6 @@
 Support specifying (not inferring):
-  * table-name
   * model-name of an association
-  * foreign-key-name
-
-Sort out what we want to return from update.
+  * foreign-key column name
 
 Allow update to be called with nil values. (Should be a patch to clojure.contrib.sql I think.)
 
