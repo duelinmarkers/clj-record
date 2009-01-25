@@ -10,12 +10,6 @@
 (deftest table-name-can-be-unconventional-with-table-name-option-to-init-model
   (is (= "productos" (core/table-name "product"))))
 
-(deftest infer-table-name-is-permissive-about-input-type
-  (are (= _1 (core/infer-table-name _2))
-    "foos" "foo"
-    "foos" 'foo
-    "foos" :foo))
-
 (deftest table-name-is-available-on-each-model-namespace
   (are (= _1 _2)
     "manufacturers"  (manufacturer/table-name)

@@ -4,9 +4,6 @@
   (:use (clj-record meta util config callbacks)))
 
 
-(defn infer-table-name [model-name]
-  (pluralize (if (string? model-name) model-name (name model-name))))
-
 (defn table-name [model-name]
   (model-metadata-for model-name :table-name))
 
