@@ -4,10 +4,14 @@
   (:use (clj-record meta util config callbacks)))
 
 
-(defn table-name [model-name]
+(defn table-name
+  "Retrieves table-name from model-metadata."
+  [model-name]
   (model-metadata-for model-name :table-name))
 
-(defn set-table-name [model-name tbl-name]
+(defn set-table-name
+  "Puts table-name into model metadata."
+  [model-name tbl-name]
   (dosync (set-model-metadata-for model-name :table-name tbl-name)))
 
 (defn to-conditions
