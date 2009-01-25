@@ -119,23 +119,23 @@
   [& option-groups]
   (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))
         optional-defs (defs-from-option-groups model-name option-groups)]
-      `(do
-        (init-model-metadata ~model-name)
-        (defn ~'model-metadata [& args#]
-          (apply model-metadata-for ~model-name args#))
-        (defn ~'table-name [] (table-name ~model-name))
-        (defn ~'get-record [id#]
-          (get-record ~model-name id#))
-        (defn ~'find-records [attributes#]
-          (find-records ~model-name attributes#))
-        (defn ~'create [attributes#]
-          (create ~model-name attributes#))
-        (defn ~'insert [attributes#]
-          (insert ~model-name attributes#))
-        (defn ~'update [attributes#]
-          (update ~model-name attributes#))
-        (defn ~'destroy-record [record#]
-          (destroy-record ~model-name record#))
-        (defn ~'validate [record#]
-          (clj-record.validation/validate ~model-name record#))
-        ~@optional-defs)))
+    `(do
+      (init-model-metadata ~model-name)
+      (defn ~'model-metadata [& args#]
+        (apply model-metadata-for ~model-name args#))
+      (defn ~'table-name [] (table-name ~model-name))
+      (defn ~'get-record [id#]
+        (get-record ~model-name id#))
+      (defn ~'find-records [attributes#]
+        (find-records ~model-name attributes#))
+      (defn ~'create [attributes#]
+        (create ~model-name attributes#))
+      (defn ~'insert [attributes#]
+        (insert ~model-name attributes#))
+      (defn ~'update [attributes#]
+        (update ~model-name attributes#))
+      (defn ~'destroy-record [record#]
+        (destroy-record ~model-name record#))
+      (defn ~'validate [record#]
+        (clj-record.validation/validate ~model-name record#))
+      ~@optional-defs)))
