@@ -117,8 +117,8 @@
   Optional forms for associations and validation are specified here.
   See clj_record/test/model/manufacturer.clj for an example."
   [& option-groups]
-  (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))]
-    (let [optional-defs (defs-from-option-groups model-name option-groups)]
+  (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))
+        optional-defs (defs-from-option-groups model-name option-groups)]
       `(do
         (init-model-metadata ~model-name)
         (defn ~'model-metadata [& args#]
@@ -138,4 +138,4 @@
           (destroy-record ~model-name record#))
         (defn ~'validate [record#]
           (clj-record.validation/validate ~model-name record#))
-        ~@optional-defs))))
+        ~@optional-defs)))
