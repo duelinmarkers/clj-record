@@ -20,3 +20,6 @@
 (defn set-model-metadata-for [model-name category value]
   (let [model-ref (@all-models-metadata model-name)]
     (ref-set model-ref (assoc @model-ref category value))))
+
+(defn db-spec-for [model-name]
+  (model-metadata-for model-name :db-spec))

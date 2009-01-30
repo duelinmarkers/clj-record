@@ -1,7 +1,7 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql        :as sql]
             [clojure.contrib.str-utils  :as str-utils])
-  (:use (clj-record meta util config callbacks)))
+  (:use (clj-record meta util callbacks)))
 
 
 (defn table-name
@@ -13,6 +13,9 @@
   "Puts table-name into model metadata."
   [model-name tbl-name]
   (dosync (set-model-metadata-for model-name :table-name tbl-name)))
+
+(defn set-db-spec [model-name db-spec]
+  (dosync (set-model-metadata-for model-name :db-spec db-spec)))
 
 (defn to-conditions
   "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
@@ -34,31 +37,31 @@
   "Ensures that the body is run with a single DB connection.
   Doesn't create a new connection if there already is one.
   You're probably more interested in the 'transaction' macro."
-  [& body]
+  [db-spec & body]
   `(let [func# (fn [] ~@body)]
     (if (sql/find-connection)
       (func#)
-      (sql/with-connection db (func#)))))
+      (sql/with-connection ~db-spec (func#)))))
 
 (defmacro transaction
   "Runs body in a single DB transaction, first ensuring there's a connection."
-  [& body]
-  `(connected
+  [db-spec & body]
+  `(connected ~db-spec
     (sql/transaction
       ~@body)))
 
 (defn insert
   "Inserts a record populated with attributes and returns the generated id."
   [model-name attributes]
-  (transaction
+  (transaction (db-spec-for model-name)
     (let [attributes (run-callbacks attributes model-name :before-save)]
       (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
-    (sql/with-query-results rows [(id-query-for db)] (:1 (first rows)))))
+    (sql/with-query-results rows [(id-query-for (db-spec-for model-name))] (:1 (first rows)))))
 
 (defn get-record
   "Retrieves record by id, throwing if not found."
   [model-name id]
-  (connected
+  (connected (db-spec-for model-name)
     (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
       (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
       (merge {} (first rows)))))
@@ -67,7 +70,7 @@
   "Inserts a record populated with attributes and returns it."
   [model-name attributes]
   (let [id (insert model-name attributes)]
-    (connected
+    (connected (db-spec-for model-name)
       (get-record model-name id))))
 
 (defn find-records
@@ -80,14 +83,14 @@
             (to-conditions attributes-or-where-params)
             attributes-or-where-params)
         select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
-    (connected
+    (connected (db-spec-for model-name)
       (sql/with-query-results rows (apply vector select-query values)
         (doall (map #(merge {} %) rows))))))
 
 (defn update
   "Updates by (partial-record :id), updating only those columns included in partial-record."
   [model-name partial-record]
-  (connected
+  (connected (db-spec-for model-name)
     (let [id (partial-record :id)
           partial-record (-> partial-record (run-callbacks model-name :before-save :before-update) (dissoc :id))]
       (sql/update-values (table-name model-name) ["id = ?" id] partial-record)
@@ -96,13 +99,13 @@
 (defn destroy-record
   "Deletes by (record :id)."
   [model-name record]
-  (connected
+  (connected (db-spec-for model-name)
     (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])))
 
 (defn destroy-records
   "Deletes all records matching (-> attributes to-conditions)."
   [model-name attributes]
-  (connected
+  (connected (db-spec-for model-name)
     (sql/delete-rows (table-name model-name) (to-conditions attributes))))
 
 (defn- defs-from-option-groups [model-name option-groups]
@@ -139,6 +142,7 @@
         optional-defs (defs-from-option-groups model-name option-groups)]
     `(do
       (init-model-metadata ~model-name)
+      (set-db-spec ~model-name ~'db)
       (set-table-name ~model-name ~tbl-name)
       (def ~'table-name (table-name ~model-name))
       (defn ~'model-metadata [& args#]

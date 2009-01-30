@@ -8,7 +8,7 @@
     (rolling-back ~@body)))
 
 (defmacro rolling-back [& body]
-  `(core/transaction
+  `(core/transaction clj-record.test.model.config/db
     (try
       ~@body
       (finally

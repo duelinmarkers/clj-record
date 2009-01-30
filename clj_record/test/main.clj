@@ -2,7 +2,7 @@
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is]
             [clojure.contrib.str-utils :as str-utils]
-            clj-record.config))
+            clj-record.test.model.config))
 
 
 (defn drop-tables []
@@ -23,7 +23,7 @@
     [:price           :int]
     [:manufacturer_id :int "NOT NULL"]))
 
-(sql/with-connection clj-record.config/db
+(sql/with-connection clj-record.test.model.config/db
   (sql/transaction
     (drop-tables)
     (create-tables)))
