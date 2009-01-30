@@ -22,7 +22,7 @@
 
 (defdbtest get-record-by-id
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
-    (is (= humedai (manufacturer/get-record (:id humedai))))))
+    (is (= humedai (manufacturer/get-record (humedai :id))))))
 
 (defdbtest get-record-throws-if-not-found
   (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
@@ -39,12 +39,12 @@
 
 (defdbtest destroy-record-destroys-by-id-from-record
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
-    (manufacturer/destroy-record {:id (:id humedai)})
-    (is (empty? (manufacturer/find-records {:id (:id humedai)})))))
+    (manufacturer/destroy-record {:id (humedai :id)})
+    (is (empty? (manufacturer/find-records {:id (humedai :id)})))))
 
 (defdbtest update-uses-id-to-update-other-given-attributes-leaving-unspecified-attributes-untouched
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors" :grade 90}))
-        id (:id humedai)]
+        id (humedai :id)]
     (manufacturer/update {:id id :name "Schmoomdai Motors" :founded "2008"})
     (is (= 
       {:name "Schmoomdai Motors" :grade 90 :founded "2008"}
