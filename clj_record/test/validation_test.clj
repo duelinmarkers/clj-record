@@ -12,18 +12,22 @@
 (deftest validate-returns-valid-for-a-valid-record
   (is (validation/valid? (manufacturer/validate {:name "Good Name"}))))
 
-(deftest validate-returns-single-message-keyed-by-attribute-for-an-invalid-record
-  (is (= {:name ["empty!"]} (manufacturer/validate {:name ""}))))
+(deftest validate-returns-invalid-for-an-invalid-record
+  (is (not (validation/valid? (manufacturer/validate {:name ""})))))
+
+(deftest exposes-single-message-by-attribute-for-an-invalid-record
+  (is (= ["empty!"] (validation/messages-for (manufacturer/validate {:name ""}) :name))))
 
 (deftest validate-with-multiple-messages-for-one-attribute
   (is (= 
-    {:name ["starts with whitespace!" "ends with whitespace!"]}
-    (manufacturer/validate {:name " Bad Name "}))))
+    ["starts with whitespace!" "ends with whitespace!"]
+    (validation/messages-for (manufacturer/validate {:name " Bad Name "}) :name))))
 
 (deftest validation-message-can-be-defined-in-model-namespace
   (is (= ["negative!"] (:grade (manufacturer/validate {:grade -2 :name "Bob"})))))
 
 (deftest validate-with-errors-on-multiple-attributes
-  (is (=
-    {:name ["empty!"] :founded ["must be numeric"]}
-    (manufacturer/validate {:name "" :founded "oh"}))))
+  (let [validation-result (manufacturer/validate {:name "" :founded "oh"})]
+    (are (= _1 (validation/messages-for validation-result _2))
+      ["empty!"] :name
+      ["must be numeric"] :founded)))

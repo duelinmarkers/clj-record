@@ -8,6 +8,8 @@
 
 (def valid? empty?)
 
+(def messages-for get)
+
 (defn validate [model-name record]
   (reduce
     (fn [errors [attr message validation-fn]]
