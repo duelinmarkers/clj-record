@@ -6,6 +6,8 @@
 
 (defn- validations-for [model-name] ((@all-models-metadata model-name) :validations))
 
+(def valid? empty?)
+
 (defn validate [model-name record]
   (reduce
     (fn [errors [attr message validation-fn]]

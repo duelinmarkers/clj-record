@@ -1,15 +1,16 @@
 (ns clj-record.test.validation-test
   (:require
+    [clj-record.validation :as validation]
     [clj-record.test.model.manufacturer :as manufacturer]
     [clj-record.test.model.product :as product])
   (:use clojure.contrib.test-is))
 
 
-(deftest validate-returns-empty-for-a-model-without-validations
-  (is (empty? (product/validate {}))))
+(deftest validate-returns-valid-for-a-model-without-validations
+  (is (validation/valid? (product/validate {}))))
 
-(deftest validate-returns-empty-for-a-valid-record
-  (is (empty? (manufacturer/validate {:name "Good Name"}))))
+(deftest validate-returns-valid-for-a-valid-record
+  (is (validation/valid? (manufacturer/validate {:name "Good Name"}))))
 
 (deftest validate-returns-single-message-keyed-by-attribute-for-an-invalid-record
   (is (= {:name ["empty!"]} (manufacturer/validate {:name ""}))))
