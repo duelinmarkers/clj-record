@@ -30,8 +30,7 @@
   (dosync
     (let [validations (or (model-metadata-for model-name :validations) [])]
       (set-model-metadata-for model-name :validations
-        (conj validations
-          [attribute-name message function])))))
+        (conj validations [attribute-name message function])))))
 
 (defn expand-init-option
   "init-model macro-expansion delegate that generates a call to add-validation."
