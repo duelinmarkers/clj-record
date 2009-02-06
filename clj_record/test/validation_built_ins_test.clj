@@ -1,20 +1,20 @@
 (ns clj-record.test.validation-built-ins-test
   (:use clojure.contrib.test-is)
-  (:require [clj-record.validation.built-ins :as vfn]))
+  (:require [clj-record.validation.built-ins :as v]))
 
 
 (deftest match-creates-a-matching-fn-for-the-given-pattern
-  (let [matches-foo? (vfn/match #"foo")]
+  (let [matches-foo? (v/match #"foo")]
     (is (matches-foo? "yes foo does"))
     (are (not (matches-foo? _1))
       "no bar doesn't"
       nil
       123))
   (testing "non-strings are str'd so they may match"
-    (is ((vfn/match #"123") 41234))))
+    (is ((v/match #"123") 41234))))
 
 (deftest non-match-creates-an-anti-matching-fn-for-the-given-pattern
-  (let [non-matches-foo? (vfn/non-match #"foo")]
+  (let [non-matches-foo? (v/non-match #"foo")]
     (is (not (non-matches-foo? "foo doesn't not")))
     (are (non-matches-foo? _1)
       "bar non-matches"
@@ -22,8 +22,12 @@
       123)))
 
 (deftest numeric?
-  (are (vfn/numeric? _1)
+  (are (v/numeric? _1)
     123
     "123")
-  (are (not (vfn/numeric? _1))
+  (are (not (v/numeric? _1))
     "foo"))
+
+;(deftest email?
+;  (are (v/email? _1)
+;    "a@b.c"))

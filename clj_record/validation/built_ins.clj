@@ -4,7 +4,7 @@
 (defn match
   "Returns a validation function matching value against pattern."
   [pattern]
-  #(re-find pattern (str %)))
+  (fn [value] (re-find pattern (str value))))
 
 (defn non-match
   "Returns a validation function ensuring value doesn't match pattern."
