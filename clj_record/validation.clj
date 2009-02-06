@@ -25,15 +25,13 @@
 (defn add-validation
   "Adds a validation to the named model.
   Called behind the scenes by the expanded form of
-  (init-model ... (:validation (attribute-name message function) ...)."
+  (init-model ... (:validation (attribute-name message function) ...))."
   [model-name attribute-name message function]
   (dosync
     (let [validations (or (model-metadata-for model-name :validations) [])]
       (set-model-metadata-for model-name :validations
         (conj validations
-          [ (keyword (name attribute-name))
-            (eval message)
-            (eval function)])))))
+          [attribute-name message function])))))
 
 (defn expand-init-option
   "init-model macro-expansion delegate that generates a call to add-validation."
