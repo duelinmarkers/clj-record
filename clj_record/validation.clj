@@ -23,7 +23,9 @@
     (validations-for model-name)))
 
 (defn add-validation
-  "Adds a validation to the named model."
+  "Adds a validation to the named model.
+  Called behind the scenes by the expanded form of
+  (init-model ... (:validation (attribute-name message function) ...)."
   [model-name attribute-name message function]
   (dosync
     (let [validations (or (model-metadata-for model-name :validations) [])]
