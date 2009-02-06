@@ -14,3 +14,7 @@
 (def
   #^{:doc "Validation function that makes sure a value is numeric (though not necessarily a number)."}
   numeric? (non-match #"\D"))
+
+(def
+  #^{:doc "Matches a simple email address format."}
+  email? (match #".+@.+\..+"))

@@ -28,6 +28,12 @@
   (are (not (v/numeric? _1))
     "foo"))
 
-;(deftest email?
-;  (are (v/email? _1)
-;    "a@b.c"))
+(deftest email?
+  (are (v/email? _1)
+    "a@b.c")
+  (are (not (v/email? _1))
+    ""
+    "a"
+    "a@"
+    "@b"
+    "a@b"))
