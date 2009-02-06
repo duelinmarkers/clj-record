@@ -1,4 +1,5 @@
-(ns clj-record.validation.built-ins)
+(ns clj-record.validation.built-ins
+  (:require [clojure.contrib.str-utils  :as str-utils]))
 
 
 (defn match
@@ -15,6 +16,18 @@
   #^{:doc "Validation function that makes sure a value is numeric (though not necessarily a number)."}
   numeric? (non-match #"\D"))
 
-(def
-  #^{:doc "Matches a simple email address format."}
-  email? (match #".+@.+\..+"))
+(defn email?
+  "Validation function that sees whether value looks like a valid email address."
+  [email]
+  (if (not (re-find #"^\S+@\S+\.\S+$" email))
+    false
+    (let [[local-part domain] (str-utils/re-split #"@" email)
+          dot-atom? (fn [s]
+            (let [atexts (str-utils/re-split #"\." s)
+                  atext-run-pattern #"^[\p{Alnum}_\-]+$"]
+              (and
+                (not (empty? atexts))
+                (every? #(re-find atext-run-pattern %) atexts))))]
+      (and
+        (dot-atom? local-part)
+        (dot-atom? domain)))))

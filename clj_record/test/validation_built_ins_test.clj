@@ -30,10 +30,23 @@
 
 (deftest email?
   (are (v/email? _1)
-    "a@b.c")
+    "a@b.cd"
+    "abcdef@abcdef.abcdef.abc"
+    "a.b@c.de"
+    "a_b@c.de"
+    "a-b@c.de"
+    "a@b.c.de"
+    "a@b-c.de")
   (are (not (v/email? _1))
     ""
     "a"
+    "abcdef"
     "a@"
-    "@b"
-    "a@b"))
+    "@bc"
+    "a@bc"
+    ".@a.bc"
+    "a@..."
+    "a..b@c.de"
+    "a.b@c..de"
+    "hi a@b.cd"
+    "a@b.cd hi"))
