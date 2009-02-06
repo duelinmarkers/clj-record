@@ -1,6 +1,6 @@
 (ns clj-record.test.model.manufacturer
   (:require clj-record.boot
-            [clj-record.validation.built-ins :as v]
+            [clj-record.validation.built-ins :as valid]
             [clj-record.callbacks.built-ins :as cb])
   (:use clj-record.test.model.config))
 
@@ -18,9 +18,9 @@
     (has-many products))
   (:validation
     (:name "empty!" #(not (empty? %)))
-    (:name "starts with whitespace!" (v/non-match #"^\s"))
-    (:name "ends with whitespace!" (v/non-match #"\s$"))
-    (:founded "must be numeric" #(or (nil? %) (v/numeric? %)))
+    (:name "starts with whitespace!" (valid/non-match #"^\s"))
+    (:name "ends with whitespace!" (valid/non-match #"\s$"))
+    (:founded "must be numeric" #(or (nil? %) (valid/numeric? %)))
     (:grade my-grade-validation-message #(or (nil? %) (>= % 0))))
   (:callbacks
     (:before-save (cb/transform-value :founded infer-full-year))))
