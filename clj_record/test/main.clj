@@ -13,12 +13,12 @@
 
 (defn create-tables []
   (sql/create-table :manufacturers
-    [:id      :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
+    [:id      :serial]
     [:name    "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
     [:grade   :int])
   (sql/create-table :productos
-    [:id              :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
+    [:id              :serial]
     [:name            "VARCHAR(32)" "NOT NULL"]
     [:price           :int]
     [:manufacturer_id :int "NOT NULL"]))

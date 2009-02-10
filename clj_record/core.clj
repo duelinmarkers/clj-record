@@ -56,7 +56,7 @@
   (transaction (db-spec-for model-name)
     (let [attributes (run-callbacks attributes model-name :before-save)]
       (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
-    (sql/with-query-results rows [(id-query-for (db-spec-for model-name))] (:1 (first rows)))))
+    (sql/with-query-results rows [(id-query-for (db-spec-for model-name))] (val (first (first rows))))))
 
 (defn get-record
   "Retrieves record by id, throwing if not found."

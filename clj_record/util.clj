@@ -17,5 +17,7 @@
   (cond
     (= subprotocol "derby")
       "VALUES IDENTITY_VAL_LOCAL()"
+    (= subprotocol "mysql")
+      "SELECT LAST_INSERT_ID()"
     :else
       (throw (Exception. (str "Unrecognized db-spec: " db-spec)))))

@@ -1,7 +1,8 @@
 (ns clj-record.test.model.config)
 
 
-(def db {:classname "org.apache.derby.jdbc.EmbeddedDriver"
-         :subprotocol "derby"
-         :subname "/tmp/clj-record.test.db"
-         :create true})
+(def db {:classname "com.mysql.jdbc.Driver" 
+	 :subprotocol "mysql" 
+	 :user "root" 
+	 :password "root" 
+	 :subname "//localhost/test"})
