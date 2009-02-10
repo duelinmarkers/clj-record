@@ -26,6 +26,8 @@
       "VALUES IDENTITY_VAL_LOCAL()"
     (= subprotocol "postgresql")
       (str "SELECT last_value FROM " (postgresql-id-sequence-name table-name))
+    (= subprotocol "mysql")
+      "SELECT LAST_INSERT_ID()"
     :else
       (throw (Exception. (str "Unrecognized db-spec: " db-spec)))))
 

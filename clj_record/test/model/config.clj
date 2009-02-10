@@ -11,4 +11,10 @@
          :subname "//localhost:5433/coffeemug"
          :user "enter-user-name-here"
          :password ""})
+
+(def db {:classname "com.mysql.jdbc.Driver" 
+         :subprotocol "mysql" 
+         :user "root" 
+         :password "root" 
+         :subname "//localhost/test"})
 )

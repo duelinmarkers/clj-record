@@ -13,6 +13,9 @@
 
 (defmethod get-id-key-spec "POSTGRESQL" [db-spec name]
   [:id (str "SERIAL UNIQUE PRIMARY KEY")])
+
+(defmethod get-id-key-spec "MYSQL" [db-spec name]
+  [:id :serial])
 ;;--------------------------------------------------
 
 (defn drop-tables []
