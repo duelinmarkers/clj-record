@@ -6,15 +6,15 @@
 
 ;; Multiple DB Support
 ;;--------------------------------------------------
-(defmulti get-id-key-spec (fn [{sb :subprotocol} _ ] (.toUpperCase sb)))
+(defmulti get-id-key-spec :subprotocol)
 
-(defmethod get-id-key-spec "DERBY" [db-spec name]
+(defmethod get-id-key-spec "derby" [db-spec name]
   [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
 
-(defmethod get-id-key-spec "POSTGRESQL" [db-spec name]
+(defmethod get-id-key-spec "postgresql" [db-spec name]
   [:id (str "SERIAL UNIQUE PRIMARY KEY")])
 
-(defmethod get-id-key-spec "MYSQL" [db-spec name]
+(defmethod get-id-key-spec "mysql" [db-spec name]
   [:id :serial])
 ;;--------------------------------------------------
 
