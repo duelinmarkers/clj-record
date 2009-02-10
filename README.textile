@@ -102,7 +102,9 @@ for what else I'm thinking about, and feel free to suggest.
 
 h2. Running
 
-Run ./test as a clj script to run tests. In addition to clojure-contrib, you'll need "Apache Derby":http://db.apache.org/derby/ on your classpath. (Or you can uncomment and modify a different db-spec in clj-record/test/config.clj and use MySQL or PostgreSQL.)
+Run ./test as a clj script to run tests. In addition to clojure-contrib, you'll need 
+"Apache Derby":http://db.apache.org/derby/ on your classpath. 
+(Or you can uncomment and modify a different db-spec in clj-record/test/config.clj and use MySQL or PostgreSQL.)
 
 h2. The Name...
 
@@ -117,4 +119,4 @@ Stephen Gilardi for making helpful changes to clojure.contrib.sql.
 
 ---
 
-Copyright 2008 John D. Hume and released under an MIT license.
+Copyright 2009 John D. Hume and released under an MIT license.
