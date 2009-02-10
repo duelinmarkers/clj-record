@@ -13,10 +13,6 @@
     (re-sub #"y$" "ies" word)
     (str word "s")))
 
-(defmulti get-key-for-autoincrement-value (fn [{db :subprotocol}] (.toUpperCase db)))
-(defmethod get-key-for-autoincrement-value "DERBY" [db-spec] :1)
-(defmethod get-key-for-autoincrement-value "POSTGRESQL" [db-spec] :last_value)
-
 (defn postgresql-id-sequence-name [table-name]
   (str table-name "_id_seq"))
 
