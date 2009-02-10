@@ -4,6 +4,16 @@
             [clojure.contrib.str-utils :as str-utils]
             clj-record.test.model.config))
 
+;; Multiple DB Support
+;;--------------------------------------------------
+(defmulti get-id-key-spec (fn [{sb :subprotocol} _ ] (.toUpperCase sb)))
+
+(defmethod get-id-key-spec "DERBY" [db-spec name]
+  [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
+
+(defmethod get-id-key-spec "POSTGRESQL" [db-spec name]
+  [:id (str "SERIAL UNIQUE PRIMARY KEY")])
+;;--------------------------------------------------
 
 (defn drop-tables []
   (try
@@ -13,12 +23,12 @@
 
 (defn create-tables []
   (sql/create-table :manufacturers
-    [:id      :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT manufacturer_pk PRIMARY KEY"]
+    (get-id-key-spec clj-record.test.model.config/db "manufacturer_pk")
     [:name    "VARCHAR(32)" "NOT NULL"]
     [:founded "VARCHAR(4)"]
     [:grade   :int])
   (sql/create-table :productos
-    [:id              :int "GENERATED ALWAYS AS IDENTITY CONSTRAINT product_pk PRIMARY KEY"]
+    (get-id-key-spec clj-record.test.model.config/db "product_pk")
     [:name            "VARCHAR(32)" "NOT NULL"]
     [:price           :int]
     [:manufacturer_id :int "NOT NULL"]))

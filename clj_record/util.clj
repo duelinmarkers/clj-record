@@ -13,9 +13,27 @@
     (re-sub #"y$" "ies" word)
     (str word "s")))
 
-(defn id-query-for [{:keys [subprotocol] :as db-spec}]
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Support for multiple DB
+
+(defmulti get-key-for-autoincrement-value (fn [{db :subprotocol}] (.toUpperCase db)))
+(defmethod get-key-for-autoincrement-value "DERBY" [db-spec] :1)
+(defmethod get-key-for-autoincrement-value "POSTGRESQL" [db-spec] :last_value)
+
+
+(defn get-postgresql-id-sequence-name-from-table-name 
+  "The name of the ID column is assumed to be 'id'"
+  [table-name]
+  (str table-name "_id_seq"))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(defn id-query-for [{:keys [subprotocol] :as db-spec} table-name]
   (cond
-    (= subprotocol "derby")
+   (= subprotocol "derby")
       "VALUES IDENTITY_VAL_LOCAL()"
+      (= subprotocol "postgresql")
+      (str "SELECT last_value FROM " (get-postgresql-id-sequence-name-from-table-name table-name))
     :else
       (throw (Exception. (str "Unrecognized db-spec: " db-spec)))))
+
