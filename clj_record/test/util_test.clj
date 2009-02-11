@@ -18,7 +18,7 @@
 
 (deftest provides-id-query-for-postgresql
   (are (= _1 (util/id-query-for _2 "table_name"))
-    "SELECT last_value FROM table_name_id_seq" {:classname "org.postgresql.Driver" :subprotocol "postgresql"}))
+    "SELECT currval(pg_get_serial_sequence('table_name','id'))" {:classname "org.postgresql.Driver" :subprotocol "postgresql"}))
 
 (deftest throws-if-asked-for-id-query-of-unrecognized-db-spec
   (is (thrown? Exception
