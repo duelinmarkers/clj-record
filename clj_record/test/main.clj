@@ -4,19 +4,14 @@
             [clojure.contrib.str-utils :as str-utils]
             clj-record.test.model.config))
 
-;; Multiple DB Support
-;;--------------------------------------------------
-(defmulti get-id-key-spec :subprotocol)
 
+(defmulti get-id-key-spec :subprotocol)
 (defmethod get-id-key-spec "derby" [db-spec name]
   [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
-
 (defmethod get-id-key-spec "postgresql" [db-spec name]
-  [:id (str "SERIAL UNIQUE PRIMARY KEY")])
-
+  [:id "SERIAL UNIQUE PRIMARY KEY"])
 (defmethod get-id-key-spec "mysql" [db-spec name]
   [:id :serial])
-;;--------------------------------------------------
 
 (defn drop-tables []
   (try
