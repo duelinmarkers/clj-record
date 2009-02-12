@@ -18,10 +18,8 @@
     (= subprotocol "derby")
       "VALUES IDENTITY_VAL_LOCAL()"
     (= subprotocol "postgresql")
-    ;; The assumption is that the column name for the id key is always 'id'
       (str "SELECT currval(pg_get_serial_sequence('" table-name "','id'))")
     (= subprotocol "mysql")
       "SELECT LAST_INSERT_ID()"
     :else
       (throw (Exception. (str "Unrecognized db-spec: " db-spec)))))
-
