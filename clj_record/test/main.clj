@@ -11,7 +11,7 @@
 (defmethod get-id-key-spec "postgresql" [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 (defmethod get-id-key-spec "mysql" [db-spec name]
-  [:id :serial :unique])
+  [:id "SERIAL UNIQUE PRIMARY KEY"])
 
 (defn drop-tables []
   (try
