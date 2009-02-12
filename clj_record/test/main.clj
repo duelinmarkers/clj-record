@@ -11,7 +11,7 @@
 (defmethod get-id-key-spec "postgresql" [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 (defmethod get-id-key-spec "mysql" [db-spec name]
-  [:id :serial])
+  [:id :serial :unique])
 
 (defn drop-tables []
   (try
@@ -36,7 +36,7 @@
     (drop-tables)
     (create-tables)))
 
-(println "DB setup complete.")
+(println (str (clj-record.test.model.config/db :subprotocol) " database setup complete."))
 
 (let [test-files  (for [f (-> *file* java.io.File. .getParentFile .list)
                         :when (re-find #"test.clj$" f)]
