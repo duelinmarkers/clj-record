@@ -114,7 +114,7 @@ h2. Thanks for Contributing
 
 Brian Doyle for early interest and ideas. 
 Stephen Gilardi for making helpful changes to clojure.contrib.sql. 
-"vishnu":http://github.com/vishnu for initial implementation of PostgreSQL support. 
+"Raja Ramachandran":http://github.com/vishnu for initial implementation of PostgreSQL support. 
 "tunde ashafa":http://github.com/tashafa for initial implementation of MySQL support. 
 
 ---
