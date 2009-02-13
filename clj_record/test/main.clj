@@ -8,9 +8,7 @@
 (defmulti get-id-key-spec :subprotocol)
 (defmethod get-id-key-spec "derby" [db-spec name]
   [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
-(defmethod get-id-key-spec "postgresql" [db-spec name]
-  [:id "SERIAL UNIQUE PRIMARY KEY"])
-(defmethod get-id-key-spec "mysql" [db-spec name]
+(defmethod get-id-key-spec :default [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 
 (defn drop-tables []
