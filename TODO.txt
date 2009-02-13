@@ -10,6 +10,7 @@ More callbacks.
   * Use this http://groups.google.com/group/clojure/msg/e21bf475b45bd2d5
 
 :stop-if-invalid to abort early inside (:validation ...) form.
+  * Not sure that makes the most sense ... maybe multiple validations hanging off one attribute would be better.
 
 Eager fetching of associations.
 
@@ -28,3 +29,7 @@ Generate fancier queries with some fancy query API.
 Pretty migrations. Maybe just a series of contributions to clojure.contrib.sql.
 
 Figure out a way to test init-model options without putting every bizarre case into manufacturer. It's getting ridiculous.
+  * This is largely (maybe sufficiently) addressed now that init-model is side-effect free and tests can 
+    directly use the expanded forms of options, then restore the model metadata when they're finished.
+
+Support for BLOBs, CLOBs.
