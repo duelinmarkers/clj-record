@@ -6,11 +6,19 @@
 
 (deftest singularize (are (= _1 (util/singularize _2))
     "foo" "foos"
-    "baby" "babies"))
+    "baby" "babies"
+    "beach" "beaches"
+    "box" "boxes"
+    "bush" "bushes"
+    "bus" "buses"))
 
 (deftest pluralize (are (= _1 (util/pluralize _2))
     "foos" "foo"
-    "babies" "baby"))
+    "beaches" "beach"
+    "babies" "baby"
+    "boxes" "box"
+    "bushes" "bush"
+    "buses" "bus"))
 
 (deftest provides-id-query-for-derby
   (are (= _1 (util/id-query-for _2 "table_name"))
