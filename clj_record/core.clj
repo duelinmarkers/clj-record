@@ -26,14 +26,14 @@
   ; XXX: Surely there's a better way.
   (let [[parameterized-conditions values] (reduce
       (fn [[parameterized-conditions values] [attribute value]]
-        (cond
-	 (nil? value)
-	 [(conj parameterized-conditions (format "%s IS NULL" (name attribute))) values]
-	 (fn? value)
-	 (let [[new-condition new-values] (value attribute)]
-	   [(conj parameterized-conditions new-condition) (apply conj values new-values)])
-	 :else
-	 [(conj parameterized-conditions (format "%s = ?" (name attribute))) (conj values value)]))
+       (cond
+         (nil? value)
+         [(conj parameterized-conditions (format "%s IS NULL" (name attribute))) values]
+         (fn? value)
+         (let [[new-condition new-values] (value attribute)]
+           [(conj parameterized-conditions new-condition) (apply conj values new-values)])
+         :else
+         [(conj parameterized-conditions (format "%s = ?" (name attribute))) (conj values value)]))
       [[] []]
       attributes)]
     (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
