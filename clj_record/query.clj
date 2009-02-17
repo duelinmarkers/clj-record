@@ -4,8 +4,8 @@
 
 (defn- generate-predicate-fn [predicate join-predicate-params-with values]
   (fn [attribute]
-     (let [[clause params] 
-	   [(str-utils/str-join join-predicate-params-with
+     (let [[clause params]
+           [(str-utils/str-join join-predicate-params-with
              (reduce
                (fn [predicate-params value]
                  (conj predicate-params (if (nil? value) "NULL" "?"))) [] values))
