@@ -1,6 +1,7 @@
 (ns clj-record.test.core-test
   (:require
     [clj-record.core :as core]
+    [clj-record.query :as query]
     [clj-record.test.model.manufacturer :as manufacturer]
     [clj-record.test.model.product :as product])
   (:use clojure.contrib.test-is
@@ -54,7 +55,10 @@
   (are (= _1 (core/to-conditions _2))
     ["a = ?" 1] {:a 1}
     ["a = ?" "one"] {:a "one"}
-    ["a IS NULL"] {:a nil})
+    ["a IS NULL"] {:a nil}
+    ["a BETWEEN ? AND ?" 1 3] {:a (query/between 1 3)}
+    ["a IN (?, ?, NULL, ?)" "foo" "bar" "baz"] {:a (query/in "foo" "bar" nil "baz")}
+    ["a LIKE ?" "h%"] {:a (query/like "h%")})
   (let [r (core/to-conditions {:a 1 :b 2})]
     (is (or (= r ["a = ? AND b = ?" 1 2]) (= r ["b = ? AND a = ?" 2 1])))))
 
