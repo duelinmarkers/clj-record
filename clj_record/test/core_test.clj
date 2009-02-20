@@ -56,9 +56,18 @@
     ["a = ?" 1] {:a 1}
     ["a = ?" "one"] {:a "one"}
     ["a IS NULL"] {:a nil}
-    ["a BETWEEN ? AND ?" 1 3] {:a (query/between 1 3)}
-    ["a IN (?, ?, NULL, ?)" "foo" "bar" "baz"] {:a (query/in "foo" "bar" nil "baz")}
-    ["a LIKE ?" "h%"] {:a (query/like "h%")})
+    ["a = ?" 2] {:a (query/equal 2)}
+    ["a <> ?" "two"] {:a (query/not-equal "two")}
+    ["a > ?" 3] {:a (query/greater-than 3)}
+    ["a >= ?" 3] {:a (query/greater-than-or-equal 3)}
+    ["a < ?" 3] {:a (query/less-than 3)}
+    ["a <= ?" 3] {:a (query/less-than-or-equal 3)}
+    ["a LIKE ?" "a%"] {:a (query/like "a%")}
+    ["a NOT LIKE ?" "%s"] {:a (query/not-like "%s")}
+    ["a BETWEEN ? AND ?" 1 5] {:a (query/between 1 5)}
+    ["a NOT BETWEEN ? AND ?" 6 10] {:a (query/not-between 6 10)}
+    ["a IN (?, ?, ?)" "foo" "bar" "baz"] {:a (query/in "foo" "bar" "baz")}
+    ["a NOT IN (?, ?, ?)" 1 2 3] {:a (query/not-in 1 2 3)})
   (let [r (core/to-conditions {:a 1 :b 2})]
     (is (or (= r ["a = ? AND b = ?" 1 2]) (= r ["b = ? AND a = ?" 2 1])))))
 
