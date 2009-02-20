@@ -25,6 +25,7 @@ Create lazy seqs for multi-value associations?
   Would like to do lazy singular associations too ... not sure what that can look like.
 
 Generate fancier queries with some fancy query API.
+  * http://gist.github.com/64357
 
 Pretty migrations. Maybe just a series of contributions to clojure.contrib.sql.
 

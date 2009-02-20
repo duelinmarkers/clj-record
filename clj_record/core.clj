@@ -125,8 +125,8 @@
          remaining-options init-options]
     (if (keyword? (first remaining-options))
       (recur
-        (assoc top-level-options (first remaining-options) (frest remaining-options))
-        (rrest remaining-options))
+        (assoc top-level-options (first remaining-options) (fnext remaining-options))
+        (nnext remaining-options))
       [top-level-options remaining-options])))
 
 (defmacro init-model
