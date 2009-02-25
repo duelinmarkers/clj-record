@@ -11,9 +11,7 @@
                 (fn [operator-params value]
                   (conj operator-params (if (nil? value) (throw (Exception. "A query argument must not be nil.")) "?"))) [] values)
             clause-params
-              (if (nil? join-with)
-                (apply str clause-params-vector)
-                (str-utils/str-join join-with clause-params-vector))]
+              (str-utils/str-join join-with clause-params-vector)]
         [(format (str "%s " operator-format) (name attribute) clause-params) (filter (complement nil?) values)]))))
 
 (defn equal [value] (operator-fn "= %s" [value]))
