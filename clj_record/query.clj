@@ -5,11 +5,10 @@
 (defn- operator-fn
   ([operator-format values] (operator-fn operator-format values nil))
   ([operator-format values join-with]
+    (if (some nil? values) (throw (IllegalArgumentException. "A query argument must not be nil."))) ; Do we really want this?
     (fn [attribute]
       (let [clause-params-vector
-              (reduce
-                (fn [operator-params value]
-                  (conj operator-params (if (nil? value) (throw (Exception. "A query argument must not be nil.")) "?"))) [] values)
+              (reduce (fn [operator-params value] (conj operator-params "?")) [] values)
             clause-params
               (str-utils/str-join join-with clause-params-vector)]
         [(format (str "%s " operator-format) (name attribute) clause-params) (filter (complement nil?) values)]))))

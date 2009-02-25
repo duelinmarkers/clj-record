@@ -61,3 +61,11 @@
 (defdbtest find-records-using-not-in
   (let [[sozooke foyoto gmb ghysler merledas] manufacturers]
     (is (= #{sozooke foyoto ghysler} (set (manufacturer/find-records {:name (query/not-in "GMB Motors" "Merledas Automotive")}))))))
+
+(deftest attempt-to-supply-nil-value
+  (are (thrown? IllegalArgumentException _1)
+    (query/equal nil)
+    (query/not-equal nil)
+    (query/greater-than nil)
+    (query/between 3 nil)
+    (query/between nil 3)))
