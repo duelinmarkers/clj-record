@@ -6,9 +6,6 @@ Allow update to be called with nil values. (Should be a patch to clojure.contrib
 
 More callbacks.
 
-"Serialization" of data structures as attribute values.
-  * Use this http://groups.google.com/group/clojure/msg/e21bf475b45bd2d5
-
 :stop-if-invalid to abort early inside (:validation ...) form.
   * Not sure that makes the most sense ... maybe multiple validations hanging off one attribute would be better.
 
@@ -33,6 +30,9 @@ Figure out a way to test init-model options without putting every bizarre case i
 Support for BLOBs, CLOBs.
 
 TODONE
+
+"Serialization" of data structures as attribute values.
+  * Use this http://groups.google.com/group/clojure/msg/e21bf475b45bd2d5
 
 Generate fancier queries with some fancy query API.
   * http://gist.github.com/64357
