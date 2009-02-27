@@ -31,4 +31,5 @@
         (do (manufacturer/update (assoc record :name _1)) _1)
         ((manufacturer/get-record (record :id)) :name))
         "some string"
-        23))))
+        23
+        [1 2 3]))))
