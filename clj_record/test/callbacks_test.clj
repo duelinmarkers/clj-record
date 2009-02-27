@@ -23,3 +23,15 @@
       (let [m (manufacturer/create {:name "A" :founded "2008"})]
         (is (= "2008" (:founded m)))
         (is (= "0000" (:founded (manufacturer/update (select-keys m [:id :founded])))))))))
+
+(defdbtest after-load-can-transform-record-after-a-find
+  (let [m (manufacturer/create (valid-manufacturer-with {:founded "2008"}))]
+    (restoring-ref (manufacturer/model-metadata)
+      (callbacks/add-callback "manufacturer" :after-load #(assoc % :founded "0000"))
+      (is (= "0000" ((first (manufacturer/find-records {:founded "2008"})) :founded))))))
+
+(defdbtest after-load-can-transform-record-after-a-get
+  (let [m (manufacturer/create (valid-manufacturer-with {:founded "2008"}))]
+    (restoring-ref (manufacturer/model-metadata)
+      (callbacks/add-callback "manufacturer" :after-load #(assoc % :founded "0000"))
+      (is (= "0000" ((manufacturer/get-record (m :id)) :founded))))))

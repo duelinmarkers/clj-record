@@ -70,7 +70,7 @@
   (connected (db-spec-for model-name)
     (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
       (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
-      (merge {} (first rows)))))
+      (run-callbacks (merge {} (first rows)) model-name :after-load))))
 
 (defn create
   "Inserts a record populated with attributes and returns it."
@@ -91,7 +91,7 @@
         select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
     (connected (db-spec-for model-name)
       (sql/with-query-results rows (apply vector select-query values)
-        (doall (map #(merge {} %) rows))))))
+        (doall (map #(run-callbacks (merge {} %) model-name :after-load) rows))))))
 
 (defn update
   "Updates by (partial-record :id), updating only those columns included in partial-record."
