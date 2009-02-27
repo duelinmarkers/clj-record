@@ -3,4 +3,5 @@
     core
     callbacks
     associations
-    validation)))
+    validation
+    serialization)))
