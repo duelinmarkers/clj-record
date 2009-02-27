@@ -32,3 +32,8 @@
         "some string"
         23
         [1 2 3]))))
+
+(deftest expand-init-option-creates-a-call-to-serialize-attribute
+  (is (=
+    '(clj-record.serialization/serialize-attribute "foo" :bar)
+    (serialization/expand-init-option "foo" :bar))))
