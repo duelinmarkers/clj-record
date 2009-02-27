@@ -1,18 +1,35 @@
 (ns clj-record.test.serialization-test
   (:require
+    [clj-record.serialization :as serialization]
+    [clj-record.callbacks :as callbacks]
+    [clj-record.callbacks.built-ins :as callb]
     [clj-record.test.model.manufacturer :as manufacturer]
     [clj-record.test.model.product :as product])
   (:use clojure.contrib.test-is
         clj-record.test.test-helper))
 
 
+(deftest serializes-simple-clojure-types
+  (are (= _1 (serialization/serialize _2))
+    "\"123\"" "123"
+    "123" 123))
+
+(deftest serializes-and-deserializes-clojure-types-symmetrically
+  (are (= _1 (serialization/deserialize (serialization/serialize _1)))
+    nil
+    [1 2 3]
+    {:a "Aee" :b "Bee" :c "See"}
+    #{1 :b "See"}
+    '(1 2 [hey now])))
+
 (defdbtest serialized-attributes-support-common-clojure-types
-  (let [record (manufacturer/create valid-manufacturer)]
-    (are (=
-      (do
-        (manufacturer/update (assoc record :name _1))
-        _1)
-      ((manufacturer/get-record (record :id)) :name))
-      "some string" ; Cheating? This passes without serialization implemented.
-      )))
-  
+  (restoring-ref (manufacturer/model-metadata)
+    ;(callbacks/add-callback "manufacturer" :before-save (callb/transform-value :name serialization/serialize))
+    ;(callbacks/add-callback "manufacturer" :after-load (callb/transform-value :name serialization/deserialize))
+    (let [record (manufacturer/create valid-manufacturer)]
+      (are (=
+        (do (manufacturer/update (assoc record :name _1)) _1)
+        ((manufacturer/get-record (record :id)) :name))
+        "some string" ; Cheating? This passes without serialization implemented.
+        ;23
+        ))))
