@@ -1,8 +1,7 @@
 (ns clj-record.test.serialization-test
   (:require
     [clj-record.serialization :as serialization]
-    [clj-record.test.model.manufacturer :as manufacturer]
-    [clj-record.test.model.product :as product])
+    [clj-record.test.model.manufacturer :as manufacturer])
   (:use clojure.contrib.test-is
         clj-record.test.test-helper))
 
