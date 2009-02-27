@@ -24,12 +24,11 @@
 
 (defdbtest serialized-attributes-support-common-clojure-types
   (restoring-ref (manufacturer/model-metadata)
-    ;(callbacks/add-callback "manufacturer" :before-save (callb/transform-value :name serialization/serialize))
-    ;(callbacks/add-callback "manufacturer" :after-load (callb/transform-value :name serialization/deserialize))
+    (callbacks/add-callback "manufacturer" :before-save (callb/transform-value :name serialization/serialize))
+    (callbacks/add-callback "manufacturer" :after-load (callb/transform-value :name serialization/deserialize))
     (let [record (manufacturer/create valid-manufacturer)]
       (are (=
         (do (manufacturer/update (assoc record :name _1)) _1)
         ((manufacturer/get-record (record :id)) :name))
-        "some string" ; Cheating? This passes without serialization implemented.
-        ;23
-        ))))
+        "some string"
+        23))))
