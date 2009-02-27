@@ -24,8 +24,7 @@
 
 (defdbtest serialized-attributes-support-common-clojure-types
   (restoring-ref (manufacturer/model-metadata)
-    (callbacks/add-callback "manufacturer" :before-save (callb/transform-value :name serialization/serialize))
-    (callbacks/add-callback "manufacturer" :after-load (callb/transform-value :name serialization/deserialize))
+    (serialization/serialize-attribute "manufacturer" :name)
     (let [record (manufacturer/create valid-manufacturer)]
       (are (=
         (do (manufacturer/update (assoc record :name _1)) _1)
