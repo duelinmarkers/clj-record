@@ -1,8 +1,6 @@
 (ns clj-record.test.serialization-test
   (:require
     [clj-record.serialization :as serialization]
-    [clj-record.callbacks :as callbacks]
-    [clj-record.callbacks.built-ins :as callb]
     [clj-record.test.model.manufacturer :as manufacturer]
     [clj-record.test.model.product :as product])
   (:use clojure.contrib.test-is
