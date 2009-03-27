@@ -1,17 +1,19 @@
 (ns clj-record.util
-  (:use clojure.contrib.test-is)
   (:use clojure.contrib.str-utils))
 
-
 (defn singularize [plural]
-  (if (.endsWith plural "ies")
-    (re-sub #"ies$" "y" plural)
-    (re-sub #"s$" "" plural)))
+  (let [lc (.toLowerCase plural)]
+    (cond
+      (.endsWith lc "ies") (re-sub #"ies$" "y" lc)
+      (.endsWith lc "es") (re-sub #"es$" "" lc)
+      :else (re-sub #"s" "" lc))))
 
 (defn pluralize [word]
-  (if (.endsWith word "y")
-    (re-sub #"y$" "ies" word)
-    (str word "s")))
+  (let [lc (.toLowerCase word)]
+    (cond
+      (.endsWith lc "y") (re-sub #"y$" "ies" lc)
+      (some #(.endsWith lc %) ["s" "z" "ch" "sh" "x"]) (str lc "es")
+      :else (str lc "s"))))
 
 (defn id-query-for [{:keys [subprotocol] :as db-spec} table-name]
   (cond
