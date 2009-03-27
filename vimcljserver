@@ -1,0 +1,9 @@
+#!/bin/sh 
+CLOJURE_DIR=$HOME/dev/clojure
+CLOJURE_JAR=$CLOJURE_DIR/clojure.jar
+CLOJURE_CONTRIB_JAR=$HOME/dev/clojure-contrib/clojure-contrib.jar
+DERBY_PATH=/usr/local/lib/java/db-derby-10.4.2.0-lib/lib
+DERBY_JARS=$DERBY_PATH/derby.jar:$DERBY_PATH/derbyclient.jar
+VIMCLOJURE_JAR=$HOME/.vim/vimclojure.jar
+java -cp $CLOJURE_DIR/jline-0.9.94.jar:$CLOJURE_JAR:$CLOJURE_CONTRIB_JAR:$DERBY_JARS:$VIMCLOJURE_JAR:. \
+    com.martiansoftware.nailgun.NGServer 127.0.0.1
