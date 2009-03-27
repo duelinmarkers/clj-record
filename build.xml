@@ -33,19 +33,23 @@
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
       <arg value="clj-record.boot" />
-      <arg value="clj-record.test.main" />
     </java>
   </target>
 
   <target name="test" depends="compile">
-    <java classname="clj_record.test.main" classpathref="test.classpath" fork="true" failonerror="true">
+    <java classname="clojure.main" classpathref="test.classpath" dir="${src.dir}" fork="true" failonerror="true">
       <classpath path="${src.dir}" />
-      <arg value="${src.dir}/clj_record/test" />
+      <!--
+      <arg value="-i" />
+      <arg value="@clj_record/test/main.clj" />
+      -->
+      <arg value="-e" />
+      <arg value="(require 'clj-record.test.main) (clj-record.test.main/load-and-run)" />
     </java>
   </target>
 
   <target name="jar" depends="compile">
-    <fail message="no jar task yet" />
+    <jar jarfile="clj-record.jar" basedir="${classes.dir}" />
   </target>
 
   <target name="all" depends="test,jar" />
