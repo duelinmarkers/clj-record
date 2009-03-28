@@ -1,22 +1,20 @@
 <project name="clj-record" basedir="." default="test">
-  
+
+  <property environment="env" />
   <property name="classes.dir" value="classes" />
   <property name="lib.dir" value="lib" />
   <property name="test.lib.dir" value="test_lib" />
   <property name="src.dir" value="src" />
+  <property name="vimclojure.jar" value="${env.HOME}/.vim/vimclojure.jar" />
   
   <path id="project.classpath">
     <pathelement path="${classes.dir}" />
-    <fileset dir="${lib.dir}">
-      <include name="**/*.jar" />
-    </fileset>
+    <fileset dir="${lib.dir}" includes="*.jar" />
   </path>
   
   <path id="test.classpath">
     <path refid="project.classpath" />
-    <fileset dir="${test.lib.dir}">
-      <include name="**/*.jar" />
-    </fileset>
+    <fileset dir="${test.lib.dir}" includes="*.jar" />
   </path>
   
   <target name="clean">
@@ -39,10 +37,6 @@
   <target name="test" depends="compile">
     <java classname="clojure.main" classpathref="test.classpath" dir="${src.dir}" fork="true" failonerror="true">
       <classpath path="${src.dir}" />
-      <!--
-      <arg value="-i" />
-      <arg value="@clj_record/test/main.clj" />
-      -->
       <arg value="-e" />
       <arg value="(require 'clj-record.test.main) (clj-record.test.main/load-and-run)" />
     </java>
@@ -53,5 +47,17 @@
   </target>
 
   <target name="all" depends="test,jar" />
+
+  <target name="vim" description="Run ng server for VimClojure">
+    <java classname="com.martiansoftware.nailgun.NGServer" dir="${src.dir}" fork="true">
+      <arg value="127.0.0.1" />
+      <classpath>
+        <pathelement path="${src.dir}" />
+        <pathelement location="${vimclojure.jar}" />
+        <fileset dir="${lib.dir}" includes="*.jar" />
+        <fileset dir="${test.lib.dir}" includes="*.jar" />
+      </classpath>
+    </java>
+  </target>
   
 </project>
