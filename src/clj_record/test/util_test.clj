@@ -10,7 +10,8 @@
     "beach" "beaches"
     "box" "boxes"
     "bush" "bushes"
-    "bus" "buses"))
+    "bus" "buses"
+    "visit" "visits"))
 
 (deftest pluralize (are (= _1 (util/pluralize _2))
     "foos" "foo"

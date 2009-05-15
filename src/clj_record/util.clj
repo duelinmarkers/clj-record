@@ -6,7 +6,7 @@
     (cond
       (.endsWith lc "ies") (re-sub #"ies$" "y" lc)
       (.endsWith lc "es") (re-sub #"es$" "" lc)
-      :else (re-sub #"s" "" lc))))
+      :else (re-sub #"s$" "" lc))))
 
 (defn pluralize [word]
   (let [lc (.toLowerCase word)]
