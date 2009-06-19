@@ -38,6 +38,11 @@
         other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
     (is (= [humedai] (manufacturer/find-records ["name = ?" "Humedai Motors"])))))
 
+(defdbtest find-by-sql-uses-a-complete-query
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
+    (is (= (manufacturer/find-records ["name = ?" "Humedai Motors"])
+           (manufacturer/find-by-sql ["SELECT * FROM manufacturers WHERE name = ?" "Humedai Motors"])))))
+
 (defdbtest destroy-record-destroys-by-id-from-record
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
     (manufacturer/destroy-record {:id (humedai :id)})

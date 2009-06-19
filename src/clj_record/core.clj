@@ -79,6 +79,17 @@
     (connected (db-spec-for model-name)
       (get-record model-name id))))
 
+(defn find-by-sql
+  "Returns a vector of matching records.
+  select-query-and-values should be something like
+    [\"SELECT id, name FROM manufacturers WHERE id = ?\" 23]
+  This allows the caller total control over the SELECT and FROM clauses, but note that callbacks are still run,
+  so if you omit columns your callbacks will have to be written to tolerate incomplete records."
+  [model-name select-query-and-values]
+    (connected (db-spec-for model-name)
+      (sql/with-query-results rows select-query-and-values
+        (doall (map #(run-callbacks (merge {} %) model-name :after-load) rows)))))
+
 (defn find-records
   "Returns a vector of matching records.
   Given a where-params vector, uses it as-is. (See clojure.contrib.sql/with-query-results.)
@@ -89,9 +100,7 @@
             (to-conditions attributes-or-where-params)
             attributes-or-where-params)
         select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
-    (connected (db-spec-for model-name)
-      (sql/with-query-results rows (apply vector select-query values)
-        (doall (map #(run-callbacks (merge {} %) model-name :after-load) rows))))))
+    (find-by-sql model-name (apply vector select-query values))))
 
 (defn update
   "Updates by (partial-record :id), updating only those columns included in partial-record."
@@ -158,6 +167,8 @@
         (get-record ~model-name id#))
       (defn ~'find-records [attributes#]
         (find-records ~model-name attributes#))
+      (defn ~'find-by-sql [select-query-and-values#]
+        (find-by-sql ~model-name select-query-and-values#))
       (defn ~'create [attributes#]
         (create ~model-name attributes#))
       (defn ~'insert [attributes#]
