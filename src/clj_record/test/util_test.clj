@@ -11,7 +11,8 @@
     "box" "boxes"
     "bush" "bushes"
     "bus" "buses"
-    "visit" "visits"))
+    "visit" "visits"
+    "type" "types"))
 
 (deftest pluralize (are (= _1 (util/pluralize _2))
     "foos" "foo"
@@ -19,7 +20,8 @@
     "babies" "baby"
     "boxes" "box"
     "bushes" "bush"
-    "buses" "bus"))
+    "buses" "bus"
+    "types" "type"))
 
 (deftest provides-id-query-for-derby
   (are (= _1 (util/id-query-for _2 "table_name"))
