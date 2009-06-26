@@ -20,6 +20,7 @@
   <target name="clean">
     <delete dir="${classes.dir}" />
     <delete file="clj-record.jar" />
+    <delete dir="/tmp/clj-record.test.db" />
   </target>
   
   <target name="init">
