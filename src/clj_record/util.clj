@@ -1,10 +1,9 @@
 (ns clj-record.util
-  (:use (clojure.contrib str-utils
-                         fcase)))
+  (:use (clojure.contrib str-utils)))
 
 (defn singularize [plural]
   (let [lc (.toLowerCase plural)]
-    (re-case lc
+    (condp re-find lc
       #"ies$" (re-sub #"ies$" "y" lc)
       #"(s|z|ch|sh|x)es$" (re-sub #"(s|z|ch|sh|x)es$" "$1" lc)
       #"s$" (re-sub #"s$" "" lc)
