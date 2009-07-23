@@ -1,3 +1,5 @@
+Read and convert results lazily if a connection is available. (Not sure what exactly "available" should mean. Maybe pass in an option to force.)
+
 Support specifying (not inferring):
   * model-name of an association
   * foreign-key column name
