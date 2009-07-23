@@ -79,6 +79,8 @@
     (find-by-sql model-name (apply vector select-query values))))
 
 (defn find-record
+  "Returns the first matching record. This is just (first (find-records ...)).
+  Note that at the moment there's no optimization to prevent the entire result set being read and converted into records."
   [model-name attributes-or-where-params]
   (first (find-records model-name attributes-or-where-params)))
 
