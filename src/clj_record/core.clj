@@ -64,21 +64,6 @@
     (sql/with-query-results rows [(id-query-for (db-spec-for model-name) (table-name model-name))]
       (val (first (first rows))))))
 
-(defn get-record
-  "Retrieves record by id, throwing if not found."
-  [model-name id]
-  (connected (db-spec-for model-name)
-    (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name model-name)) id]
-      (if (empty? rows) (throw (IllegalArgumentException. "Record does not exist")))
-      (run-callbacks (merge {} (first rows)) model-name :after-load))))
-
-(defn create
-  "Inserts a record populated with attributes and returns it."
-  [model-name attributes]
-  (let [id (insert model-name attributes)]
-    (connected (db-spec-for model-name)
-      (get-record model-name id))))
-
 (defn find-by-sql
   "Returns a vector of matching records.
   select-query-and-values should be something like
@@ -105,6 +90,19 @@
 (defn find-record
   [model-name attributes-or-where-params]
   (first (find-records model-name attributes-or-where-params)))
+
+(defn get-record
+  "Retrieves record by id, throwing if not found."
+  [model-name id]
+  (or (find-record model-name {:id id})
+      (throw (IllegalArgumentException. "Record does not exist"))))
+
+(defn create
+  "Inserts a record populated with attributes and returns it."
+  [model-name attributes]
+  (let [id (insert model-name attributes)]
+    (connected (db-spec-for model-name)
+      (get-record model-name id))))
 
 (defn update
   "Updates by (partial-record :id), updating only those columns included in partial-record."
