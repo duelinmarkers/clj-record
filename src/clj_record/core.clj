@@ -55,15 +55,6 @@
     (sql/transaction
       ~@body)))
 
-(defn insert
-  "Inserts a record populated with attributes and returns the generated id."
-  [model-name attributes]
-  (transaction (db-spec-for model-name)
-    (let [attributes (run-callbacks attributes model-name :before-save)]
-      (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
-    (sql/with-query-results rows [(id-query-for (db-spec-for model-name) (table-name model-name))]
-      (val (first (first rows))))))
-
 (defn find-by-sql
   "Returns a vector of matching records.
   select-query-and-values should be something like
@@ -96,6 +87,15 @@
   [model-name id]
   (or (find-record model-name {:id id})
       (throw (IllegalArgumentException. "Record does not exist"))))
+
+(defn insert
+  "Inserts a record populated with attributes and returns the generated id."
+  [model-name attributes]
+  (transaction (db-spec-for model-name)
+    (let [attributes (run-callbacks attributes model-name :before-save)]
+      (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
+    (sql/with-query-results rows [(id-query-for (db-spec-for model-name) (table-name model-name))]
+      (val (first (first rows))))))
 
 (defn create
   "Inserts a record populated with attributes and returns it."
