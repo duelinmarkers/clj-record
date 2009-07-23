@@ -102,6 +102,10 @@
         select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
     (find-by-sql model-name (apply vector select-query values))))
 
+(defn find-record
+  [model-name attributes-or-where-params]
+  (first (find-records model-name attributes-or-where-params)))
+
 (defn update
   "Updates by (partial-record :id), updating only those columns included in partial-record."
   [model-name partial-record]
@@ -167,6 +171,8 @@
         (get-record ~model-name id#))
       (defn ~'find-records [attributes#]
         (find-records ~model-name attributes#))
+      (defn ~'find-record [attributes#]
+        (find-record ~model-name attributes#))
       (defn ~'find-by-sql [select-query-and-values#]
         (find-by-sql ~model-name select-query-and-values#))
       (defn ~'create [attributes#]

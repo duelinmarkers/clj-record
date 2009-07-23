@@ -21,22 +21,37 @@
         acme (manufacturer/get-record id)]
     (is (= "ACME" (acme :name)))))
 
-(defdbtest get-record-by-id
+(defdbtest get-record-does-a-lookup-by-id
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
     (is (= humedai (manufacturer/get-record (humedai :id))))))
 
 (defdbtest get-record-throws-if-not-found
   (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
 
-(defdbtest find-records-by-attribute-equality-conditions
+(defdbtest find-records-can-do-lookup-by-attribute-equality-conditions
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
         other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
     (is (= [humedai] (manufacturer/find-records {:name "Humedai Motors"})))))
 
-(defdbtest find-records-by-SQL-conditions
+(defdbtest find-records-can-do-lookup-by-a-vector-of-SQL-conditions-followed-by-values
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
         other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
     (is (= [humedai] (manufacturer/find-records ["name = ?" "Humedai Motors"])))))
+
+(defdbtest find-record-can-do-lookup-by-attribute-equality-conditions
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= humedai (manufacturer/find-record {:name "Humedai Motors"})))))
+
+(defdbtest find-record-can-do-lookup-by-a-vector-of-SQL-conditions-followed-by-values
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= humedai (manufacturer/find-record ["name = ?" "Humedai Motors"])))))
+
+(defdbtest find-record-returns-the-first-matching-record
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:grade 90}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:grade 90}))]
+    (is (= humedai (manufacturer/find-record {:grade 90})))))
 
 (defdbtest find-by-sql-uses-a-complete-query
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))]
