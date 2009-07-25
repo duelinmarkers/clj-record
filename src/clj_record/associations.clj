@@ -9,10 +9,11 @@
     (assoc-fn model-name association-name)))
 
 (defn has-many
-  "Called indirectly via clj-record.core/init-model.
-  Defines an association to a model whose name is infered by singularizing association-name.
+  "Defines an association to a model whose name is infered by singularizing association-name.
   In ns foo's init-model, (has-many bars) will define find-bars and destroy-bars functions in foo,
-  each of which take a foo record and find or destroy bars by {:foo_id (record :id)}."
+  each of which take a foo record and find or destroy bars by {:foo_id (record :id)}.
+  
+  Called indirectly via clj-record.core/init-model."
   [model-name association-name]
   (let [associated-model-name (singularize (name association-name))
         foreign-key-attribute (keyword (str model-name "_id"))
@@ -25,9 +26,10 @@
         (clj-record.core/destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)})))))
 
 (defn belongs-to
-  "Called indirectly via clj-record.core/init-model.
-  Defines an association to a model named association-name.
-  In ns bar's init-model, (belongs-to foo) will define find-foo in bar."
+  "Defines an association to a model named association-name.
+  In ns bar's init-model, (belongs-to foo) will define find-foo in bar.
+  
+  Called indirectly via clj-record.core/init-model."
   [model-name association-name]
   (let [associated-model-name (str association-name)
         find-fn-name (symbol (str "find-" associated-model-name))

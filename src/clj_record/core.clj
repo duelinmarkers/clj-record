@@ -148,11 +148,12 @@
       [top-level-options remaining-options])))
 
 (defmacro init-model
-  "Macro to turn a namespace into a 'model.'
+  "Macro to create a model out of a clojure namespace.
   The segment of the namespace name following the last dot is used as the model-name.
   Model-specific versions of most public functions in clj-record.core are defined 
-  in the model namespace (where the model-name as first argument can be omitted).
+  in the model namespace (minus the model-name as first argument).
   Optional forms for associations and validation are specified here.
+  
   See clj_record/test/model/manufacturer.clj for an example."
   [& init-options]
   (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))
