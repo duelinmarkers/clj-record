@@ -32,6 +32,8 @@
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
       <arg value="clj-record.boot" />
+      <arg value="clj-record.callbacks.built-ins" />
+      <arg value="clj-record.validation.built-ins" />
     </java>
   </target>
 
