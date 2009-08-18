@@ -5,6 +5,7 @@
   <property name="lib.dir" value="lib" />
   <property name="test.lib.dir" value="test_lib" />
   <property name="src.dir" value="src" />
+  <property name="test.dir" value="test" />
   <property name="vimclojure.jar" value="${env.HOME}/.vim/vimclojure.jar" />
   
   <path id="project.classpath">
@@ -14,6 +15,7 @@
   
   <path id="test.classpath">
     <path refid="project.classpath" />
+    <pathelement path="${test.dir}" />
     <fileset dir="${test.lib.dir}" includes="*.jar" />
   </path>
   
@@ -32,14 +34,14 @@
       <classpath path="${src.dir}" />
       <sysproperty key="clojure.compile.path" value="${classes.dir}" />
       <arg value="clj-record.boot" />
+      <arg value="clj-record.query" />
       <arg value="clj-record.callbacks.built-ins" />
       <arg value="clj-record.validation.built-ins" />
     </java>
   </target>
 
   <target name="test" depends="compile">
-    <java classname="clojure.main" classpathref="test.classpath" dir="${src.dir}" fork="true" failonerror="true">
-      <classpath path="${src.dir}" />
+    <java classname="clojure.main" classpathref="test.classpath" dir="${test.dir}" fork="true" failonerror="true">
       <arg value="-e" />
       <arg value="(require 'clj-record.test.main) (clj-record.test.main/load-and-run)" />
     </java>
