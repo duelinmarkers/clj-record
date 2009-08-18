@@ -1,3 +1,7 @@
+Get tests out of the main src folder so we don't accidentally rely on having the uncompiled production source on the classpath when running tests.
+
+Get something reasonable in place for testing with MySQL and Postgres.
+
 Read and convert results lazily if a connection is available. (Not sure what exactly "available" should mean. Maybe pass in an option to force.)
 
 Support specifying (not inferring):
@@ -13,10 +17,6 @@ More callbacks.
 
 Eager fetching of associations.
 
-Test with hsqldb in addition to derby, different connections for different models. Will hopefully force:
-  * eliminating vendor-specific bits.
-  * getting db configuration saner.
-
 (io!) bomb if any database work is attempted in a dosync block?
   * Gilardi has added this to sql/transaction.
 
@@ -26,8 +26,9 @@ Create lazy seqs for multi-value associations?
 Pretty migrations. Maybe just a series of contributions to clojure.contrib.sql.
 
 Figure out a way to test init-model options without putting every bizarre case into manufacturer. It's getting ridiculous.
-  * This is largely (maybe sufficiently) addressed now that init-model is side-effect free and tests can 
+  * This is somewhat addressed now that init-model is side-effect free and tests can 
     directly use the expanded forms of options, then restore the model metadata when they're finished.
+    It's a bit complicated though.
 
 Support for BLOBs, CLOBs.
 
