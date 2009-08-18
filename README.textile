@@ -130,13 +130,13 @@ Attribute serialization uses clojure.core's pr and read functions, so anything t
 
 ---
 
-clj-record is being TDD'd using clojure.contrib.test-is, largely with high-level full-stack tests, so see "the tests":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/test for details of everything that works. 
+clj-record is being TDD'd using clojure.contrib.test-is, largely with high-level full-stack tests, so see "the tests":http://github.com/duelinmarkers/clj-record/tree/master/test/clj_record for details of everything that works. 
 
 See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt for what else I'm thinking about, and feel free to suggest.
 
 h2. Running
 
-Run ./test as a clj script to run tests. In addition to clojure-contrib, you'll need "Apache Derby":http://db.apache.org/derby/ on your classpath. (Or you can uncomment and modify a different db-spec in clj-record/test/config.clj and use MySQL or PostgreSQL.)
+Run <code>ant</code> to compile source and run tests. By default the tests run with "Apache Derby":http://db.apache.org/derby/ . (You can uncomment and modify a different db-spec in test/clj-record/test_model/config.clj to use MySQL or PostgreSQL.)
 
 h2. Thanks for Contributing
 
