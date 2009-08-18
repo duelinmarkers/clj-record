@@ -1,13 +1,14 @@
 h1. clj-record
 
-clj-record is a library inspired by Rails' ActiveRecord but implemented in the 
-"Clojure programming language":http://www.clojure.org/ and intended to use its 
-functional idioms. It's a fairly thin layer on top of clojure.contrib.sql that 
-provides validation, associations, and callbacks.
+clj-record is a "Clojure":http://www.clojure.org/ persistence library inspired by Ruby on Rails' ActiveRecord but aimed at using LISPey functional idioms.
 
-Contributions are welcome, as are recommendations for how to improve the API.
+In short, it's a fairly thin layer on top of clojure.contrib.sql that allows you to define model namespaces and provides model-specific validation, associations, callbacks, and attribute serialization.
 
-h2. The API
+Join the "clj-record-dev Google Group":http://groups.google.com/group/clj-record-dev to stay up to date or discuss changes.
+
+Contributions and suggestions are welcome. If you'd lke to contribute patches, please include tests.
+
+h2. How to Use It
 
 To define a model (in this case called "employee"), you do something like this.
 
@@ -15,10 +16,16 @@ To define a model (in this case called "employee"), you do something like this.
   (ns com.example.employee
     (:require clj-record.boot))
 
+  (def db ...a clojure.contrib.sql db-spec...)
+
   (clj-record.core/init-model)
 </code></pre>
 
-By default it will pluralize the model name to guess the table name. In this case it would use "employees."
+The db ref can be brought in by a :use in the ns declaration rather than being defined directly in the model namespace.
+
+The model name is the last segment of the namespace name.
+
+By default the table name is assumed to be the pluralized model name. (In the above case it would use "employees.")
 
 Specify a different table name like this.
 
@@ -42,11 +49,8 @@ into function definitions for basic crud operations:
 * update (from a map of attributes that must include :id)
 * destroy-record (from a map of attributes that must include :id)
 
-See the functions of the same name in 
-"clj-record.core":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/core.clj 
-for documentation.
-(The model-name argument of the functions in clj-record.core is not needed 
-when calling functions on the model namespace.)
+See the functions of the same names in "clj-record.core":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/core.clj for documentation.
+(The functions in clj-record.core take the model-name as a first argument. The functions generated in your model namespace already know what model they're about, so they don't take that argument. Otherwise the functions are the same.)
 
 Additional optional arguments to init-model can generate richer functionality.
 
@@ -95,7 +99,7 @@ Then you get validation errors like this.
 
 h3. Callbacks...
 
-...work about as you'd expect.
+...work about as you'd expect. Your function is passed the record and returns the (possibly modified) record.
 
 <pre><code>
   (clj-record.core/init-model
