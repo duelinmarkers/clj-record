@@ -1,4 +1,4 @@
-(ns clj-record.test.model.config)
+(ns clj-record.test-model.config)
 
 (comment)
 (def db {:classname "org.apache.derby.jdbc.EmbeddedDriver"

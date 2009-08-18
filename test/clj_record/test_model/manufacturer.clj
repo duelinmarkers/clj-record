@@ -1,8 +1,8 @@
-(ns clj-record.test.model.manufacturer
+(ns clj-record.test-model.manufacturer
   (:require clj-record.boot
             [clj-record.validation.built-ins :as valid]
             [clj-record.callbacks.built-ins :as cb])
-  (:use clj-record.test.model.config))
+  (:use clj-record.test-model.config))
 
 
 ; def'd here to illustrate that validation messages don't have to live inline in the init-model form.

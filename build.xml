@@ -43,7 +43,7 @@
   <target name="test" depends="compile">
     <java classname="clojure.main" classpathref="test.classpath" dir="${test.dir}" fork="true" failonerror="true">
       <arg value="-e" />
-      <arg value="(require 'clj-record.test.main) (clj-record.test.main/load-and-run)" />
+      <arg value="(require 'clj-record.main) (clj-record.main/load-and-run)" />
     </java>
   </target>
 

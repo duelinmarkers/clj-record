@@ -1,4 +1,4 @@
-(ns clj-record.test.validation-built-ins-test
+(ns clj-record.validation-built-ins-test
   (:use clojure.contrib.test-is)
   (:require [clj-record.validation.built-ins :as v]))
 

@@ -1,4 +1,4 @@
-(ns clj-record.test.test-helper
+(ns clj-record.test-helper
   (:require [clj-record.core :as core])
   (:use clojure.contrib.test-is))
 
@@ -8,7 +8,7 @@
     (rolling-back ~@body)))
 
 (defmacro rolling-back [& body]
-  `(core/transaction clj-record.test.model.config/db
+  `(core/transaction clj-record.test-model.config/db
     (try
       ~@body
       (finally

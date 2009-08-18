@@ -1,4 +1,4 @@
-(ns clj-record.test.util-test
+(ns clj-record.util-test
   (:require
     [clj-record.util :as util])
   (:use clojure.contrib.test-is))

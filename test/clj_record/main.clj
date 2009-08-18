@@ -1,7 +1,7 @@
-(ns clj-record.test.main
+(ns clj-record.main
   (:require [clojure.contrib.sql :as sql]
             [clojure.contrib.test-is :as test-is])
-  (:use clj-record.test.model.config
+  (:use clj-record.test-model.config
         clojure.contrib.str-utils))
 
 
@@ -41,7 +41,7 @@
   "Resets the test database, then finds, loads, and runs all the tests."
   []
   (reset-db)
-  (let [test-files  (for [f (.listFiles (java.io.File. "clj_record/test"))
+  (let [test-files  (for [f (.listFiles (java.io.File. "clj_record"))
                           :when (re-find #"test.clj$" (.getPath f))]
                       (re-find #"[^.]+" (.getPath f)))
         test-namespaces (map #(symbol (re-gsub #"/" "." (re-gsub #"_" "-" %))) test-files)]

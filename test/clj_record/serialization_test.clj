@@ -1,9 +1,9 @@
-(ns clj-record.test.serialization-test
+(ns clj-record.serialization-test
   (:require
     [clj-record.serialization :as serialization]
-    [clj-record.test.model.manufacturer :as manufacturer])
+    [clj-record.test-model.manufacturer :as manufacturer])
   (:use clojure.contrib.test-is
-        clj-record.test.test-helper))
+        clj-record.test-helper))
 
 
 (deftest serializes-simple-clojure-types

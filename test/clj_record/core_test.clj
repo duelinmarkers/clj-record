@@ -1,11 +1,11 @@
-(ns clj-record.test.core-test
+(ns clj-record.core-test
   (:require
     [clj-record.core :as core]
     [clj-record.query :as query]
-    [clj-record.test.model.manufacturer :as manufacturer]
-    [clj-record.test.model.product :as product])
+    [clj-record.test-model.manufacturer :as manufacturer]
+    [clj-record.test-model.product :as product])
   (:use clojure.contrib.test-is
-        clj-record.test.test-helper))
+        clj-record.test-helper))
 
 
 (deftest table-name-can-be-unconventional-with-table-name-option-to-init-model

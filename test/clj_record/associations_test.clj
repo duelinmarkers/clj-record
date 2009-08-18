@@ -1,9 +1,9 @@
-(ns clj-record.test.associations-test
+(ns clj-record.associations-test
   (:require
-    [clj-record.test.model.manufacturer :as manufacturer]
-    [clj-record.test.model.product :as product])
+    [clj-record.test-model.manufacturer :as manufacturer]
+    [clj-record.test-model.product :as product])
   (:use clojure.contrib.test-is
-        clj-record.test.test-helper))
+        clj-record.test-helper))
 
 
 (defdbtest belongs-to-creates-find-function

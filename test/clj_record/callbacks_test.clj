@@ -1,9 +1,9 @@
-(ns clj-record.test.callbacks-test
+(ns clj-record.callbacks-test
   (:require
-    [clj-record.test.model.manufacturer :as manufacturer]
+    [clj-record.test-model.manufacturer :as manufacturer]
     [clj-record.callbacks :as callbacks])
   (:use clojure.contrib.test-is
-        clj-record.test.test-helper))
+        clj-record.test-helper))
 
 
 (defdbtest before-save-can-transform-the-record-before-create

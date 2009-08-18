@@ -1,8 +1,8 @@
-(ns clj-record.test.validation-test
+(ns clj-record.validation-test
   (:require
     [clj-record.validation :as validation]
-    [clj-record.test.model.manufacturer :as manufacturer]
-    [clj-record.test.model.product :as product])
+    [clj-record.test-model.manufacturer :as manufacturer]
+    [clj-record.test-model.product :as product])
   (:use clojure.contrib.test-is))
 
 
