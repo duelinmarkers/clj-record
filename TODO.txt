@@ -1,5 +1,3 @@
-Get tests out of the main src folder so we don't accidentally rely on having the uncompiled production source on the classpath when running tests.
-
 Get something reasonable in place for testing with MySQL and Postgres.
 
 Read and convert results lazily if a connection is available. (Not sure what exactly "available" should mean. Maybe pass in an option to force.)
@@ -33,6 +31,8 @@ Figure out a way to test init-model options without putting every bizarre case i
 Support for BLOBs, CLOBs.
 
 TODONE
+
+Get tests out of the main src folder so we don't accidentally rely on having the uncompiled production source on the classpath when running tests.
 
 "Serialization" of data structures as attribute values.
   * Use this http://groups.google.com/group/clojure/msg/e21bf475b45bd2d5
