@@ -38,3 +38,12 @@
 (deftest throws-if-asked-for-id-query-of-unrecognized-db-spec
   (is (thrown? Exception
     (util/id-query-for {:classname "com.example.MadeUpDriver" :subprotocol "madeup"}))))
+
+(defmethod util/id-query-for "fake subprotocol" [db-spec table-name]
+  (str "made up query"))
+
+(deftest provides-id-query-for-whatever-dbms-you-like-if-you-defmethod-for-it
+  (are (= _1 (util/id-query-for _2 "table_name"))
+    "made up query" {:subprotocol "fake subprotocol"}))
+
+
