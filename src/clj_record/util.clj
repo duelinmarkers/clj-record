@@ -23,6 +23,8 @@
   (str "SELECT currval(pg_get_serial_sequence('" table-name "','id'))"))
 (defmethod id-query-for "mysql" [_ _]
   "SELECT LAST_INSERT_ID()")
+(defmethod id-query-for "h2" [_ _]
+  (str "CALL IDENTITY()"))
 (defmethod id-query-for :default [db-spec _]
   (throw (Exception. (str "Unrecognized db-spec subprotocol: " db-spec))))
 
