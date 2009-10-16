@@ -35,6 +35,10 @@
   (are (= _1 (util/id-query-for _2 "table_name"))
     "SELECT LAST_INSERT_ID()" {:classname "com.mysql.jdbc.Driver" :subprotocol "mysql"}))
 
+(deftest provides-id-query-for-h2
+  (are (= _1 (util/id-query-for _2 "table_name"))
+    "CALL IDENTITY()" {:subprotocol "h2"}))
+
 (deftest throws-if-asked-for-id-query-of-unrecognized-db-spec
   (is (thrown? Exception
     (util/id-query-for {:classname "com.example.MadeUpDriver" :subprotocol "madeup"}))))
