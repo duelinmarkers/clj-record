@@ -16,7 +16,7 @@
   Called indirectly via clj-record.core/init-model."
   [model-name association-name]
   (let [associated-model-name (singularize (name association-name))
-        foreign-key-attribute (keyword (str model-name "_id"))
+        foreign-key-attribute (keyword (str (dashes-to-underscores model-name) "_id"))
         find-fn-name (symbol (str "find-" association-name))
         destroy-fn-name (symbol (str "destroy-" association-name))]
     `(do
@@ -33,6 +33,6 @@
   [model-name association-name]
   (let [associated-model-name (str association-name)
         find-fn-name (symbol (str "find-" associated-model-name))
-        foreign-key-attribute (keyword (str associated-model-name "_id"))]
+        foreign-key-attribute (keyword (str (dashes-to-underscores associated-model-name) "_id"))]
     `(defn ~find-fn-name [record#]
       (clj-record.core/get-record ~associated-model-name (~foreign-key-attribute record#)))))

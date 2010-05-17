@@ -16,6 +16,9 @@
       (some #(.endsWith lc %) ["s" "z" "ch" "sh" "x"]) (str lc "es")
       :else (str lc "s"))))
 
+(defn dashes-to-underscores [s]
+  (.replaceAll s "-" "_"))
+
 (defmulti  id-query-for :subprotocol)
 (defmethod id-query-for "derby" [_ _]
   "VALUES IDENTITY_VAL_LOCAL()")

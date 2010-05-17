@@ -158,7 +158,7 @@
   [& init-options]
   (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))
         [top-level-options option-groups] (split-out-init-options init-options)
-        tbl-name (or (top-level-options :table-name) (pluralize model-name))
+        tbl-name (or (top-level-options :table-name) (dashes-to-underscores (pluralize model-name)))
         optional-defs (defs-from-option-groups model-name option-groups)]
     `(do
       (init-model-metadata ~model-name)

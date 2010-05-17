@@ -27,7 +27,13 @@
     (get-id-key-spec db "product_pk")
     [:name            "VARCHAR(32)" "NOT NULL"]
     [:price           :int]
-    [:manufacturer_id :int "NOT NULL"]))
+    [:manufacturer_id :int "NOT NULL"])
+  (sql/create-table :thing_one
+    (get-id-key-spec db "thing_one_pk")
+    [:name            "VARCHAR(32)" "NOT NULL"])
+  (sql/create-table :thing_two
+    (get-id-key-spec db "thing_two_pk")
+    [:thing_one_id   :int "NOT NULL"]))
 
 (defn reset-db []
   (println "resetting" (db :subprotocol))
