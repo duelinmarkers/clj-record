@@ -25,7 +25,7 @@ The db ref can be brought in by a :use in the ns declaration rather than being d
 
 The model name is the last segment of the namespace name.
 
-By default the table name is assumed to be the pluralized model name. (In the above case it would use "employees.")
+By default the table name is assumed to be the pluralized model name, with dashes changed to underscores. (In the above case it would use "employees.")
 
 Specify a different table name like this.
 
@@ -48,6 +48,7 @@ into function definitions for basic crud operations:
 * create (from a map of attributes, returning the record itself)
 * update (from a map of attributes that must include :id)
 * destroy-record (from a map of attributes that must include :id)
+* record-count (by optional map of attributes)
 
 See the functions of the same names in "clj-record.core":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/core.clj for documentation.
 (The functions in clj-record.core take the model-name as a first argument. The functions generated in your model namespace already know what model they're about, so they don't take that argument. Otherwise the functions are the same.)
@@ -76,6 +77,8 @@ Then you can do things like this.
     (user/destroy-subscriptions mikey)
     (println "But not any more."))
 </code></pre>
+
+Association names will have dashes converted to underscores when used in queries.
 
 h3. Validations
 
