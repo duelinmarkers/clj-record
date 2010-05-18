@@ -71,6 +71,26 @@
       {:name "Schmoomdai Motors" :grade 90 :founded "2008"}
       (select-keys (manufacturer/get-record id) [:name :grade :founded])))))
 
+(defdbtest record-count-all
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= 2 (manufacturer/record-count)))))
+
+(defdbtest record-count-with-match-using-map
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= 1 (manufacturer/record-count {:name "Some Other"})))))
+
+(defdbtest record-count-with-match-using-vector
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= 1 (manufacturer/record-count ["name = ?", "Some Other"])))))
+
+(defdbtest record-count-no-match
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= 0 (manufacturer/record-count {:name "bogus"})))))
+
 (deftest to-conditions
   (are (= _1 (core/to-conditions _2))
     ["a = ?" 1] {:a 1}

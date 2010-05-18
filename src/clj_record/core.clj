@@ -84,6 +84,18 @@
   [model-name attributes-or-where-params]
   (first (find-records model-name attributes-or-where-params)))
 
+(defn record-count
+  "Returns the number of records that match, or the total number of records
+  in the table." 
+  ([model-name] (record-count model-name ["1=1"]))
+  ([model-name attributes-or-where-params]
+     (let [[parameterized-where & values]
+           (if (map? attributes-or-where-params)
+             (to-conditions attributes-or-where-params)
+             attributes-or-where-params)
+           select-query (format "select count(*) as count from %s where %s" (table-name model-name) parameterized-where)]
+       (:count (first (find-by-sql model-name (apply vector select-query values)))))))
+
 (defn get-record
   "Retrieves record by id, throwing if not found."
   [model-name id]
@@ -168,6 +180,9 @@
       (defn ~'model-metadata [& args#]
         (apply model-metadata-for ~model-name args#))
       (defn ~'table-name [] (table-name ~model-name))
+      (defn ~'record-count 
+        ([] (record-count ~model-name))
+        ([attributes#] (record-count ~model-name attributes#)))
       (defn ~'get-record [id#]
         (get-record ~model-name id#))
       (defn ~'find-records [attributes#]
