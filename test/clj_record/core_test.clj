@@ -4,7 +4,7 @@
     [clj-record.query :as query]
     [clj-record.test-model.manufacturer :as manufacturer]
     [clj-record.test-model.product :as product])
-  (:use clojure.contrib.test-is
+  (:use clojure.test
         clj-record.test-helper))
 
 
@@ -12,9 +12,8 @@
   (is (= "productos" (core/table-name "product"))))
 
 (deftest table-name-is-available-on-each-model-namespace
-  (are (= _1 _2)
-    "manufacturers"  (manufacturer/table-name)
-    "productos"       (product/table-name)))
+  (is (= "manufacturers"  (manufacturer/table-name)))
+  (is (= "productos"      (product/table-name))))
 
 (defdbtest insert-returns-id-of-new-record
   (let [id (manufacturer/insert (valid-manufacturer-with {:name "ACME"}))
@@ -92,7 +91,8 @@
     (is (= 0 (manufacturer/record-count {:name "bogus"})))))
 
 (deftest to-conditions
-  (are (= _1 (core/to-conditions _2))
+  (are [expected-sql-conditions conditions-map]
+    (= expected-sql-conditions (core/to-conditions conditions-map))
     ["a = ?" 1] {:a 1}
     ["a = ?" "one"] {:a "one"}
     ["a IS NULL"] {:a nil}
