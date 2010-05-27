@@ -1,5 +1,6 @@
 (ns clj-record.test-model.manufacturer
-  (:require clj-record.boot
+  (:require [clojure.contrib.sql :as sql]
+            clj-record.boot
             [clj-record.validation.built-ins :as valid]
             [clj-record.callbacks.built-ins :as cb])
   (:use clj-record.test-model.config))
@@ -13,6 +14,10 @@
     (str "19" year)
     year))
 
+(defn print-record [record]
+  ;(print "record: " record)
+  record)
+
 (clj-record.core/init-model
   (:associations
     (has-many products))
@@ -23,4 +28,10 @@
     (:founded "must be numeric" #(or (nil? %) (valid/numeric? %)))
     (:grade my-grade-validation-message #(or (nil? %) (>= % 0))))
   (:callbacks
-    (:before-save (cb/transform-value :founded infer-full-year))))
+    (:before-save (cb/transform-value :founded infer-full-year))
+    (:after-load print-record)))
+
+(defn first-record []
+  (clj-record.core/model-transaction
+    (sql/with-query-results rows [(format "select * from %s where id = ?" (table-name)) 1]
+      (doall (after-load rows)))))

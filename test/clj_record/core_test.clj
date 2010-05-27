@@ -119,3 +119,6 @@
 
 (deftest model-metadata-with-one-arg
   (is (map? (manufacturer/model-metadata :callbacks))))
+
+(deftest transaction-and-defined-callback-test
+  (is (manufacturer/first-record)))

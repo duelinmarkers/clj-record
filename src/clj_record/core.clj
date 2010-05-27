@@ -1,6 +1,7 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql        :as sql]
-            [clojure.contrib.str-utils  :as str-utils])
+            [clojure.contrib.str-utils  :as str-utils]
+            [clj-record.validation :as validation])
   (:use (clj-record meta util callbacks)))
 
 
@@ -50,10 +51,71 @@
 
 (defmacro transaction
   "Runs body in a single DB transaction, first ensuring there's a connection."
-  [db-spec & body]
+  ([db-spec & body]
   `(connected ~db-spec
     (sql/transaction
-      ~@body)))
+      ~@body))))
+
+(defmacro model-transaction
+  "Runs body in a single DB transaction, first ensuring there's a connection. Note: body is a single list in this
+instance."
+  [& body]
+  `(transaction (db-spec-for ~'model-name) ~@body))
+
+(defn after-destroy
+  "Runs the after destroy call back on the given attributes."
+  [model-name attributes]
+  (run-callbacks attributes model-name :after-destroy))
+
+(defn after-insert
+  "Runs the after insert call back on the given attributes."
+  [model-name attributes]
+  (run-callbacks attributes model-name :after-insert))
+
+(defn after-load
+  "Runs the after load call back on all of the given rows."
+  [model-name rows]
+  (map #(run-callbacks (merge {} %) model-name :after-load) rows))
+
+(defn after-save
+  "Runs the after save call back on all of the given rows."
+  [model-name attributes]
+  (run-callbacks attributes model-name :after-save))
+
+(defn after-update
+  "Runs the after update call back on all of the given rows."
+  [model-name attributes]
+  (run-callbacks attributes model-name :after-update))
+
+(defn after-validation
+  "Runs the after validation call back on all of the given rows."
+  [model-name attributes]
+  (run-callbacks attributes model-name :after-validation))
+
+(defn before-destroy
+  "Runs the before destroy call back on the given attributes."
+  [model-name attributes]
+  (run-callbacks attributes model-name :before-destroy))
+
+(defn before-insert
+  "Runs the before insert call back on the given attributes."
+  [model-name attributes]
+  (run-callbacks attributes model-name :before-insert))
+
+(defn before-save
+  "Runs the before save call back on the given attributes."
+  [model-name attributes]
+  (run-callbacks attributes model-name :before-save))
+
+(defn before-update
+  "Runs the before update call back on the given attributes."
+  [model-name attributes]
+  (run-callbacks attributes model-name :before-update))
+
+(defn before-validation
+  "Runs the before validation call back on all of the given rows."
+  [model-name attributes]
+  (run-callbacks attributes model-name :before-validation))
 
 (defn find-by-sql
   "Returns a vector of matching records.
@@ -64,7 +126,7 @@
   [model-name select-query-and-values]
     (connected (db-spec-for model-name)
       (sql/with-query-results rows select-query-and-values
-        (doall (map #(run-callbacks (merge {} %) model-name :after-load) rows)))))
+        (doall (after-load model-name rows)))))
 
 (defn find-records
   "Returns a vector of matching records.
@@ -106,10 +168,12 @@
   "Inserts a record populated with attributes and returns the generated id."
   [model-name attributes]
   (transaction (db-spec-for model-name)
-    (let [attributes (run-callbacks attributes model-name :before-save)]
+    (let [attributes (before-insert model-name (before-save model-name attributes))]
       (sql/insert-values (table-name model-name) (keys attributes) (vals attributes)))
     (sql/with-query-results rows [(id-query-for (db-spec-for model-name) (table-name model-name))]
-      (val (first (first rows))))))
+      (let [id (val (first (first rows)))]
+        (after-save model-name (after-insert model-name (assoc attributes :id id)))
+        id))))
 
 (defn create
   "Inserts a record populated with attributes and returns it."
@@ -125,19 +189,39 @@
     (let [id (partial-record :id)
           partial-record (-> partial-record (run-callbacks model-name :before-save :before-update) (dissoc :id))]
       (sql/update-values (table-name model-name) ["id = ?" id] partial-record)
-      (assoc partial-record :id id))))
+      (let [output-record (assoc partial-record :id id)]
+        (after-save model-name (after-update model-name output-record))
+        output-record))))
 
 (defn destroy-record
   "Deletes by (record :id)."
   [model-name record]
   (connected (db-spec-for model-name)
-    (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])))
+    (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])
+    (after-destroy model-name record)))
 
 (defn destroy-records
   "Deletes all records matching (-> attributes to-conditions)."
   [model-name attributes]
-  (connected (db-spec-for model-name)
-    (sql/delete-rows (table-name model-name) (to-conditions attributes))))
+  (let [conditions (to-conditions attributes)
+        model-table-name (table-name model-name)
+        [parameterized-where & values] conditions
+        select-query (format "select * from %s where %s" model-table-name parameterized-where)]
+    (connected (db-spec-for model-name)
+      (sql/with-query-results rows-to-delete (apply vector select-query values)
+        (doseq [record rows-to-delete]
+          (before-destroy model-name record))
+        (sql/delete-rows model-table-name conditions)
+        (doseq [record rows-to-delete]
+          (after-destroy model-name record))))))
+
+(defn validate-record
+  "Validates the given attributes."
+  [model-name record]
+  (before-validation model-name record)
+  (let [errors (validation/validate model-name record)]
+    (after-validation model-name record)
+    errors))
 
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
@@ -176,6 +260,7 @@
       (init-model-metadata ~model-name)
       (set-db-spec ~model-name ~'db)
       (set-table-name ~model-name ~tbl-name)
+      (def ~'model-name ~model-name)
       (def ~'table-name (table-name ~model-name))
       (defn ~'model-metadata [& args#]
         (apply model-metadata-for ~model-name args#))
@@ -200,5 +285,27 @@
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
       (defn ~'validate [record#]
-        (clj-record.validation/validate ~model-name record#))
+        (validate-record ~model-name record#))
+      (defn ~'after-destroy [attributes#]
+        (after-destroy ~model-name attributes#))
+      (defn ~'after-insert [attributes#]
+        (after-insert ~model-name attributes#))
+      (defn ~'after-load [rows#]
+        (after-load ~model-name rows#))
+      (defn ~'after-save [attributes#]
+        (after-save ~model-name attributes#))
+      (defn ~'after-update [attributes#]
+        (after-update ~model-name attributes#))
+      (defn ~'after-validation [attributes#]
+        (after-validation ~model-name attributes#))
+      (defn ~'before-destroy [attributes#]
+        (before-destroy ~model-name attributes#))
+      (defn ~'before-insert [attributes#]
+        (before-insert ~model-name attributes#))
+      (defn ~'before-save [attributes#]
+        (before-save ~model-name attributes#))
+      (defn ~'before-update [attributes#]
+        (before-update ~model-name attributes#))
+      (defn ~'before-validation [attributes#]
+        (before-validation ~model-name attributes#))
       ~@optional-defs)))

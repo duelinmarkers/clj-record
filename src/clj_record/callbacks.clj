@@ -1,5 +1,6 @@
 (ns clj-record.callbacks
-  (:use clj-record.meta))
+  (:use clj-record.meta)
+  (:require [clojure.contrib.seq-utils :as seq-utils]))
 
 
 (defn expand-init-option [model-name hook func]
@@ -13,7 +14,4 @@
 
 (defn run-callbacks [record model-name & hooks]
   (let [callback-map (or (model-metadata-for model-name :callbacks) {})]
-    (loop [r record
-           funcs (apply concat (map callback-map hooks))]
-      (if (empty? funcs) r
-        (recur ((first funcs) r) (rest funcs))))))
+    (reduce #(%2 %1) record (filter identity (seq-utils/flatten (map callback-map hooks))))))
