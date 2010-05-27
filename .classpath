@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="lib" path="lib/clojure-contrib.jar"/>
+	<classpathentry kind="lib" path="lib/clojure.jar"/>
+	<classpathentry kind="lib" path="test_lib/derby.jar"/>
+	<classpathentry kind="lib" path="test_lib/derbyclient.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

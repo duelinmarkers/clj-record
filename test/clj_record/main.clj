@@ -50,7 +50,7 @@
   (let [test-files  (for [f (.listFiles (java.io.File. "clj_record"))
                           :when (re-find #"test.clj$" (.getPath f))]
                       (re-find #"[^.]+" (.getPath f)))
-        test-namespaces (map #(symbol (re-gsub #"/" "." (re-gsub #"_" "-" %))) test-files)]
+        test-namespaces (map #(symbol (re-gsub #"/|\\" "." (re-gsub #"_" "-" %))) test-files)]
     (doseq [file test-files]
       (load file))
     (apply test-is/run-tests test-namespaces)))
