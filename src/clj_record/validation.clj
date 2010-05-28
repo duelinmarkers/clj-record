@@ -19,17 +19,7 @@
 
 (defn validate-by-model [model-name record]
   (callbacks/before-validation model-name record)
-  (let [errors (reduce
-                  #(collect-errors record %1 %2)
-                  ;(fn [errors [attr message validation-fn]]
-                  ;  (if (validation-fn (record attr))
-                  ;    errors
-                  ;    (merge-with
-                  ;      (fn [result addl-val] (apply conj result addl-val))
-                  ;      errors
-                  ;      {attr [message]})))
-                  {}
-                  (validations-for model-name))]
+  (let [errors (reduce #(collect-errors record %1 %2) {} (validations-for model-name))]
     (callbacks/after-validation model-name record)
     errors))
 
