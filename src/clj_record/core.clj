@@ -1,7 +1,6 @@
 (ns clj-record.core
   (:require [clojure.contrib.sql        :as sql]
-            [clojure.contrib.str-utils  :as str-utils]
-            [clj-record.validation :as validation])
+            [clojure.contrib.str-utils  :as str-utils])
   (:use (clj-record meta util callbacks)))
 
 
@@ -61,61 +60,6 @@
 instance."
   [& body]
   `(transaction (db-spec-for ~'model-name) ~@body))
-
-(defn after-destroy
-  "Runs the after destroy call back on the given attributes."
-  [model-name attributes]
-  (run-callbacks attributes model-name :after-destroy))
-
-(defn after-insert
-  "Runs the after insert call back on the given attributes."
-  [model-name attributes]
-  (run-callbacks attributes model-name :after-insert))
-
-(defn after-load
-  "Runs the after load call back on all of the given rows."
-  [model-name rows]
-  (map #(run-callbacks (merge {} %) model-name :after-load) rows))
-
-(defn after-save
-  "Runs the after save call back on all of the given rows."
-  [model-name attributes]
-  (run-callbacks attributes model-name :after-save))
-
-(defn after-update
-  "Runs the after update call back on all of the given rows."
-  [model-name attributes]
-  (run-callbacks attributes model-name :after-update))
-
-(defn after-validation
-  "Runs the after validation call back on all of the given rows."
-  [model-name attributes]
-  (run-callbacks attributes model-name :after-validation))
-
-(defn before-destroy
-  "Runs the before destroy call back on the given attributes."
-  [model-name attributes]
-  (run-callbacks attributes model-name :before-destroy))
-
-(defn before-insert
-  "Runs the before insert call back on the given attributes."
-  [model-name attributes]
-  (run-callbacks attributes model-name :before-insert))
-
-(defn before-save
-  "Runs the before save call back on the given attributes."
-  [model-name attributes]
-  (run-callbacks attributes model-name :before-save))
-
-(defn before-update
-  "Runs the before update call back on the given attributes."
-  [model-name attributes]
-  (run-callbacks attributes model-name :before-update))
-
-(defn before-validation
-  "Runs the before validation call back on all of the given rows."
-  [model-name attributes]
-  (run-callbacks attributes model-name :before-validation))
 
 (defn find-by-sql
   "Returns a vector of matching records.
@@ -215,14 +159,6 @@ instance."
         (doseq [record rows-to-delete]
           (after-destroy model-name record))))))
 
-(defn validate-record
-  "Validates the given attributes."
-  [model-name record]
-  (before-validation model-name record)
-  (let [errors (validation/validate model-name record)]
-    (after-validation model-name record)
-    errors))
-
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
     (fn [def-forms [option-group-name & options]]
@@ -285,7 +221,7 @@ instance."
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
       (defn ~'validate [record#]
-        (validate-record ~model-name record#))
+        (~'clj-record.validation/validate-by-model ~model-name record#))
       (defn ~'after-destroy [attributes#]
         (after-destroy ~model-name attributes#))
       (defn ~'after-insert [attributes#]
