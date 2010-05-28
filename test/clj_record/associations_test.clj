@@ -2,7 +2,7 @@
   (:require
     [clj-record.test-model.manufacturer :as manufacturer]
     [clj-record.test-model.product :as product])
-  (:use clojure.contrib.test-is
+  (:use clojure.test
         clj-record.test-helper))
 
 
@@ -33,9 +33,8 @@
         prod3 (product/create {:name "prod3" :manufacturer_id (:id manu2)})
         prod4 (product/create {:name "prod4" :manufacturer_id (:id manu2)})]
     (let [[eager-manu1 eager-manu2] (manufacturer/find-records {:grade 99} {:include [:products]})]
-      (are (= _1 _2)
-        "manu1" (:name eager-manu1)
-        "manu2" (:name eager-manu2)
-        [prod1 prod2] (:products eager-manu1)
-        [prod3 prod4] (:products eager-manu2)))))
+      (is (= "manu1" (:name eager-manu1)))
+      (is (= "manu2" (:name eager-manu2)))
+      (is (= [prod1 prod2] (:products eager-manu1)))
+      (is (= [prod3 prod4] (:products eager-manu2))))))
 )

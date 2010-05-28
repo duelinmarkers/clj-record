@@ -1,6 +1,6 @@
 (ns clj-record.main
   (:require [clojure.contrib.sql :as sql]
-            [clojure.contrib.test-is :as test-is])
+            [clojure.test :as test-is])
   (:use clj-record.test-model.config
         clojure.contrib.str-utils))
 

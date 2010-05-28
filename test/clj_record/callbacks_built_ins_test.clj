@@ -1,5 +1,5 @@
 (ns clj-record.callbacks-built-ins-test
-  (:use clojure.contrib.test-is)
+  (:use clojure.test)
   (:require [clj-record.callbacks.built-ins :as cbfunc]))
 
 

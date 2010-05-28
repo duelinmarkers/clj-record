@@ -1,6 +1,6 @@
 (ns clj-record.test-helper
   (:require [clj-record.core :as core])
-  (:use clojure.contrib.test-is))
+  (:use clojure.test))
 
 
 (defmacro defdbtest [name & body]

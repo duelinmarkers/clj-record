@@ -3,7 +3,7 @@
     [clj-record.validation :as validation]
     [clj-record.test-model.manufacturer :as manufacturer]
     [clj-record.test-model.product :as product])
-  (:use clojure.contrib.test-is))
+  (:use clojure.test))
 
 
 (deftest validate-returns-valid-for-a-model-without-validations
@@ -28,6 +28,6 @@
 
 (deftest validate-with-errors-on-multiple-attributes
   (let [validation-result (manufacturer/validate {:name "" :founded "oh"})]
-    (are (= _1 (validation/messages-for validation-result _2))
+    (are [messages attribute-name] (= messages (validation/messages-for validation-result attribute-name))
       ["empty!"] :name
       ["must be numeric"] :founded)))

@@ -4,7 +4,7 @@
     [clj-record.query :as query]
     [clj-record.test-model.manufacturer :as manufacturer]
     [clj-record.test-model.product :as product])
-  (:use clojure.contrib.test-is
+  (:use clojure.test
         clj-record.test-helper))
 
 
@@ -64,7 +64,7 @@
     (is (= #{sozooke foyoto ghysler} (set (manufacturer/find-records {:name (query/not-in "GMB Motors" "Merledas Automotive")}))))))
 
 (deftest attempt-to-supply-nil-value
-  (are (thrown? IllegalArgumentException _1)
+  (are [bad-call] (thrown? IllegalArgumentException bad-call)
     (query/equal nil)
     (query/not-equal nil)
     (query/greater-than nil)

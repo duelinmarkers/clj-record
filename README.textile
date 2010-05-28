@@ -133,7 +133,7 @@ Attribute serialization uses clojure.core's pr and read functions, so anything t
 
 ---
 
-clj-record is being TDD'd using clojure.contrib.test-is, largely with high-level full-stack tests, so see "the tests":http://github.com/duelinmarkers/clj-record/tree/master/test/clj_record for details of everything that works. 
+clj-record is being TDD'd using clojure.test, largely with high-level full-stack tests, so see "the tests":http://github.com/duelinmarkers/clj-record/tree/master/test/clj_record for details of everything that works. 
 
 See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt for what else I'm thinking about, and feel free to suggest.
 

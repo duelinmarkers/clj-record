@@ -2,7 +2,7 @@
   (:require
     [clj-record.test-model.manufacturer :as manufacturer]
     [clj-record.callbacks :as callbacks])
-  (:use clojure.contrib.test-is
+  (:use clojure.test
         clj-record.test-helper))
 
 

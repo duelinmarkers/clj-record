@@ -2,7 +2,7 @@
   (:require
     [clj-record.test-model.thing-one :as thing-one]
     [clj-record.test-model.thing-two :as thing-two])
-  (:use clojure.contrib.test-is
+  (:use clojure.test
         clj-record.test-helper))
 
 
