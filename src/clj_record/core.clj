@@ -141,6 +141,7 @@ instance."
   "Deletes by (record :id)."
   [model-name record]
   (connected (db-spec-for model-name)
+    (before-destroy model-name record)
     (sql/delete-rows (table-name model-name) ["id = ?" (:id record)])
     (after-destroy model-name record)))
 
