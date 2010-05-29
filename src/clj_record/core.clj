@@ -157,8 +157,8 @@ instance."
         (doseq [record rows-to-delete]
           (before-destroy model-name record))
         (sql/delete-rows model-table-name conditions)
-        (doseq [record rows-to-delete]
-          (after-destroy model-name record))))))
+        (doall
+          (map #(after-destroy model-name %) rows-to-delete))))))
 
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
@@ -221,6 +221,8 @@ instance."
         (update ~model-name attributes#))
       (defn ~'destroy-record [record#]
         (destroy-record ~model-name record#))
+      (defn ~'destroy-records [attributes#]
+        (destroy-records ~model-name attributes#))
       (defn ~'validate [record#]
         (~'clj-record.validation/validate-by-model ~model-name record#))
       (defn ~'after-destroy [attributes#]
