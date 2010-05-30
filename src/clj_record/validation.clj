@@ -17,7 +17,7 @@
       errors
       {attr [message]})))
 
-(defn validate-by-model [model-name record]
+(defn validate [model-name record]
   (callbacks/before-validation model-name record)
   (let [errors (reduce #(collect-errors record %1 %2) {} (validations-for model-name))]
     (callbacks/after-validation model-name record)

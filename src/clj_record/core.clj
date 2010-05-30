@@ -224,7 +224,7 @@ instance."
       (defn ~'destroy-records [attributes#]
         (destroy-records ~model-name attributes#))
       (defn ~'validate [record#]
-        (~'clj-record.validation/validate-by-model ~model-name record#))
+        (~'clj-record.validation/validate ~model-name record#))
       (defn ~'after-destroy [attributes#]
         (after-destroy ~model-name attributes#))
       (defn ~'after-insert [attributes#]
