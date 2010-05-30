@@ -9,7 +9,8 @@
     (.toString *out*)))
 
 (defn deserialize [value]
-  (read (java.io.PushbackReader. (java.io.StringReader. value))))
+  (when value
+    (read (java.io.PushbackReader. (java.io.StringReader. value)))))
 
 (defn serialize-attribute [model-name attribute]
   (callbacks/add-callback model-name :before-save (callb/transform-value attribute serialize))

@@ -1,7 +1,6 @@
 (ns clj-record.validation
-  (:use clj-record.util)
-  (:use clj-record.meta)
-  (:use clj-record.core))
+  (:use (clj-record core meta util))
+  (:require [clj-record.callbacks :as callbacks]))
 
 
 (defn- validations-for [model-name] ((@all-models-metadata model-name) :validations))
@@ -10,17 +9,19 @@
 
 (def messages-for get)
 
-(defn validate [model-name record]
-  (reduce
-    (fn [errors [attr message validation-fn]]
-      (if (validation-fn (record attr))
-        errors
-        (merge-with
-          (fn [result addl-val] (apply conj result addl-val))
-          errors
-          {attr [message]})))
-    {}
-    (validations-for model-name)))
+(defn- collect-errors [record errors [attr message validation-fn]]
+  (if (validation-fn (record attr))
+    errors
+    (merge-with
+      #(apply conj %1 %2)
+      errors
+      {attr [message]})))
+
+(defn validate-by-model [model-name record]
+  (callbacks/before-validation model-name record)
+  (let [errors (reduce #(collect-errors record %1 %2) {} (validations-for model-name))]
+    (callbacks/after-validation model-name record)
+    errors))
 
 (defn add-validation
   "Adds a validation to the named model.

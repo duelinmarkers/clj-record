@@ -14,4 +14,4 @@
     ..."
   [attribute func]
   (fn [record]
-    (assoc record attribute (func (record attribute)))))
+    (assoc record attribute (func (get record attribute)))))
