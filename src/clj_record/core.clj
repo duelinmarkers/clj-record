@@ -146,7 +146,8 @@ instance."
     (after-destroy model-name record)))
 
 (defn destroy-records
-  "Deletes all records matching (-> attributes to-conditions)."
+  "Deletes all records matching (-> attributes to-conditions), 
+  running before- and after-destroy callbacks on each matching record."
   [model-name attributes]
   (let [conditions (to-conditions attributes)
         model-table-name (table-name model-name)
@@ -159,6 +160,12 @@ instance."
         (sql/delete-rows model-table-name conditions)
         (doall
           (map #(after-destroy model-name %) rows-to-delete))))))
+
+(defn delete-records
+  "Deletes all records matching (-> attributes to-conditions) without running callbacks."
+  [model-name attributes]
+  (connected (db-spec-for model-name)
+    (sql/delete-rows (table-name model-name) (to-conditions attributes))))
 
 (defn- defs-from-option-groups [model-name option-groups]
   (reduce
@@ -223,6 +230,8 @@ instance."
         (destroy-record ~model-name record#))
       (defn ~'destroy-records [attributes#]
         (destroy-records ~model-name attributes#))
+      (defn ~'delete-records [attributes#]
+        (delete-records ~model-name attributes#))
       (defn ~'validate [record#]
         (~'clj-record.validation/validate ~model-name record#))
       (defn ~'after-destroy [attributes#]

@@ -116,3 +116,11 @@
 (defdbtest validate-calls-before-validation?
   (assure-called "manufacturer" :before-validation
     (manufacturer/validate valid-manufacturer)))
+
+(defdbtest delete-records-does-not-call-before-destroy
+  (restoring-ref (manufacturer/model-metadata)
+    (restoring-ref test-ref
+      (callbacks/add-callback "manufacturer" :before-destroy (fn [r]  (callback-called :before-destroy) r))
+      (manufacturer/create valid-manufacturer)
+      (manufacturer/delete-records valid-manufacturer)
+      (is (not (callback-called? :before-destroy))))))

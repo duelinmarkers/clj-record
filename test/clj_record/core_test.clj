@@ -62,11 +62,18 @@
     (manufacturer/destroy-record {:id (humedai :id)})
     (is (empty? (manufacturer/find-records {:id (humedai :id)})))))
 
-(defdbtest destroy-records-destroys-by-prototype
+(defdbtest destroy-records-deletes-by-attribute-conditions
   (let [name-map { :name "Humedai Motors" }
         humedai1 (manufacturer/create (valid-manufacturer-with name-map))
         humedai2 (manufacturer/create (valid-manufacturer-with name-map))]
     (manufacturer/destroy-records name-map)
+    (is (empty? (manufacturer/find-records name-map)))))
+
+(defdbtest delete-records-deletes-by-attribute-conditions
+  (let [name-map { :name "Humedai Motors" }
+        humedai1 (manufacturer/create (valid-manufacturer-with name-map))
+        humedai2 (manufacturer/create (valid-manufacturer-with name-map))]
+    (manufacturer/delete-records name-map)
     (is (empty? (manufacturer/find-records name-map)))))
 
 (defdbtest update-uses-id-to-update-other-given-attributes-leaving-unspecified-attributes-untouched
