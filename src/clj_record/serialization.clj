@@ -18,5 +18,5 @@
 
 (defn expand-init-option
   "init-model macro-expansion delegate that generates a call to add-validation."
-  [model-name attribute-name]
+  [model-name attribute-name & ignored-options]
   `(serialize-attribute ~model-name ~attribute-name))

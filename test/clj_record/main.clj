@@ -28,9 +28,15 @@
     [:name            "VARCHAR(32)" "NOT NULL"]
     [:price           :int]
     [:manufacturer_id :int "NOT NULL"])
+  (sql/create-table :person
+    (get-id-key-spec db "person_pk")
+    [:name             "VARCHAR(32) NOT NULL"]
+    [:mother_id        :int]   ; default fk for assoc "mother"
+    [:father_person_id :int])
   (sql/create-table :thing_one
     (get-id-key-spec db "thing_one_pk")
-    [:name            "VARCHAR(32)" "NOT NULL"])
+    [:name            "VARCHAR(32)" "NOT NULL"]
+    [:owner_person_id   :int])   ; will need to override fk and model name
   (sql/create-table :thing_two
     (get-id-key-spec db "thing_two_pk")
     [:thing_one_id   :int "NOT NULL"]))

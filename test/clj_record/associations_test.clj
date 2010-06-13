@@ -1,7 +1,9 @@
 (ns clj-record.associations-test
   (:require
     [clj-record.test-model.manufacturer :as manufacturer]
-    [clj-record.test-model.product :as product])
+    [clj-record.test-model.product :as product]
+    [clj-record.test-model.person :as person]
+    [clj-record.test-model.thing-one :as thing-one])
   (:use clojure.test
         clj-record.test-helper))
 
@@ -23,6 +25,19 @@
         s3000xl (product/create {:name "S-3000xl" :manufacturer_id (:id humedai)})]
     (manufacturer/destroy-products humedai)
     (is (empty? (manufacturer/find-products humedai)))))
+
+(defdbtest belongs-to-custom-fk-and-model
+  (let [mother-rec (person/create {:name "mom"})
+        father-rec (person/create {:name "dad"})
+        kid-rec (person/create {:name "kid" :mother_id (:id mother-rec) :father_person_id (:id father-rec)})]
+    (is (= mother-rec (person/find-mother kid-rec)))
+    (is (= father-rec (person/find-father kid-rec)))))
+
+(defdbtest has-many-custom-fk-and-model
+  (let [person-rec (person/create {:name "phred"})
+        thing-rec1 (thing-one/create {:name "one" :owner_person_id (:id person-rec)})
+        thing-rec2 (thing-one/create {:name "two" :owner_person_id (:id person-rec)})]
+    (is (= [thing-rec1 thing-rec2] (person/find-things person-rec)))))
 
 (comment
 (defdbtest find-records-can-do-eager-fetching-of-has-many-association

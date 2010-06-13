@@ -3,7 +3,7 @@
   (:require [clojure.contrib.seq-utils :as seq-utils]))
 
 
-(defn expand-init-option [model-name hook func]
+(defn expand-init-option [model-name hook func & ignored-options]
   `(add-callback ~model-name ~hook ~func))
 
 (defn add-callback [model-name hook func]

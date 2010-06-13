@@ -81,7 +81,7 @@ instance."
           (if (map? attributes-or-where-params)
             (to-conditions attributes-or-where-params)
             attributes-or-where-params)
-        select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
+          select-query (format "select * from %s where %s" (table-name model-name) parameterized-where)]
     (find-by-sql model-name (apply vector select-query values))))
 
 (defn find-record

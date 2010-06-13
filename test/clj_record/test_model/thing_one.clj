@@ -5,4 +5,5 @@
 (clj-record.core/init-model
  :table-name "thing_one"
   (:associations
-    (has-many thing-twos)))
+    (has-many thing-twos)
+    (belongs-to person :fk owner_person_id)))

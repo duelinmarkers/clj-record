@@ -2,10 +2,6 @@ Get something reasonable in place for testing with MySQL and Postgres.
 
 Read and convert results lazily if a connection is available. (Not sure what exactly "available" should mean. Maybe pass in an option to force.)
 
-Support specifying (not inferring):
-  * model-name of an association
-  * foreign-key column name
-
 Allow update to be called with nil values. (Should be a patch to clojure.contrib.sql I think.)
 
 More callbacks.
@@ -40,3 +36,6 @@ Get tests out of the main src folder so we don't accidentally rely on having the
 Generate fancier queries with some fancy query API.
   * http://gist.github.com/64357
 
+Support specifying (not inferring):
+  * model-name of an association
+  * foreign-key column name

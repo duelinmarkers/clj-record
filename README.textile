@@ -80,6 +80,28 @@ Then you can do things like this.
 
 Association names will have dashes converted to underscores when used in queries.
 
+To override the foreign key name or model name, do this:
+
+<pre><code>
+  (ns ...)
+
+  (clj-record.core/init-model
+    (:associations
+      (belongs-to account :fk account_fk_id)
+      (has-many subscriptions :fk sub_id :model subscription-model-name)))
+</code></pre>
+
+In a belongs-to, if :model is specified and :fk is not, then the foreign key
+name is inferred from the association name. For example, in
+
+<pre><code>
+  ...
+  (belongs-to mother :model person)
+  ...
+</code></pre>
+
+the foreign key name will be mother_id (not person_id).
+
 h3. Validations
 
 Do this.
