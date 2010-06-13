@@ -7,6 +7,7 @@
   (:use clojure.test
         clj-record.test-helper))
 
+(use-fixtures :once (reset-db-fixture [:manufacturers]))
 
 (defn manufacturers [] 
   [ (manufacturer/create (valid-manufacturer-with {:name "Sozooke Motors" :grade 90}))
