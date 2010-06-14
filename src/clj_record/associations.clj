@@ -53,9 +53,8 @@
   (let [opts (apply hash-map options)
         associated-model-name (str (or (:model opts) association-name))
         find-fn-name (symbol (str "find-" association-name))
-        foreign-key-attribute (keyword (cond
-                                        (:fk opts) (:fk opts)
-                                        (:model opts) (str (dashes-to-underscores (str association-name)) "_id")
-                                        :else (str (dashes-to-underscores associated-model-name) "_id")))]
+        foreign-key-attribute (keyword (or
+                                        (:fk opts)
+                                        (str (dashes-to-underscores (str association-name)) "_id")))]
     `(defn ~find-fn-name [record#]
       (clj-record.core/get-record ~associated-model-name (~foreign-key-attribute record#)))))
