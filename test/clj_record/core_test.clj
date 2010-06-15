@@ -7,6 +7,7 @@
   (:use clojure.test
         clj-record.test-helper))
 
+(use-fixtures :once (reset-db-fixture [:manufacturers]))
 
 (deftest table-name-can-be-unconventional-with-table-name-option-to-init-model
   (is (= "productos" (core/table-name "product"))))

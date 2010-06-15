@@ -7,6 +7,7 @@
   (:use clojure.test
         clj-record.test-helper))
 
+(use-fixtures :once (reset-db-fixture [:manufacturers :productos :person :thing_one :thing_two]))
 
 (defdbtest belongs-to-creates-find-function
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Automotive"}))
