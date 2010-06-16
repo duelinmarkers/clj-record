@@ -5,7 +5,6 @@
   (:use clojure.test
         clj-record.test-helper))
 
-(use-fixtures :once (reset-db-fixture [:thing_one :thing_two]))
 
 (defdbtest nothing-blows-up
   (let [t1-rec1 (thing-one/create {:name "foo"})

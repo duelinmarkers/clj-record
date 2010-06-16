@@ -81,15 +81,3 @@
       (drop-tables)
       (create-tables)))
   (println "database reset"))
-
-(defn reset-db-fixture [tables]
-  (fn [test-fn] 
-    (println "Setting up" (db :subprotocol))
-    (sql/with-connection db
-      (sql/transaction
-        (create-tables tables)))
-    (test-fn)
-    (println "Tearing down" (db :subprotocol))
-    (sql/with-connection db
-      (sql/transaction
-        (drop-tables tables)))))

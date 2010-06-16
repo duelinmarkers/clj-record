@@ -6,7 +6,6 @@
   (:use clojure.test
         clj-record.test-helper))
 
-(use-fixtures :once (reset-db-fixture [:manufacturers]))
 
 (def test-ref (ref {}))
 

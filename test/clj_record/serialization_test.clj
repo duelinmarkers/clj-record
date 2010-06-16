@@ -5,7 +5,6 @@
   (:use clojure.test
         clj-record.test-helper))
 
-(use-fixtures :once (reset-db-fixture [:manufacturers]))
 
 (deftest serializes-simple-clojure-types
   (are [serialized-value value] (= serialized-value (serialization/serialize value))
