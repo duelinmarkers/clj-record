@@ -155,13 +155,19 @@ Attribute serialization uses clojure.core's pr and read functions, so anything t
 
 ---
 
-clj-record is being TDD'd using clojure.test, largely with high-level full-stack tests, so see "the tests":http://github.com/duelinmarkers/clj-record/tree/master/test/clj_record for details of everything that works. 
+clj-record is being TDD'd using clojure.test, largely with high-level full-stack tests, 
+so see "the tests":http://github.com/duelinmarkers/clj-record/tree/master/test/clj_record 
+for details of everything that works. 
 
-See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt for what else I'm thinking about, and feel free to suggest.
+See "TODO.txt":http://github.com/duelinmarkers/clj-record/tree/master/TODO.txt for what else I'm thinking about, 
+and feel free to suggest.
 
-h2. Running
+h2. Development
 
-Run <code>ant</code> to compile source and run tests. By default the tests run with "Apache Derby":http://db.apache.org/derby/ . (You can uncomment and modify a different db-spec in test/clj-record/test_model/config.clj to use MySQL or PostgreSQL.)
+We've switched to "Leiningen":http://github.com/technomancy/leiningen for building and testing. 
+Once you have lein installed, run <code>lein reset-db</code> to create (or recreate) a test db. 
+Run <code>lein test</code> to test. By default the tests run with "Apache Derby":http://db.apache.org/derby/ . 
+(You can uncomment and modify a different db-spec in test/clj-record/test_model/config.clj to use MySQL or PostgreSQL.)
 
 h2. Thanks for Contributing
 
@@ -170,7 +176,8 @@ Stephen Gilardi for making helpful changes to clojure.contrib.sql.
 "Raja Ramachandran":http://github.com/vishnu for initial implementation of PostgreSQL support. 
 "tunde ashafa":http://github.com/tashafa for initial implementation of MySQL support and the clj-record.query API. 
 "Jim Menard":http://jimmenard.blogspot.com/ for dash-to-underscore and record counting.
+"Matt Courtney":http://github.com/macourtney for using clj-record as part of Conjure.
 
 ---
 
-Copyright 2009 John D. Hume and released under an MIT license.
+Copyright 2010 John D. Hume and released under an MIT license.
