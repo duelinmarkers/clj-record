@@ -175,7 +175,7 @@ Brian Doyle for early interest and ideas.
 Stephen Gilardi for making helpful changes to clojure.contrib.sql. 
 "Raja Ramachandran":http://github.com/vishnu for initial implementation of PostgreSQL support. 
 "tunde ashafa":http://github.com/tashafa for initial implementation of MySQL support and the clj-record.query API. 
-"Jim Menard":http://jimmenard.blogspot.com/ for dash-to-underscore and record counting.
+"Jim Menard":http://www.io.com/~jimm for dash-to-underscore, record counting, and foreign key and model overrides in associations.
 "Matt Courtney":http://github.com/macourtney for using clj-record as part of Conjure.
 
 ---
