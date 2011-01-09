@@ -29,10 +29,12 @@
 (defmulti get-id-key-spec :subprotocol)
 (defmethod get-id-key-spec "derby" [db-spec name]
   [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
+(defmethod get-id-key-spec "db2" [db-spec name]
+  [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
 (defmethod get-id-key-spec :default [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 
-(def table-specs 
+(def table-specs
   { :manufacturers
       [ (get-id-key-spec db "manufacturer_pk")
         [:name    "VARCHAR(32)" "NOT NULL"]
