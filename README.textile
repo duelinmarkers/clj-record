@@ -37,6 +37,8 @@ Specify a different table name like this.
     :table-name "employee")
 </code></pre>
 
+For the time being, the primary key column of the table must be named 'id'.
+
 The (clj-record.core/init-model) macro form with no extra arguments will expand 
 into function definitions for basic crud operations: 
 
