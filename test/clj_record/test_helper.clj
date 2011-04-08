@@ -29,6 +29,8 @@
 (defmulti get-id-key-spec :subprotocol)
 (defmethod get-id-key-spec "derby" [db-spec name]
   [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
+(defmethod get-id-key-spec "sqlserver" [db-spec name]
+  [:id :int (str "PRIMARY KEY IDENTITY")])
 (defmethod get-id-key-spec :default [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 

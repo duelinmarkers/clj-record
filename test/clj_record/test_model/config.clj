@@ -19,3 +19,8 @@
 	   :user "root" 
 	   :password "root" 
 	   :subname "//localhost/test"}))
+
+(comment (def db {:classname "com.microsoft.sqlserver.jdbc.SQLServerDriver"
+	 :subprotocol "sqlserver"
+	 :subname "//localhost;instanceName=TEST;databaseName=test;user=username;password=password;"
+	 :create true}))
