@@ -1,11 +1,10 @@
 (defproject clj-record "1.0-SNAPSHOT"
   :description "A pseudo-port of ActiveRecord to the Clojure programming language"
   :url "http://github.com/duelinmarkers/clj-record"
-  :dependencies [[org.clojure/clojure "1.2.0"]
-                 [org.clojure/clojure-contrib "1.2.0"]]
-  :dev-dependencies [[lein-clojars "0.5.0-SNAPSHOT"]
-                     [swank-clojure/swank-clojure "1.2.1"]
-                     [mysql/mysql-connector-java "5.1.17"]])
+  :dependencies [[org.clojure/clojure "1.3.0"]
+                 [org.clojure.contrib/seq "1.3.0-alpha4"]
+                 [org.clojure/java.jdbc "0.0.6"]]
+  :dev-dependencies [[mysql/mysql-connector-java "5.1.17"]])
 
 
 (ns leiningen.reset-db
