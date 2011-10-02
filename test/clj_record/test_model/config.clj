@@ -1,10 +1,10 @@
 (ns clj-record.test-model.config)
 
-(comment)
+(comment
 (def db {:classname "org.apache.derby.jdbc.EmbeddedDriver"
 	 :subprotocol "derby"
 	 :subname "/tmp/clj-record.test.db"
-	 :create true})
+	 :create true}))
 
 (comment
   (def db {:classname "org.postgresql.Driver" 
@@ -13,9 +13,9 @@
            :user "user"
            :password "pass"}))
 
-(comment
+(comment)
   (def db {:classname "com.mysql.jdbc.Driver" 
 	   :subprotocol "mysql" 
 	   :user "root" 
-	   :password "root" 
-	   :subname "//localhost/test"}))
+	   :password "" 
+	   :subname "//localhost/clj_record_test"})
