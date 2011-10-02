@@ -3,3 +3,5 @@ classes
 *.swp
 clj-record.jar
 /lib/*
+.lein-failures
+
