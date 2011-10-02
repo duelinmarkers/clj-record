@@ -28,6 +28,9 @@
   "SELECT LAST_INSERT_ID()")
 (defmethod id-query-for "h2" [_ _]
   "CALL IDENTITY()")
+(defmethod id-query-for "sqlserver" [_ table-name]
+ (str  "SELECT IDENT_CURRENT('" table-name "')")
+  )
 (defmethod id-query-for :default [db-spec _]
   (throw (Exception. (str "Unrecognized db-spec subprotocol: " db-spec))))
 

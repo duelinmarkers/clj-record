@@ -1,6 +1,10 @@
 (ns clj-record.associations
-  (:use clj-record.util))
+  (:use clj-record.util)
+  (:require clj-record.query))
 
+(defn eager-fetch [model-name foreign-key attribute-name records]
+  (let [fetched-records (clj-record.core/find-records model-name {foreign-key (apply clj-record.query/in (map (fn [record] (:id record)) records))})]
+    (map (fn [record] (conj {attribute-name (filter (fn [fetched] (= (:id record) (foreign-key fetched))) fetched-records)} record)) records)))
 
 (defn expand-init-option
   "Called via init-model when an :associations option group is encountered.
@@ -25,12 +29,17 @@
         associated-model-name (str (or (:model opts) (singularize (name association-name))))
         foreign-key-attribute (keyword (or (:fk opts) (str (dashes-to-underscores model-name) "_id")))
         find-fn-name (symbol (str "find-" association-name))
+	eager-fetch-fn-name (symbol (str "eager-fetch-" association-name))
+	attribute (keyword association-name)
         destroy-fn-name (symbol (str "destroy-" association-name))]
     `(do
       (defn ~find-fn-name [record#]
         (clj-record.core/find-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
       (defn ~destroy-fn-name [record#]
-        (clj-record.core/destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)})))))
+        (clj-record.core/destroy-records ~associated-model-name {~foreign-key-attribute (record# :id)}))
+      (defn ~eager-fetch-fn-name [records#]
+	(clj-record.associations/eager-fetch ~associated-model-name ~foreign-key-attribute ~attribute records#))
+      )))
 
 (defn belongs-to
   "Defines an association to a model named association-name.
