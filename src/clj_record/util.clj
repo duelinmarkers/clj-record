@@ -29,8 +29,9 @@
 (defmethod id-query-for "h2" [_ _]
   "CALL IDENTITY()")
 (defmethod id-query-for "sqlserver" [_ table-name]
- (str  "SELECT IDENT_CURRENT('" table-name "')")
-  )
+ (str  "SELECT IDENT_CURRENT('" table-name "')"))
+(defmethod id-query-for "db2" [_ _]
+  "VALUES IDENTITY_VAL_LOCAL()")
 (defmethod id-query-for :default [db-spec _]
   (throw (Exception. (str "Unrecognized db-spec subprotocol: " db-spec))))
 

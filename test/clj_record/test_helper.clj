@@ -31,33 +31,31 @@
   [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
 (defmethod get-id-key-spec "sqlserver" [db-spec name]
   [:id :int (str "PRIMARY KEY IDENTITY")])
+(defmethod get-id-key-spec "db2" [db-spec name]
+  [:id :int (str "GENERATED ALWAYS AS IDENTITY CONSTRAINT " name " PRIMARY KEY")])
 (defmethod get-id-key-spec :default [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 
-(def table-specs 
+(def table-specs
   { :manufacturers
       [ (get-id-key-spec db "manufacturer_pk")
         [:name    "VARCHAR(32)" "NOT NULL"]
         [:founded "VARCHAR(4)"]
         [:grade   :int] ]
-    
     :productos
       [ (get-id-key-spec db "product_pk")
         [:name            "VARCHAR(32)" "NOT NULL"]
         [:price           :int]
         [:manufacturer_id :int "NOT NULL"] ]
-    
     :person
       [ (get-id-key-spec db "person_pk")
         [:name             "VARCHAR(32) NOT NULL"]
         [:mother_id        :int]
         [:father_person_id :int] ]
-    
     :thing_one
       [ (get-id-key-spec db "thing_one_pk")
         [:name            "VARCHAR(32)" "NOT NULL"]
         [:owner_person_id   :int] ]
-    
     :thing_two
       [ (get-id-key-spec db "thing_two_pk")
         [:thing_one_id   :int "NOT NULL"] ] })
@@ -83,3 +81,4 @@
       (drop-tables)
       (create-tables)))
   (println "database reset"))
+
