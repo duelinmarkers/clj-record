@@ -22,4 +22,7 @@
     (ref-set model-ref (assoc @model-ref category value))))
 
 (defn db-spec-for [model-name]
-  (model-metadata-for model-name :db-spec))
+  (let [db-spec (model-metadata-for model-name :db-spec)]
+    (if (fn? db-spec)
+      (db-spec)
+      db-spec)))

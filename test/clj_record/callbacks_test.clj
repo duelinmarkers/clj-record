@@ -34,6 +34,19 @@
     (manufacturer/update {:id id :founded "68"})
     (is (= "1968" ((manufacturer/get-record id) :founded)))))
 
+(defdbtest before-save-only-gets-called-once-on-create-testing-with-inc
+  (restoring-ref (manufacturer/model-metadata)
+    (callbacks/add-callback "manufacturer" :before-save #(assoc % :grade (inc (:grade %))))
+    (let [m (manufacturer/create (valid-manufacturer-with {:grade 1}))]
+      (is (= 2 (m :grade))))))
+
+(defdbtest before-save-only-gets-called-once-on-create-testing-with-rand
+  (restoring-ref (manufacturer/model-metadata)
+    (callbacks/add-callback "manufacturer" :before-save #(assoc % :grade (* 100 (rand))))
+    (let [m (manufacturer/create (valid-manufacturer-with {:grade nil}))]
+      (is (= (manufacturer/get-record (m :id))
+             m)))))
+
 (deftest before-update-can-transform-record
   (restoring-ref (manufacturer/model-metadata)
     (callbacks/add-callback "manufacturer" :before-update #(assoc % :founded "0000"))
