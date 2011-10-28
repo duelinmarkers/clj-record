@@ -1,5 +1,5 @@
 (ns clj-record.validation.built-ins
-  (:require [clojure.contrib.str-utils  :as str-utils]))
+  (:require [clojure.string :as string]))
 
 
 (defn match
@@ -21,9 +21,9 @@
   [email]
   (if (not (re-find #"^\S+@\S+\.\S+$" email))
     false
-    (let [[local-part domain] (str-utils/re-split #"@" email)
+    (let [[local-part domain] (string/split email #"@")
           dot-atom? (fn [s]
-            (let [atexts (str-utils/re-split #"\." s)
+            (let [atexts (string/split s #"\.")
                   atext-run-pattern #"^[\p{Alnum}_\-]+$"]
               (and
                 (not (empty? atexts))

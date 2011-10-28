@@ -1,18 +1,18 @@
 (ns clj-record.util
-  (:use (clojure.contrib str-utils)))
+  (:require [clojure.string :as string]))
 
 (defn singularize [plural]
   (let [lc (.toLowerCase plural)]
     (condp re-find lc
-      #"ies$" (re-sub #"ies$" "y" lc)
-      #"(s|z|ch|sh|x)es$" (re-sub #"(s|z|ch|sh|x)es$" "$1" lc)
-      #"s$" (re-sub #"s$" "" lc)
+      #"ies$" (string/replace lc #"ies$" "y")
+      #"(s|z|ch|sh|x)es$" (string/replace lc #"(s|z|ch|sh|x)es$" "$1")
+      #"s$" (string/replace lc #"s$" "")
       lc)))
 
 (defn pluralize [word]
   (let [lc (.toLowerCase word)]
     (cond
-      (.endsWith lc "y") (re-sub #"y$" "ies" lc)
+      (.endsWith lc "y") (string/replace lc #"y$" "ies")
       (some #(.endsWith lc %) ["s" "z" "ch" "sh" "x"]) (str lc "es")
       :else (str lc "s"))))
 
