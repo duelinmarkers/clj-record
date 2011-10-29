@@ -3,7 +3,7 @@
   :url "http://github.com/duelinmarkers/clj-record"
   :dependencies [[org.clojure/clojure "1.2.0"]
                  [org.clojure/clojure-contrib "1.2.0"]]
-  :dev-dependencies [[lein-clojars "0.5.0-SNAPSHOT"]
+  :dev-dependencies [[lein-clojars "0.6.0"]
                      [swank-clojure/swank-clojure "1.2.1"]
                      [mysql/mysql-connector-java "5.1.17"]])
 
