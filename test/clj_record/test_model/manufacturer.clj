@@ -1,5 +1,5 @@
 (ns clj-record.test-model.manufacturer
-  (:require [clojure.contrib.sql :as sql]
+  (:require [clojure.java.jdbc :as sql]
             clj-record.boot
             [clj-record.validation.built-ins :as valid]
             [clj-record.callbacks.built-ins :as cb])

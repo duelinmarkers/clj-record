@@ -1,6 +1,6 @@
 (ns clj-record.test-helper
   (:require [clj-record.core :as core]
-            [clojure.contrib.sql :as sql])
+            [clojure.java.jdbc :as sql])
   (:use clj-record.test-model.config
         clojure.test))
 
@@ -13,7 +13,7 @@
     (try
       ~@body
       (finally
-        (clojure.contrib.sql/set-rollback-only)))))
+        (clojure.java.jdbc/set-rollback-only)))))
 
 (defmacro restoring-ref [ref & body]
   `(let [old-value# (deref ~ref)]
