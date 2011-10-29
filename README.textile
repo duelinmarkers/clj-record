@@ -2,7 +2,7 @@ h1. clj-record
 
 clj-record is a "Clojure":http://www.clojure.org/ persistence library inspired by Ruby on Rails' ActiveRecord but aimed at using LISPey functional idioms.
 
-In short, it's a fairly thin layer on top of clojure.contrib.sql that allows you to define model namespaces and provides model-specific validation, associations, callbacks, and attribute serialization.
+In short, it's a fairly thin layer on top of clojure.java.jdbc that allows you to define model namespaces and provides model-specific validation, associations, callbacks, and attribute serialization.
 
 Join the "clj-record-dev Google Group":http://groups.google.com/group/clj-record-dev to stay up to date or discuss changes.
 
@@ -10,13 +10,15 @@ Contributions and suggestions are welcome. If you'd lke to contribute patches, p
 
 h2. How to Use It
 
+If you're using Leiningen or Maven, see the "clj-record page on Clojars":http://clojars.org/clj-record for configuration snippets.
+
 To define a model (in this case called "employee"), you do something like this.
 
 <pre><code>
   (ns com.example.employee
     (:require clj-record.boot))
 
-  (def db ...a clojure.contrib.sql db-spec...)
+  (def db ...a clojure.java.jdbc db-spec...)
 
   (clj-record.core/init-model)
 </code></pre>
