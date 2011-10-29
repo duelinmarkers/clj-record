@@ -36,29 +36,40 @@
 (defmethod get-id-key-spec :default [db-spec name]
   [:id "SERIAL UNIQUE PRIMARY KEY"])
 
+(defmulti get-table-spec :subprotocol)
+(defmethod get-table-spec "mysql" [db-spec]
+  "Engine=InnoDB")
+(defmethod get-table-spec :default [db-spec]
+  nil)
+
 (def table-specs
   { :manufacturers
       [ (get-id-key-spec db "manufacturer_pk")
         [:name    "VARCHAR(32)" "NOT NULL"]
         [:founded "VARCHAR(4)"]
-        [:grade   :int] ]
+        [:grade   :int]
+        :table-spec (get-table-spec db)]
     :productos
       [ (get-id-key-spec db "product_pk")
         [:name            "VARCHAR(32)" "NOT NULL"]
         [:price           :int]
-        [:manufacturer_id :int "NOT NULL"] ]
+        [:manufacturer_id :int "NOT NULL"]
+        :table-spec (get-table-spec db)]
     :person
       [ (get-id-key-spec db "person_pk")
         [:name             "VARCHAR(32) NOT NULL"]
         [:mother_id        :int]
-        [:father_person_id :int] ]
+        [:father_person_id :int]
+        :table-spec (get-table-spec db)]
     :thing_one
       [ (get-id-key-spec db "thing_one_pk")
         [:name            "VARCHAR(32)" "NOT NULL"]
-        [:owner_person_id   :int] ]
+        [:owner_person_id   :int]
+        :table-spec (get-table-spec db)]
     :thing_two
       [ (get-id-key-spec db "thing_two_pk")
-        [:thing_one_id   :int "NOT NULL"] ] })
+        [:thing_one_id   :int "NOT NULL"]
+        :table-spec (get-table-spec db)] })
 
 (defn drop-tables
   ([] (drop-tables (keys table-specs)))
