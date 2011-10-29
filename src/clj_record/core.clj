@@ -1,6 +1,6 @@
 (ns clj-record.core
-  (:require [clojure.contrib.sql        :as sql]
-            [clojure.contrib.str-utils  :as str-utils])
+  (:require [clojure.java.jdbc :as sql]
+            [clojure.string :as string])
   (:use (clj-record meta util callbacks)))
 
 
@@ -18,7 +18,7 @@
   (dosync (set-model-metadata-for model-name :db-spec db-spec)))
 
 (defn to-conditions
-  "Converts the given attribute map into a clojure.contrib.sql style 'where-params,'
+  "Converts the given attribute map into a clojure.java.jdbc style 'where-params,'
   a vector containing a parameterized conditions string followed by ordered values for the parameters.
   Conditions will be ANDed together.
   Nil attributes will be turned into 'attr_name IS NULL' with no value in the vector."
@@ -36,7 +36,7 @@
          [(conj parameterized-conditions (format "%s = ?" (name attribute))) (conj values value)]))
       [[] []]
       attributes)]
-    (apply vector (str-utils/str-join " AND " parameterized-conditions) values)))
+    (apply vector (string/join " AND " parameterized-conditions) values)))
 
 (defmacro connected
   "Ensures that the body is run with a single DB connection.
@@ -74,7 +74,7 @@ instance."
 
 (defn find-records
   "Returns a vector of matching records.
-  Given a where-params vector, uses it as-is. (See clojure.contrib.sql/with-query-results.)
+  Given a where-params vector, uses it as-is. (See clojure.java.jdbc/with-query-results.)
   Given a map of attribute-value pairs, uses to-conditions to convert to where-params."
   [model-name attributes-or-where-params]
   (let [[parameterized-where & values]
@@ -196,7 +196,7 @@ instance."
   
   See clj_record/test/model/manufacturer.clj for an example."
   [& init-options]
-  (let [model-name (last (str-utils/re-split #"\." (name (ns-name *ns*))))
+  (let [model-name (last (string/split (name (ns-name *ns*)) #"\."))
         [top-level-options option-groups] (split-out-init-options init-options)
         tbl-name (or (top-level-options :table-name) (dashes-to-underscores (pluralize model-name)))
         optional-defs (defs-from-option-groups model-name option-groups)]

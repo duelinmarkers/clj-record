@@ -1,6 +1,5 @@
 (ns clj-record.callbacks
-  (:use clj-record.meta)
-  (:require [clojure.contrib.seq-utils :as seq-utils]))
+  (:use clj-record.meta))
 
 
 (defn expand-init-option [model-name hook func & ignored-options]
@@ -14,7 +13,7 @@
 
 (defn run-callbacks [record model-name & hooks]
   (let [callback-map (or (model-metadata-for model-name :callbacks) {})]
-    (reduce #(%2 %1) record (filter identity (seq-utils/flatten (map callback-map hooks))))))
+    (reduce #(%2 %1) record (filter identity (flatten (map callback-map hooks))))))
 
 (defn after-destroy
   "Runs the after destroy call back on the given attributes."
