@@ -77,7 +77,7 @@ Then you can do things like this.
 <pre><code>
   (let [mikey (user/get-record 2)
         subs (user/find-subscriptions mikey)]
-    (doseq [subscription subs] (println (format "Mikey is subscribed to %s" (:name sub))))
+    (doseq [subscription subs] (println (format "Mikey is subscribed to %s" (:name subscription))))
     (user/destroy-subscriptions mikey)
     (println "But not any more."))
 </code></pre>
