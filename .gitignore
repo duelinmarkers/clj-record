@@ -3,6 +3,7 @@ classes
 *.swp
 clj-record*.jar
 /lib/*
+.lein-deps-sum
 .lein-failures
 pom.xml
 
