@@ -1,10 +1,17 @@
 (ns clj-record.associations
   (:use clj-record.util)
-  (:require clj-record.query))
+  (:require (clj-record [query :as q]
+                        [core :as core])))
 
 (defn eager-fetch [model-name foreign-key attribute-name records]
-  (let [fetched-records (clj-record.core/find-records model-name {foreign-key (apply clj-record.query/in (map (fn [record] (:id record)) records))})]
-    (map (fn [record] (conj {attribute-name (filter (fn [fetched] (= (:id record) (foreign-key fetched))) fetched-records)} record)) records)))
+  (let [fetched-records (core/find-records model-name
+                                           {foreign-key (apply q/in (map (fn [record] (:id record))
+                                                                         records))})]
+    (map (fn [record]
+           (conj {attribute-name (filter (fn [fetched]
+                                           (= (:id record) (foreign-key fetched))) fetched-records)}
+                 record))
+         records)))
 
 (defn expand-init-option
   "Called via init-model when an :associations option group is encountered.
