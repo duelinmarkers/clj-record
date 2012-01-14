@@ -5,7 +5,8 @@
                  [org.clojure/java.jdbc "0.1.1"]]
   :dev-dependencies [[lein-clojars "0.6.0"]
                      [swank-clojure/swank-clojure "1.2.1"]
-                     [mysql/mysql-connector-java "5.1.17"]])
+                     [mysql/mysql-connector-java "5.1.17"]
+                     [lein-marginalia "0.7.0-SNAPSHOT"]])
 
 
 (ns leiningen.reset-db
