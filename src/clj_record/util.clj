@@ -1,4 +1,5 @@
 (ns clj-record.util
+  "Assorted utilities for internal use."
   (:require [clojure.string :as string]))
 
 (defn singularize [plural]

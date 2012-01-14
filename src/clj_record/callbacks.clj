@@ -1,4 +1,5 @@
 (ns clj-record.callbacks
+  "Support for (init-model (callbacks ...)) form."
   (:use clj-record.meta))
 
 

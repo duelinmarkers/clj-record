@@ -1,4 +1,5 @@
 (ns clj-record.associations
+  "Support for the (init-model (associations ...)) form."
   (:use clj-record.util)
   (:require (clj-record [query :as q]
                         [core :as core])))

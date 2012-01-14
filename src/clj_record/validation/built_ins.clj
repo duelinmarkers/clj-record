@@ -14,7 +14,7 @@
   (complement (match pattern)))
 
 (def
-  #^{:doc "Validation function that makes sure a value is numeric (though not necessarily a number)."}
+  #^{:doc "Validation function that makes sure a String value is numeric (though not necessarily a number)."}
   numeric? (non-match #"\D"))
 
 (defn email?

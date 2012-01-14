@@ -1,4 +1,5 @@
 (ns clj-record.query
+  "Functions for use in specifying condition maps."
   (:require [clojure.string :as string]))
 
 

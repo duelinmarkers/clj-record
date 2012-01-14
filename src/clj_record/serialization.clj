@@ -1,4 +1,5 @@
 (ns clj-record.serialization
+  "Support for (init-model (:serialization ...)) forms."
   (:require [clj-record.callbacks :as callbacks]
             [clj-record.callbacks.built-ins :as callb]))
 

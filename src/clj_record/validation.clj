@@ -1,4 +1,5 @@
 (ns clj-record.validation
+  "Support for (init-model (:validation ...)) forms."
   (:use (clj-record core meta util))
   (:require [clj-record.callbacks :as callbacks]))
 

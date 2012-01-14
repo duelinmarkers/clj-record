@@ -197,7 +197,7 @@ instance."
   in the model namespace (minus the model-name as first argument).
   Optional forms for associations, validation, etc. are specified here.
 
-  See clj_record/test/model/manufacturer.clj for an example."
+  See test/clj_record/test_model/manufacturer.clj for an example."
   [& init-options]
   (let [model-name (last (string/split (name (ns-name *ns*)) #"\."))
         [top-level-options option-groups] (split-out-init-options init-options)

@@ -1,7 +1,10 @@
-;; Note that clj-record's model-metadata has nothing to do with Clojure metadata.
-;; Suggestions of a reasonable name that's not overloaded are appreciated.
+(ns clj-record.meta
+  "Functions for managing all the metadata specified in (init-model ...) forms,
+  which are stored in this namespace's all-models-metadata ref. Nothing in this
+  namespace is likely to be used by code that uses clj-record.
 
-(ns clj-record.meta)
+  Note that clj-record's model-metadata has nothing to do with Clojure metadata.
+  Suggestions of a reasonable name that's not overloaded are appreciated.")
 
 
 (def all-models-metadata (ref {}))
