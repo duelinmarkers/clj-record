@@ -4,12 +4,13 @@
                         [core :as core])))
 
 (defn eager-fetch [model-name foreign-key attribute-name records]
-  (let [fetched-records (core/find-records model-name
-                                           {foreign-key (apply q/in (map :id records))})]
-    (map (fn [record]
-           (conj {attribute-name (filter (fn [fetched]
-                                           (= (:id record) (foreign-key fetched))) fetched-records)}
-                 record))
+  (let [parent-ids (map :id records)
+        child-records (core/find-records model-name
+                                         {foreign-key (apply q/in parent-ids)})]
+    (map (fn [parent-record]
+           (assoc parent-record
+                  attribute-name
+                  (filter #(= (foreign-key %) (:id parent-record)) child-records)))
          records)))
 
 (defn expand-init-option
