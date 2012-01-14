@@ -1,4 +1,5 @@
 (ns clj-record.validation.built-ins
+  "Built-in validation functions for use in the (init-model (:validation ...)) form."
   (:require [clojure.string :as string]))
 
 

@@ -1,4 +1,7 @@
 (ns clj-record.core
+  "This is the heart of clj-record. The primary functions generated in your model namespace
+  by (init-model ...) delegate to same-named functions in this namespace. The functions here
+  take an extra model-name String as their first argument."
   (:require [clojure.java.jdbc :as sql]
             [clojure.string :as string])
   (:use (clj-record meta util callbacks)))
@@ -192,8 +195,8 @@ instance."
   The segment of the namespace name following the last dot is used as the model-name.
   Model-specific versions of most public functions in clj-record.core are defined 
   in the model namespace (minus the model-name as first argument).
-  Optional forms for associations and validation are specified here.
-  
+  Optional forms for associations, validation, etc. are specified here.
+
   See clj_record/test/model/manufacturer.clj for an example."
   [& init-options]
   (let [model-name (last (string/split (name (ns-name *ns*)) #"\."))
@@ -209,7 +212,7 @@ instance."
       (defn ~'model-metadata [& args#]
         (apply model-metadata-for ~model-name args#))
       (defn ~'table-name [] (table-name ~model-name))
-      (defn ~'record-count 
+      (defn ~'record-count
         ([] (record-count ~model-name))
         ([attributes#] (record-count ~model-name attributes#)))
       (defn ~'get-record [id#]

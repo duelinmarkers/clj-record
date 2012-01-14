@@ -1,4 +1,5 @@
-(ns clj-record.callbacks.built-ins)
+(ns clj-record.callbacks.built-ins
+  "Built-in helpers for use in the (init-model (:callbacks ...)) form.")
 
 
 (defn transform-value
