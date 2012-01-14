@@ -5,8 +5,7 @@
 
 (defn eager-fetch [model-name foreign-key attribute-name records]
   (let [fetched-records (core/find-records model-name
-                                           {foreign-key (apply q/in (map (fn [record] (:id record))
-                                                                         records))})]
+                                           {foreign-key (apply q/in (map :id records))})]
     (map (fn [record]
            (conj {attribute-name (filter (fn [fetched]
                                            (= (:id record) (foreign-key fetched))) fetched-records)}
