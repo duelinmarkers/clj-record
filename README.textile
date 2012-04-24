@@ -168,10 +168,18 @@ and feel free to suggest.
 
 h2. Development
 
-We've switched to "Leiningen":http://github.com/technomancy/leiningen for building and testing. 
-Once you have lein installed, run <code>lein reset-db</code> to create (or recreate) a test db. 
-Run <code>lein test</code> to test. By default the tests run with "Apache Derby":http://db.apache.org/derby/ . 
-(You can uncomment and modify a different db-spec in test/clj-record/test_model/config.clj to use MySQL or PostgreSQL.)
+We use "Leiningen":http://github.com/technomancy/leiningen for building and testing. Install it using their instructions.
+
+We use MySQL with InnoDB tables as a test database. First create the database with a command like this:
+
+<pre><code>
+  echo "create database clj_record_test" | mysql -uroot
+</code></pre>
+
+Then create (or recreate) the test tables with <code>lein reset-db</code>. 
+Run <code>lein test</code> to test. 
+You can uncomment and modify a different db-spec in test/clj-record/test_model/config.clj to use a different RDBMS. 
+That's also where test DB credentials are defined.
 
 h2. Thanks for Contributing
 
