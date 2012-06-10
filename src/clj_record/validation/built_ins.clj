@@ -20,7 +20,7 @@
 (defn email?
   "Validation function that sees whether value looks like a valid email address."
   [email]
-  (if (not (re-find #"^\S+@\S+\.\S+$" email))
+  (if-not (re-find #"^\S+@\S+\.\S+$" email)
     false
     (let [[local-part domain] (string/split email #"@")
           dot-atom? (fn [s]

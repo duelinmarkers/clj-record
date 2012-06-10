@@ -12,7 +12,7 @@
               (reduce (fn [operator-params value] (conj operator-params "?")) [] values)
             clause-params
               (string/join join-with clause-params-vector)]
-        [(format (str "%s " operator-format) (name attribute) clause-params) (filter (complement nil?) values)]))))
+        [(format (str "%s " operator-format) (name attribute) clause-params) (remove nil? values)]))))
 
 (defn equal [value] (operator-fn "= %s" [value]))
 (defn not-equal [value] (operator-fn "<> %s" [value]))
