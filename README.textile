@@ -54,7 +54,7 @@ into function definitions for basic crud operations:
 * destroy-record (from a map of attributes that must include :id)
 * record-count (by optional map of attributes)
 
-See the functions of the same names in "clj-record.core":http://github.com/duelinmarkers/clj-record/tree/master/clj_record/core.clj for documentation.
+See the functions of the same names in "clj-record.core":https://github.com/duelinmarkers/clj-record/blob/master/src/clj_record/core.clj for documentation.
 (The functions in clj-record.core take the model-name as a first argument. The functions generated in your model namespace already know what model they're about, so they don't take that argument. Otherwise the functions are the same.)
 
 Additional optional arguments to init-model can generate richer functionality.
