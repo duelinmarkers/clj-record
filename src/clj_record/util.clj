@@ -2,7 +2,7 @@
   "Assorted utilities for internal use."
   (:require [clojure.string :as string]))
 
-(defn singularize [plural]
+(defn singularize [^String plural]
   (let [lc (.toLowerCase plural)]
     (condp re-find lc
       #"ies$" (string/replace lc #"ies$" "y")
@@ -10,14 +10,14 @@
       #"s$" (string/replace lc #"s$" "")
       lc)))
 
-(defn pluralize [word]
+(defn pluralize [^String word]
   (let [lc (.toLowerCase word)]
     (cond
       (.endsWith lc "y") (string/replace lc #"y$" "ies")
       (some #(.endsWith lc %) ["s" "z" "ch" "sh" "x"]) (str lc "es")
       :else (str lc "s"))))
 
-(defn dashes-to-underscores [s]
+(defn dashes-to-underscores [^String s]
   (.replaceAll s "-" "_"))
 
 (defmulti  id-query-for :subprotocol)
