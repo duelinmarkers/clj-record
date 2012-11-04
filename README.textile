@@ -46,6 +46,7 @@ into function definitions for basic crud operations:
 
 * get-record (by id)
 * find-record (by a map of attributes)
+* all-records
 * find-records (by a map of attributes)
 * find-by-sql (by a SQL string and "?" parameter values)
 * insert (from a map of attributes, returning the generated id)
