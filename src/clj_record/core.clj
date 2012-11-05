@@ -75,6 +75,12 @@ instance."
       (sql/with-query-results rows select-query-and-values
         (doall (after-load model-name rows)))))
 
+(defn all-records
+  "Returns a vector of all records."
+  [model-name]
+  (let [select-query (format "select * from %s" (table-name model-name))]
+    (find-by-sql model-name [select-query])))
+
 (defn find-records
   "Returns a vector of matching records.
   Given a where-params vector, uses it as-is. (See clojure.java.jdbc/with-query-results.)
@@ -217,6 +223,8 @@ instance."
         ([attributes#] (record-count ~model-name attributes#)))
       (defn ~'get-record [id#]
         (get-record ~model-name id#))
+      (defn ~'all-records []
+        (all-records ~model-name))
       (defn ~'find-records [attributes#]
         (find-records ~model-name attributes#))
       (defn ~'find-record [attributes#]
