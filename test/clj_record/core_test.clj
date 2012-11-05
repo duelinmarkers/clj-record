@@ -27,6 +27,11 @@
 (defdbtest get-record-throws-if-not-found
   (is (thrown? IllegalArgumentException (manufacturer/get-record -1))))
 
+(defdbtest all-records-returns-all
+  (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
+        other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
+    (is (= #{humedai other-1} (apply hash-set (manufacturer/all-records))))))
+
 (defdbtest find-records-can-do-lookup-by-attribute-equality-conditions
   (let [humedai (manufacturer/create (valid-manufacturer-with {:name "Humedai Motors"}))
         other-1 (manufacturer/create (valid-manufacturer-with {:name "Some Other"}))]
