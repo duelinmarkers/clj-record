@@ -8,6 +8,10 @@ Join the "clj-record-dev Google Group":http://groups.google.com/group/clj-record
 
 Contributions and suggestions are welcome. If you'd lke to contribute patches, please include tests.
 
+h2. Notice
+
+The author of clj-record regrets its API design and *recommends you don't use it*. "Read the blog post":http://elhumidor.blogspot.com/2012/11/why-not-to-use-my-library-clj-record.html for more details.
+
 h2. How to Use It
 
 If you're using Leiningen or Maven, see the "clj-record page on Clojars":http://clojars.org/clj-record for configuration snippets.
